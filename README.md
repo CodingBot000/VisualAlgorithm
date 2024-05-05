@@ -12,7 +12,7 @@
 
     
 ## Download APK for install
-Go to the [apk file]([https://www.dropbox.com/scl/fi/b0jqvqrylfr63x5wcs7b0/visual-algorithm-app-debug.apk?rlkey=eun7qrk0kgl462cvxe6f00agg&dl=0)]) to download the latest APK.
+Go to the [apk file](https://www.dropbox.com/scl/fi/b0jqvqrylfr63x5wcs7b0/visual-algorithm-app-debug.apk?rlkey=eun7qrk0kgl462cvxe6f00agg&dl=0) to download the latest APK.
 
 
 ## Tech stack
