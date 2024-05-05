@@ -5,6 +5,8 @@
 </br>
 </br>
 
+[![Video Label](http://img.youtube.com/vi/WhnYrbhViLk/0.jpg)](https://youtu.be/WhnYrbhViLk)
+
 
 [![IMAGE ALT TEXT HERE]([https://youtube.com/shorts/WhnYrbhViLk?feature=share](https://youtube.com/shorts/WhnYrbhViLk?feature=share))
 - Click to view as a 'YouTube' video.  
