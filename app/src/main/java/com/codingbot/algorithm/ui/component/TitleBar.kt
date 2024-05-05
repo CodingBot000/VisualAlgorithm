@@ -1,6 +1,5 @@
 package com.codingbot.algorithm.ui.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.codingbot.algorithm.R
+import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.ui.theme.CustomTypography
 
 @Composable
@@ -35,15 +35,16 @@ fun ScreenTitle(
             modifier = Modifier
                 .size(24.dp)
                 .padding(end = 10.dp)
-                .clickable {
+                .clickableSingle {
                     onClickBack()
-                }
+                },
+            tint = CustomTheme.colors.textColorPrimary
         )
 
         Text(
             text = title.replace("_", " "),
-            color = Color.Black,
-            style = CustomTypography.title3Bold
+            color = CustomTheme.colors.textColorPrimary,
+            style = CustomTheme.typography.title3Bold
         )
     }
 }

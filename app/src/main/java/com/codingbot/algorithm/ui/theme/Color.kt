@@ -2,6 +2,7 @@ package com.codingbot.algorithm.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+
 object Color {
     val Blue = Color(0xFF0062FF)
     val Skyblue = Color(0xFF0094FF)

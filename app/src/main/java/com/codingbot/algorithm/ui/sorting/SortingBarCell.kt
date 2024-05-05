@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.data.SortingData
 import com.codingbot.algorithm.ui.theme.Color
+import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.ui.theme.Dimens
 
 enum class SortingBarCellType {
@@ -39,6 +39,7 @@ fun SortingBarCell(
     val elementInnerWidth = elementWidth - 2.dp
     Column(
         modifier = Modifier
+            .background(color = CustomTheme.colors.bg)
             .width(elementWidth),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -74,22 +75,7 @@ fun SortingBarCell(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(elementInnerWidth)
-                .padding(5.dp)
-                .background(
-                    color =
-                        if (sortingBarCellType == SortingBarCellType.SortingResult) {
-                            Color.White
-                        } else {
-                            if (item.swap1) {
-                                Color.Blue_30
-                            } else if (item.swap2) {
-                                Color.Blue_Gray_30
-                            } else {
-                                Color.White
-                            }
-                        },
-                    shape = RoundedCornerShape(Dimens.Sorting.SortingTextOverayMarkRoundedCorner),
-                ),
+                .padding(5.dp),
         ) {
             logger { "item.element.toString():${item.element.toString()}" }
             Box(
@@ -99,14 +85,14 @@ fun SortingBarCell(
                     .background(
                         color =
                         if (sortingBarCellType == SortingBarCellType.SortingResult) {
-                            Color.White
+                            androidx.compose.ui.graphics.Color.Transparent
                         } else {
                             if (item.swap1) {
                                 Color.Blue_30
                             } else if (item.swap2) {
                                 Color.Blue_Gray_30
                             } else {
-                                Color.White
+                                androidx.compose.ui.graphics.Color.Transparent
                             }
                         },
                         shape = RoundedCornerShape(Dimens.Sorting.SortingTextOverayMarkRoundedCorner),
@@ -114,14 +100,19 @@ fun SortingBarCell(
             ) {
                 Text(
                     text = item.element.toString(),
-                    color = Color.Black,
-                    fontSize = 10.sp,
-                    fontWeight = if (item.swap1) {
+                    color = CustomTheme.colors.textColorPrimary,
+                    style = CustomTheme.typography.caption2Regular,
+                    fontWeight =
+                    if (sortingBarCellType == SortingBarCellType.SortingResult) {
                         FontWeight.Bold
-                    } else if (item.swap2) {
-                        FontWeight.ExtraBold
                     } else {
-                        FontWeight.Normal
+                        if (item.swap1) {
+                            FontWeight.Bold
+                        } else if (item.swap2) {
+                            FontWeight.ExtraBold
+                        } else {
+                            FontWeight.Normal
+                        }
                     }
                 )
             }

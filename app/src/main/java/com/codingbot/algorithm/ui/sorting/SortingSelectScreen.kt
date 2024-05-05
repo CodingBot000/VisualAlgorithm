@@ -1,5 +1,6 @@
 package com.codingbot.algorithm.ui.sorting
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,16 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.codingbot.algorithm.core.common.GraphList
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.core.common.Screen
 import com.codingbot.algorithm.core.common.SortingList
+import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.viewmodel.MainViewModel
 
 @Composable
@@ -40,6 +39,7 @@ fun SortingSelectScreen(
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier
+        .background(color = CustomTheme.colors.bg)
         .fillMaxSize()
         .padding(horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -53,14 +53,12 @@ fun SortingSelectScreen(
                 key = { index, item -> "$index _$item" })
             { index, item ->
                 SelectionCell(
-                    item = item,
-                    onClick = { navigateCell ->
-                        logger { "name : ${navigateCell.name}" }
-                        if (navigateCell.name == SortingList.HEAP_SORT.name) {
-                            logger { "name : ${navigateCell.name} heapSort: ${SortingList.HEAP_SORT.name}" }
-                            navController.navigate(Screen.SortingHeapSortingScreen.route(navigateCell.name))
+                    itemName = item.name,
+                    onClick = { navigateCellName ->
+                        if ( navigateCellName == SortingList.HEAP_SORT.name) {
+                            navController.navigate(Screen.SortingHeapSortingScreen.route(navigateCellName))
                         } else {
-                            navController.navigate(Screen.SortingScreen.route(navigateCell.name))
+                            navController.navigate(Screen.SortingScreen.route(navigateCellName))
                         }
                     }
                 )
@@ -75,9 +73,9 @@ fun SortingSelectScreen(
                 key = { index, item -> "$index _$item" })
             { index, item ->
                 SelectionCell(
-                    item = item,
-                    onClick = { navigateCell ->
-                        navController.navigate(Screen.GraphScreen.route(navigateCell.name))
+                    itemName = item.name,
+                    onClick = { navigateCellName ->
+                        navController.navigate(Screen.GraphScreen.route(navigateCellName))
                     }
                 )
             }
@@ -85,57 +83,29 @@ fun SortingSelectScreen(
     }
 }
 
-
 @Composable
-fun SelectionCell(
-    item: SortingList,
-    onClick: (SortingList) -> Unit
+private fun SelectionCell(
+    itemName: String,
+    onClick: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
+            .background(color = CustomTheme.colors.bg)
             .fillMaxWidth()
             .padding(vertical = 3.dp)
             .clickable {
-                onClick(item)
+                onClick(itemName)
             },
         shape = RoundedCornerShape(16.dp),
-        elevation = 5.dp
+        elevation = 5.dp,
     ) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(5.dp),
-            text = item.name.replace("_", " "),
-            color = Color.Black,
-            fontSize = 20.sp
-        )
-    }
-    Spacer(modifier = Modifier.width(10.dp))
-}
-
-
-@Composable
-fun SelectionCell(
-    item: GraphList,
-    onClick: (GraphList) -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 3.dp)
-            .clickable {
-                onClick(item)
-            },
-        shape = RoundedCornerShape(16.dp),
-        elevation = 5.dp
-    ) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-            text = item.name.replace("_", " "),
-            color = Color.Black,
-            fontSize = 20.sp
+            text = itemName.replace("_", " "),
+            color = CustomTheme.colors.black,
+            style = CustomTheme.typography.title3Regular
         )
     }
     Spacer(modifier = Modifier.width(10.dp))

@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.codingbot.algorithm.core.common.GraphList
 import com.codingbot.algorithm.core.common.Screen
 import com.codingbot.algorithm.core.common.SortingList
-import com.codingbot.algorithm.ui.sorting.GraphScreen
+import com.codingbot.algorithm.ui.graph.GraphScreen
 import com.codingbot.algorithm.ui.sorting.SortingHeapSortingScreen
 import com.codingbot.algorithm.ui.sorting.SortingScreen
 import com.codingbot.algorithm.ui.sorting.SortingSelectScreen

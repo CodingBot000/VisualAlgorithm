@@ -46,7 +46,6 @@ class SharedUiEvent<Event> : UiEvent<Event> {
     override val uiEvent: Flow<Event> = sharedFlow
 
     override suspend fun postEvent(event: Event) {
-        // 화면에서 collect 하기 전에 이벤트 전송이 먼저되는 경우가 있어서 (ex: OnNewIntent-딥링크) yield 로 전송 시점을 늦춤
         yield()
         sharedFlow.emit(event)
     }
