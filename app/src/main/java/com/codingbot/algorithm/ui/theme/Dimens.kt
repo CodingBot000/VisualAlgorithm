@@ -1,0 +1,34 @@
+package com.codingbot.algorithm.ui.theme
+
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+
+object Dimens {
+    object Sorting {
+        val SortingGraphHeight = Height.H170
+        val SortingGraphWidth = Height.H10
+        val SortingTextMarkingHeight = Height.H15
+        val SortingTextOverayMarkRoundedCorner = Size.S8
+
+    }
+    object Height {
+        val H170: Dp = 170.dp
+        val H150: Dp = 150.dp
+        val H64: Dp = 64.dp
+        val H52: Dp = 52.dp
+        val H48: Dp = 48.dp
+        val H44: Dp = 44.dp
+        val H40: Dp = 40.dp
+        val H38: Dp = 38.dp
+        val H32: Dp = 32.dp
+        val H30: Dp = 30.dp
+        val H20: Dp = 20.dp
+        val H15: Dp = 15.dp
+        val H10: Dp = 10.dp
+    }
+
+    object Size {
+        val S8: Dp = 8.dp
+    }
+
+}

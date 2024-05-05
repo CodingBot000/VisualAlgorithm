@@ -1,0 +1,122 @@
+[
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/raw_scenario_intro_video_sound_02.mp3.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/raw/scenario_intro_video_sound_02.mp3"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/raw_touch_1.json.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/raw/touch_1.json"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/drawable_icon_spinner_light.xml.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/drawable/icon_spinner_light.xml"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/raw_touch_2.json.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/raw/touch_2.json"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/raw_scenario_intro_video_sound_01.mp3.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/raw/scenario_intro_video_sound_01.mp3"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-anydpi/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-anydpi/ic_launcher.xml"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/raw_scenario_intro_end_4k.mp4.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/raw/scenario_intro_end_4k.mp4"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/font_notosanskr_bold.ttf.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/font/notosanskr_bold.ttf"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/font_notosanskr_regular.ttf.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/font/notosanskr_regular.ttf"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/raw_scenario_intro_front_4k.mp4.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/raw/scenario_intro_front_4k.mp4"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/raw_scenario_touch_lottie1.json.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/raw/scenario_touch_lottie1.json"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/xml_data_extraction_rules.xml.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/drawable_icon_spinner_dark.xml.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/drawable/icon_spinner_dark.xml"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/raw_touch.json.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/raw/touch.json"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/raw_scenario_intro_medium_4k.mp4.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/raw/scenario_intro_medium_4k.mp4"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/xml_backup_rules.xml.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.codingbot.algorithm.app-debug-56:/drawable_icon_arrow_left.xml.flat",
+        "source": "com.codingbot.algorithm.app-main-58:/drawable/icon_arrow_left.xml"
+    }
+]

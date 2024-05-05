@@ -1,0 +1,12 @@
+package com.codingbot.algorithm.data.model
+
+import com.codingbot.algorithm.data.SortingData
+
+
+interface IDisplayHeapSortingUpdateEvent {
+    fun elementList(list: MutableList<SortingData>,
+                    resultList: MutableList<SortingData>? = null,
+                    swapTargetIdx1: Int,
+                    swapTargetIdx2: Int)
+    fun finish()
+}

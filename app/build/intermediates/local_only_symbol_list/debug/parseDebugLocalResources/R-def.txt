@@ -1,0 +1,31 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable icon_arrow_left
+drawable icon_spinner_dark
+drawable icon_spinner_light
+font notosanskr_bold
+font notosanskr_regular
+mipmap ic_launcher
+mipmap ic_launcher_round
+raw scenario_intro_end_4k
+raw scenario_intro_front_4k
+raw scenario_intro_medium_4k
+raw scenario_intro_video_sound_01
+raw scenario_intro_video_sound_02
+raw scenario_touch_lottie1
+raw touch
+raw touch_1
+raw touch_2
+string app_name
+style Theme.VisualAlgorithm
+xml backup_rules
+xml data_extraction_rules
