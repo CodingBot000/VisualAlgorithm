@@ -6,7 +6,7 @@
 </br>
 
 
-[![IMAGE ALT TEXT HERE](https://youtube.com/shorts/WhnYrbhViLk?feature=share)
+[![IMAGE ALT TEXT HERE]([https://youtube.com/shorts/WhnYrbhViLk?feature=share](https://youtube.com/shorts/WhnYrbhViLk?feature=share))
 - Click to view as a 'YouTube' video.  
 
     
