@@ -19,7 +19,6 @@ class SelectionSortAlgorithm(): ISortingAlgorithm
     private var resultArr: MutableList<SortingDataResult> = mutableListOf<SortingDataResult>()
     private lateinit var iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
 
-    private var sortingSpeed: Float = Const.sortingSpeed
     private var backupArr = emptyList<SortingData>()
     private var arrSize = 0
 
@@ -33,9 +32,6 @@ class SelectionSortAlgorithm(): ISortingAlgorithm
         this.iDisplaySortingUpdateEvent = iDisplaySortingUpdateEvent
 
         backupArr = sortingListInit.toMutableList()
-    }
-    override fun setSpeed(speed: Float) {
-        this.sortingSpeed = speed
     }
 
     override suspend fun start() {

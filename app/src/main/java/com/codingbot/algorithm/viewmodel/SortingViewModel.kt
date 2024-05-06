@@ -120,7 +120,6 @@ class SortingViewModel @Inject constructor()
         try {
             with(sortingResultList[sortingProgressIndex]) {
                 displayBars(sortingDataList, swapTargetIdx1, swapTargetIdx2)
-                logger { "updateBars Const.sortingSpeed:${Const.sortingSpeed}"}
                 delay(speed.toLong())
             }
         } catch (e: IndexOutOfBoundsException) {
@@ -248,7 +247,6 @@ class SortingViewModel @Inject constructor()
 
     fun setSortingSpeed(sortingSpeed: Float) {
         speed = sortingSpeed
-        sortingAlgorithm?.setSpeed(sortingSpeed)
     }
 
     fun setPlayButtonState(playState: PlayState) {

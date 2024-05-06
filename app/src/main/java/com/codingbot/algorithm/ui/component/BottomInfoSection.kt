@@ -58,7 +58,7 @@ fun BottomInfoSection(sortingType: String,
     )
 
     val hiddenButton = remember(sortingType) {
-        !arrayListOf(GraphList.BFS.name, GraphList.DFS.name, SortingList.HEAP_SORT).contains(sortingType)
+        !arrayListOf(GraphList.BFS.name, GraphList.DFS.name, SortingList.HEAP_SORT.name).contains(sortingType)
     }
 
     Row(modifier = Modifier
@@ -80,26 +80,22 @@ fun BottomInfoSection(sortingType: String,
 
         Button(
             onClick = {
-                if (playState == PlayState.INIT) {
-                    onClickStart()
-                } else if (playState == PlayState.PAUSE) {
-                    onClickResume()
-                } else if (playState == PlayState.RESUME || playState == PlayState.PLAYING) {
-                    onClickPause()
-                } else {
-                    onClickPause()
+                when(playState) {
+                    PlayState.INIT -> onClickStart()
+                    PlayState.PAUSE -> onClickResume()
+                    PlayState.RESUME, PlayState.PLAYING -> onClickPause()
+                    else -> {}
                 }
             },
+            enabled = startButtonEnable
         ) {
-            if (playState == PlayState.INIT) {
-                bottomIcon(resId = R.drawable.icon_play_circle_48px)
-            } else if (playState == PlayState.RESUME || playState == PlayState.PLAYING) {
-                bottomIcon(resId = R.drawable.icon_pause_circle_48px)
-            } else if (playState == PlayState.PAUSE) {
-                bottomIcon(resId = R.drawable.icon_play_circle_48px)
-            } else {
-                bottomIcon(resId = R.drawable.icon_pause_circle_48px)
+            var resId = when(playState) {
+                PlayState.INIT -> R.drawable.icon_play_circle_48px
+                PlayState.PAUSE -> R.drawable.icon_play_circle_48px
+                PlayState.RESUME, PlayState.PLAYING -> R.drawable.icon_pause_circle_48px
+                else -> R.drawable.icon_pause_circle_48px
             }
+            bottomIcon(resId = resId)
         }
         Spacer(Modifier.width(10.dp))
         if (hiddenButton) {
@@ -114,14 +110,14 @@ fun BottomInfoSection(sortingType: String,
             Spacer(Modifier.width(10.dp))
         }
 
-        Button(
-            onClick = {
-                onClickReplay()
-            },
-            enabled = finish
-        ) {
-            bottomIcon(resId = R.drawable.icon_refresh_48px)
-        }
+//        Button(
+//            onClick = {
+//                onClickReplay()
+//            },
+//            enabled = finish
+//        ) {
+//            bottomIcon(resId = R.drawable.icon_refresh_48px)
+//        }
 
 
     }

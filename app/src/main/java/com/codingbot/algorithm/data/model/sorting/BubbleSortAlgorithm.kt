@@ -33,10 +33,6 @@ class BubbleSortAlgorithm(): ISortingAlgorithm
         backupArr = sortingListInit.toMutableList()
     }
 
-    override fun setSpeed(speed: Float) {
-//        this.sortingSpeed = speed
-    }
-
     override suspend fun start() {
         arrSize = arr.size
         viewModelScope.launch {

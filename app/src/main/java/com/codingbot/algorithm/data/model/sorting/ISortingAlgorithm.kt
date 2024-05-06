@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineScope
 
 interface ISortingAlgorithm
 {
-    fun setSpeed(speed: Float)
     fun initValue(
         viewModelScope: CoroutineScope,
         sortingListInit: MutableList<SortingData>,
