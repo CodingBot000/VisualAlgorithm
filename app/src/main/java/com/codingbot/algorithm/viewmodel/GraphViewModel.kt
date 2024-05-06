@@ -44,9 +44,6 @@ class GraphViewModel
     private val INIT_SPEED = 500f
     private var speed = INIT_SPEED
     private var moveCount = 0
-//    private var type: String = GraphList.BFS.name
-//    private val arr: Array<IntArray>  = Array(Const.GRAPH_ARRAY_SIZE) { IntArray(Const.GRAPH_ARRAY_SIZE) }
-//    private val visitedArray: Array<BooleanArray>  = Array(Const.GRAPH_ARRAY_SIZE) { BooleanArray(Const.GRAPH_ARRAY_SIZE) }
     var arrColSize = 0
     var graphType: String = GraphList.BFS.name
 
@@ -59,22 +56,6 @@ class GraphViewModel
         get() = getFlatArrayIndex(dest)
 
     private var graphAlgorithm: GraphAlgorithm? = null
-//    private lateinit var array: Array<Array<GraphData>>
-//    fun initGraph(graphType: String) {
-//        val mazeInit = arrayOf(
-//            intArrayOf(0, 0, 1, 0, 0),
-//            intArrayOf(0, 0, 0, 0, 0),
-//            intArrayOf(0, 0, 0, 1, 0),
-//            intArrayOf(1, 1, 0, 1, 1),
-//            intArrayOf(0, 0, 0, 0, 0)
-//        )
-//
-//        array = Array(mazeInit.size) { rowIndex ->
-//            Array(mazeInit[rowIndex].size) { columnIndex ->
-//                GraphData(mazeInit[rowIndex][columnIndex])
-//            }
-//        }
-//    }
 
     init {
         initGraph()
@@ -113,7 +94,6 @@ class GraphViewModel
                     arr = baseGridArray,
                     iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
                         override fun visitedList(list: Array<BooleanArray>) {
-//                    logger { "visitedList: ${list.flatMap { it.asList() }.joinToString(" ")}"}
                             val flatList = list.flatMap { it.asList() }
                             execute(GraphIntent.ElementList(list = flatList))
                             execute(GraphIntent.MoveCount(moveCount = moveCount))
@@ -124,7 +104,6 @@ class GraphViewModel
                         }
                     }
                 )
-
             }
             GraphList.DFS.name -> {
                 graphAlgorithm = GraphDFSAlgorithm()
@@ -133,7 +112,6 @@ class GraphViewModel
                     arr = baseGridArray,
                     iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
                         override fun visitedList(list: Array<BooleanArray>) {
-//                    logger { "visitedList: ${list.flatMap { it.asList() }.joinToString(" ")}"}
                             val flatList = list.flatMap { it.asList() }
                             execute(GraphIntent.ElementList(list = flatList))
                             execute(GraphIntent.MoveCount(moveCount = moveCount))
@@ -146,8 +124,6 @@ class GraphViewModel
                 )
             }
         }
-
-
     }
 
     fun start() {
