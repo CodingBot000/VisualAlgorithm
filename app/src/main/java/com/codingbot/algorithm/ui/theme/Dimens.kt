@@ -29,6 +29,7 @@ object Dimens {
 
     object Size {
         val S8: Dp = 8.dp
+        val S20: Dp = 20.dp
     }
 
 }

@@ -3,6 +3,7 @@ package com.codingbot.algorithm.data.model.sorting
 import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.data.SortingData
+import com.codingbot.algorithm.data.SortingDataResult
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplaySortingUpdateEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -15,6 +16,7 @@ class QuickSortAlgorithm(): ISortingAlgorithm
 
     private lateinit var viewModelScope: CoroutineScope
     private lateinit var arr: MutableList<SortingData>
+    private var resultArr: MutableList<SortingDataResult> = mutableListOf<SortingDataResult>()
     private lateinit var iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
 
     private var sortingSpeed: Float = Const.sortingSpeed
@@ -23,14 +25,14 @@ class QuickSortAlgorithm(): ISortingAlgorithm
 
     override fun initValue(
         viewModelScope: CoroutineScope,
-        arr: MutableList<SortingData>,
+        sortingListInit: MutableList<SortingData>,
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = arr
+        this.arr = sortingListInit
         this.iDisplaySortingUpdateEvent = iDisplaySortingUpdateEvent
 
-        backupArr = arr.toMutableList()
+        backupArr = sortingListInit.toMutableList()
     }
     override fun setSpeed(speed: Float) {
         this.sortingSpeed = speed
@@ -50,7 +52,7 @@ class QuickSortAlgorithm(): ISortingAlgorithm
 
     private suspend fun sort() {
         quickSort(arr)
-        iDisplaySortingUpdateEvent.finish()
+        iDisplaySortingUpdateEvent.finish(resultArr)
     }
 
     private suspend fun quickSort(arr: MutableList<SortingData>) {
@@ -79,19 +81,33 @@ class QuickSortAlgorithm(): ISortingAlgorithm
                 right--
             }
             if (left <= right) { //left가 right보다 왼쪽에 있으면 둘이 자리 바꿈
-                iDisplaySortingUpdateEvent.elementList(
-                    list = arr,
-                    swapTargetIdx1 = left,
-                    swapTargetIdx2 = right
+//                iDisplaySortingUpdateEvent.elementList(
+//                    list = arr,
+//                    swapTargetIdx1 = left,
+//                    swapTargetIdx2 = right
+//                )
+//                delay(sortingSpeed.toLong())
+                resultArr.add(
+                    SortingDataResult(
+                        sortingDataList = arr.toMutableList(),
+                        swapTargetIdx1 = left,
+                        swapTargetIdx2 = right
+                    )
                 )
-                delay(sortingSpeed.toLong())
                 swap(arr, left, right)
-                iDisplaySortingUpdateEvent.elementList(
-                    list = arr,
-                    swapTargetIdx1 = left,
-                    swapTargetIdx2 = right
+//                iDisplaySortingUpdateEvent.elementList(
+//                    list = arr,
+//                    swapTargetIdx1 = left,
+//                    swapTargetIdx2 = right
+//                )
+//                delay(sortingSpeed.toLong())
+                resultArr.add(
+                    SortingDataResult(
+                        sortingDataList = arr.toMutableList(),
+                        swapTargetIdx1 = left,
+                        swapTargetIdx2 = right
+                    )
                 )
-                delay(sortingSpeed.toLong())
                 left++
                 right--
             }

@@ -6,6 +6,7 @@ import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.core.common.SortingList
 import com.codingbot.algorithm.core.utils.scaledNumber
 import com.codingbot.algorithm.data.SortingData
+import com.codingbot.algorithm.data.SortingDataResult
 import com.codingbot.algorithm.data.model.sorting.HeapSortAlgorithm
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
 import com.codingbot.algorithm.ui.ChannelUiEvent
@@ -66,7 +67,7 @@ class SortingHeapSortingViewModel @Inject constructor()
         sortingAlgorithm = getAlogrithm(sortingType)
         sortingAlgorithm?.initValue(
             viewModelScope = viewModelScope,
-            arr = arr,
+            sortingListInit = arr,
             iDisplayHeapSortingUpdateEvent = object: IDisplayHeapSortingUpdateEvent {
                 override fun elementList(
                     list: MutableList<SortingData>,
@@ -77,7 +78,7 @@ class SortingHeapSortingViewModel @Inject constructor()
                     displayBars(list, result, swapTargetIdx1, swapTargetIdx2)
                 }
 
-                override fun finish() {
+                override fun finish(resultList: MutableList<SortingDataResult>?) {
                     execute(HeapSortingIntent.FinishSorting(sortingType, true))
                 }
             }

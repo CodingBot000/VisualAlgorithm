@@ -73,6 +73,7 @@ fun GraphScreen(
             }
 
             BottomInfoSection(
+                sortingType = graphType,
                 moveCount = uiState.value.moveCount,
                 startButtonEnable = uiState.value.startButtonEnable,
                 finish = uiState.value.finish,
