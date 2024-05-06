@@ -4,6 +4,7 @@ import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.data.SortingData
 import com.codingbot.algorithm.data.SortingDataResult
+import com.codingbot.algorithm.data.SortingHeapDataResult
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -16,7 +17,7 @@ class HeapSortAlgorithm
 
     private lateinit var viewModelScope: CoroutineScope
     private lateinit var arr: MutableList<SortingData>
-    private var resultArr: MutableList<SortingDataResult> = mutableListOf<SortingDataResult>()
+    private var resultArr: MutableList<SortingHeapDataResult> = mutableListOf<SortingHeapDataResult>()
     private lateinit var iDisplayHeapSortingUpdateEvent: IDisplayHeapSortingUpdateEvent
 
     private var sortingSpeed: Float = Const.sortingSpeed
@@ -25,11 +26,11 @@ class HeapSortAlgorithm
 
     fun initValue(
         viewModelScope: CoroutineScope,
-        arr: MutableList<SortingData>,
+        sortingListInit: MutableList<SortingData>,
         iDisplayHeapSortingUpdateEvent: IDisplayHeapSortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = arr
+        this.arr = sortingListInit
         this.iDisplayHeapSortingUpdateEvent = iDisplayHeapSortingUpdateEvent
 
         backupArr = arr.toMutableList()
@@ -61,6 +62,14 @@ class HeapSortAlgorithm
             swapTargetIdx1 = -1,
             swapTargetIdx2 = -1
         )
+//        resultArr.add(
+//            SortingHeapDataResult(
+//                sortingDataList = arr,
+//                resultList = results.toMutableList(),
+//                swapTargetIdx1 = -1,
+//                swapTargetIdx2 = -1
+//            )
+//        )
         iDisplayHeapSortingUpdateEvent.finish()
     }
 
@@ -89,6 +98,14 @@ class HeapSortAlgorithm
                 swapTargetIdx2 = -1
             )
             delay(sortingSpeed.toLong())
+//            resultArr.add(
+//                SortingHeapDataResult(
+//                    sortingDataList = array,
+//                    resultList = results.toMutableList(),
+//                    swapTargetIdx1 = -1,
+//                    swapTargetIdx2 = -1
+//                )
+//            )
             heapify(array, --arrayLen, 0, results)
         }
         return results
@@ -122,14 +139,31 @@ class HeapSortAlgorithm
                 swapTargetIdx1 = p,
                 swapTargetIdx2 = pIdx
             )
-//            delay(sortingSpeed.toLong())
+            delay(sortingSpeed.toLong())
+//            resultArr.add(
+//                SortingHeapDataResult(
+//                    sortingDataList = array,
+//                    resultList = null,
+//                    swapTargetIdx1 = p,
+//                    swapTargetIdx2 = pIdx
+//                )
+//            )
+
             array[pIdx] = temp
             iDisplayHeapSortingUpdateEvent.elementList(
                 list = array,
                 swapTargetIdx1 = pIdx,
                 swapTargetIdx2 = p
             )
-//            delay(sortingSpeed.toLong())
+            delay(sortingSpeed.toLong())
+//            resultArr.add(
+//                SortingHeapDataResult(
+//                    sortingDataList = array,
+//                    resultList = null,
+//                    swapTargetIdx1 = pIdx,
+//                    swapTargetIdx2 = p
+//                )
+//            )
             heapify(array, heapSize, p, results)
         }
     }

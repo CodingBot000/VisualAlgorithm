@@ -25,14 +25,14 @@ class QuickSortAlgorithm(): ISortingAlgorithm
 
     override fun initValue(
         viewModelScope: CoroutineScope,
-        arr: MutableList<SortingData>,
+        sortingListInit: MutableList<SortingData>,
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = arr
+        this.arr = sortingListInit
         this.iDisplaySortingUpdateEvent = iDisplaySortingUpdateEvent
 
-        backupArr = arr.toMutableList()
+        backupArr = sortingListInit.toMutableList()
     }
     override fun setSpeed(speed: Float) {
         this.sortingSpeed = speed
@@ -81,19 +81,33 @@ class QuickSortAlgorithm(): ISortingAlgorithm
                 right--
             }
             if (left <= right) { //left가 right보다 왼쪽에 있으면 둘이 자리 바꿈
-                iDisplaySortingUpdateEvent.elementList(
-                    list = arr,
-                    swapTargetIdx1 = left,
-                    swapTargetIdx2 = right
+//                iDisplaySortingUpdateEvent.elementList(
+//                    list = arr,
+//                    swapTargetIdx1 = left,
+//                    swapTargetIdx2 = right
+//                )
+//                delay(sortingSpeed.toLong())
+                resultArr.add(
+                    SortingDataResult(
+                        sortingDataList = arr.toMutableList(),
+                        swapTargetIdx1 = left,
+                        swapTargetIdx2 = right
+                    )
                 )
-                delay(sortingSpeed.toLong())
                 swap(arr, left, right)
-                iDisplaySortingUpdateEvent.elementList(
-                    list = arr,
-                    swapTargetIdx1 = left,
-                    swapTargetIdx2 = right
+//                iDisplaySortingUpdateEvent.elementList(
+//                    list = arr,
+//                    swapTargetIdx1 = left,
+//                    swapTargetIdx2 = right
+//                )
+//                delay(sortingSpeed.toLong())
+                resultArr.add(
+                    SortingDataResult(
+                        sortingDataList = arr.toMutableList(),
+                        swapTargetIdx1 = left,
+                        swapTargetIdx2 = right
+                    )
                 )
-                delay(sortingSpeed.toLong())
                 left++
                 right--
             }

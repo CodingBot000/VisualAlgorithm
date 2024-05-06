@@ -26,6 +26,8 @@ import kotlin.random.Random
 
 data class SortingUiState(
     val startButtonEnable: Boolean = true,
+    val forwardButtonEnable: Boolean = false,
+    val backwardButtonEnable: Boolean = false,
     val playState: PlayState = PlayState.INIT,
     val elementSelected: Int = 0,
     val elementList: MutableList<SortingData> = mutableListOf<SortingData>(),
@@ -35,12 +37,12 @@ data class SortingUiState(
 )
 
 sealed interface SortingIntent {
-    data class StartButtonEnable(val enable: Boolean): SortingIntent
+    data class ButtonEnableForwardAndBackward(val forwardButtonEnable: Boolean, val backwardButtonEnable: Boolean): SortingIntent
     data class PlayButtonState(val playState: PlayState): SortingIntent
     data class ElementSelected(val index: Int): SortingIntent
     data class ElementList(val list: MutableList<SortingData>): SortingIntent
     data class MoveCount(val moveCount: Int): SortingIntent
-    data class FinishSorting(val sortingType: String, val enable: Boolean, val resultList: MutableList<SortingDataResult>): SortingIntent
+    data class FinishSorting(val sortingType: String, val enable: Boolean): SortingIntent
 }
 
 sealed interface SortingUiEvent {
@@ -62,14 +64,15 @@ class SortingViewModel @Inject constructor()
     private var speed = INIT_SPEED
     private var moveCount = 0
     private var type: String = SortingList.BUBBLE_SORT.name
-    private val arr = mutableListOf<SortingData>()
-    private var arrSize = 0
+    private val sortingListInit = mutableListOf<SortingData>()
+    private var sortingListInitSize = 0
+    private lateinit var sortingResultList: MutableList<SortingDataResult>
 
     private var sortingAlgorithm: ISortingAlgorithm? = null
 
     private var continuation: Continuation<Unit>? = null
     var curPlayState = PlayState.INIT
-
+    private var sortingProgressIndex = 0
 
     init {
         initValues()
@@ -82,7 +85,7 @@ class SortingViewModel @Inject constructor()
         sortingAlgorithm = getAlogritm(sortingType)
         sortingAlgorithm?.initValue(
             viewModelScope = viewModelScope,
-            arr = arr,
+            sortingListInit = sortingListInit,
             iDisplaySortingUpdateEvent = object: IDisplaySortingUpdateEvent {
                 override fun elementList(
                     list: MutableList<SortingData>,
@@ -93,38 +96,37 @@ class SortingViewModel @Inject constructor()
                 }
 
                 override fun finish(resultList: MutableList<SortingDataResult>) {
+
                     execute(SortingIntent.FinishSorting(
                         sortingType = sortingType,
-                        enable = true,
-                        resultList = resultList))
+                        enable = true))
+
+                    sortingResultList = resultList
 
                     viewModelScope.launch {
-                        var index = 0
-                        var size = resultList.size
-
-                        while (index < size) {
-                            // 일시 정지 상태에서 대기
+                        while (sortingProgressIndex < sortingResultList.size) {
                             checkPaused()
-
-                            with(resultList[index]) {
-                                displayBars(sortingDataList, swapTargetIdx1, swapTargetIdx2)
-                                delay(Const.sortingSpeed.toLong())
-                            }
-                            index++
-
+                            updateBars()
+                            decideForwardBackwardEnable()
+                            sortingProgressIndex++
                         }
-//                        resultList.forEach { sortingDataResult ->
-//                            val swapTargetIdx1 = sortingDataResult.swapTargetIdx1
-//                            val swapTargetIdx2 = sortingDataResult.swapTargetIdx2
-//                            displayBars(sortingDataResult.sortingDataList, swapTargetIdx1, swapTargetIdx2)
-//                            delay(Const.sortingSpeed.toLong())
-//                        }
                     }
                 }
             }
         )
     }
 
+    private suspend fun updateBars() {
+        try {
+            with(sortingResultList[sortingProgressIndex]) {
+                displayBars(sortingDataList, swapTargetIdx1, swapTargetIdx2)
+                logger { "updateBars Const.sortingSpeed:${Const.sortingSpeed}"}
+                delay(speed.toLong())
+            }
+        } catch (e: IndexOutOfBoundsException) {
+            logger { "updateBars sortingIndexException: $e" }
+        }
+    }
     private suspend fun checkPaused() {
         if (curPlayState == PlayState.PAUSE) {
             suspendCancellableCoroutine<Unit> { continuation = it }
@@ -134,14 +136,72 @@ class SortingViewModel @Inject constructor()
     fun pauseSorting() {
 //        playState = PlayState.PAUSE
         setPlayButtonState(PlayState.PAUSE)
+
     }
 
     fun resumeSorting() {
 //        playState = PlayState.RESUME
         setPlayButtonState(PlayState.RESUME)
+
         continuation?.resume(Unit)
         continuation = null
     }
+
+    fun forward() {
+        viewModelScope.launch {
+            if (sortingResultList.size -1 > sortingProgressIndex) {
+                sortingProgressIndex++
+                logger { "forward sortingProgressIndex 1:$sortingProgressIndex" }
+                updateBars()
+            } else {
+                logger { "forward sortingProgressIndex over:$sortingProgressIndex" }
+                forwardBackwardEnable(
+                    forwardButtonEnable = false,
+                    backwardButtonEnable = true,
+                )
+            }
+            decideForwardBackwardEnable()
+        }
+    }
+
+    fun backward() {
+        viewModelScope.launch {
+            if (0 < sortingProgressIndex) {
+                sortingProgressIndex--
+                logger { "backward sortingProgressIndex over:$sortingProgressIndex" }
+                updateBars()
+            } else {
+                logger { "backward sortingProgressIndex over:$sortingProgressIndex" }
+                forwardBackwardEnable(
+                    forwardButtonEnable = true,
+                    backwardButtonEnable = false,
+                )
+            }
+            decideForwardBackwardEnable()
+        }
+    }
+
+    private fun forwardBackwardEnable(
+        forwardButtonEnable: Boolean = true,
+        backwardButtonEnable: Boolean = true
+    ) {
+//        var forwardButtonEnable = true
+//        var backwardButtonEnable = true
+//        if (curPlayState != PlayState.PAUSE) {
+//            forwardButtonEnable = false
+//            backwardButtonEnable = false
+//        }
+        execute(SortingIntent.ButtonEnableForwardAndBackward(forwardButtonEnable, backwardButtonEnable))
+//        buttonEnableForwardAndBackward(
+//            forwardButtonEnable = forwardButtonEnable,
+//            backwardButtonEnable = backwardButtonEnable
+//        )
+    }
+
+
+//    fun buttonEnableForwardAndBackward(forwardButtonEnable: Boolean, backwardButtonEnable: Boolean) {
+//        execute(SortingIntent.ButtonEnableForwardAndBackward(forwardButtonEnable, backwardButtonEnable))
+//    }
 
     private fun getAlogritm(sortingType: String): ISortingAlgorithm =
       when (sortingType) {
@@ -171,14 +231,14 @@ class SortingViewModel @Inject constructor()
             to = Const.GRAPH_HEIGHT_TO
             )
         randomValues.forEachIndexed { index, randomNum ->
-            arr.add(
+            sortingListInit.add(
                 SortingData(element = randomNum,
                     scaledNum = scaledNumberList[index])
             )
         }
 
-        arrSize = arr.size
-        execute(SortingIntent.ElementList(arr))
+        sortingListInitSize = sortingListInit.size
+        execute(SortingIntent.ElementList(sortingListInit))
     }
 
     private fun initValues() {
@@ -187,16 +247,41 @@ class SortingViewModel @Inject constructor()
     }
 
     fun setSortingSpeed(sortingSpeed: Float) {
+        speed = sortingSpeed
         sortingAlgorithm?.setSpeed(sortingSpeed)
-    }
-
-    fun startButtonEnabled(enable: Boolean) {
-        execute(SortingIntent.StartButtonEnable(enable))
     }
 
     fun setPlayButtonState(playState: PlayState) {
         curPlayState = playState
         execute(SortingIntent.PlayButtonState(playState))
+        logger { "setPlayButtonState:$playState" }
+        decideForwardBackwardEnable()
+    }
+
+    private fun decideForwardBackwardEnable() {
+        if (curPlayState == PlayState.PAUSE) {
+            if (sortingProgressIndex >= sortingResultList.size -1) {
+                forwardBackwardEnable(
+                    forwardButtonEnable = false,
+                    backwardButtonEnable = true,
+                )
+            } else if (sortingProgressIndex <= 0) {
+                forwardBackwardEnable(
+                    forwardButtonEnable = true,
+                    backwardButtonEnable = false,
+                )
+            } else {
+                forwardBackwardEnable(
+                    forwardButtonEnable = true,
+                    backwardButtonEnable = true,
+                )
+            }
+        } else {
+            forwardBackwardEnable(
+                forwardButtonEnable = false,
+                backwardButtonEnable = false,
+            )
+        }
     }
 
     fun start() {
@@ -208,7 +293,7 @@ class SortingViewModel @Inject constructor()
 
     fun restart() {
         moveCount = 0
-        execute(SortingIntent.ElementList(arr))
+        execute(SortingIntent.ElementList(sortingListInit))
         viewModelScope.launch {
             sortingAlgorithm?.restart()
             setPlayButtonState(PlayState.PLAYING)
@@ -216,43 +301,44 @@ class SortingViewModel @Inject constructor()
     }
 
     private fun displayBars(
-        arr: MutableList<SortingData>,
+        sortingList: MutableList<SortingData>,
         swapTargetIdx1: Int,
         swapTargetIdx2: Int)
     {
-        for (k in arr.indices) {
+        for (k in sortingList.indices) {
             if (k == swapTargetIdx1) {
-                arr[k] = SortingData(
-                    element = arr[k].element,
-                    scaledNum = arr[k].scaledNum,
+                sortingList[k] = SortingData(
+                    element = sortingList[k].element,
+                    scaledNum = sortingList[k].scaledNum,
                     swap1 = true,
                     swap2 = false)
             } else if (k == swapTargetIdx2) {
-                arr[k] = SortingData(
-                    element = arr[k].element,
-                    scaledNum = arr[k].scaledNum,
+                sortingList[k] = SortingData(
+                    element = sortingList[k].element,
+                    scaledNum = sortingList[k].scaledNum,
                     swap1 = false,
                     swap2 = true)
             } else {
-                arr[k] = SortingData(
-                    element = arr[k].element,
-                    scaledNum = arr[k].scaledNum,
+                sortingList[k] = SortingData(
+                    element = sortingList[k].element,
+                    scaledNum = sortingList[k].scaledNum,
                     swap1 = false,
                     swap2 = false)
             }
         }
         moveCount++
-        execute(SortingIntent.ElementList(list = arr))
+        execute(SortingIntent.ElementList(list = sortingList))
         execute(SortingIntent.MoveCount(moveCount = moveCount))
     }
 
     override suspend fun SortingUiState.reduce(intent: SortingIntent): SortingUiState =
         when (intent) {
-            is SortingIntent.StartButtonEnable -> {
-                copy(startButtonEnable = intent.enable)
+            is SortingIntent.ButtonEnableForwardAndBackward -> {
+                copy(forwardButtonEnable = intent.forwardButtonEnable,
+                    backwardButtonEnable = intent.backwardButtonEnable)
             }
             is SortingIntent.PlayButtonState -> {
-                curPlayState = intent.playState
+//                curPlayState = intent.playState
                 copy(playState = intent.playState)
             }
             is SortingIntent.ElementSelected -> {
@@ -262,7 +348,6 @@ class SortingViewModel @Inject constructor()
                 val newList = intent.list.toMutableList()
                 copy(elementList = newList)
             }
-
             is SortingIntent.FinishSorting -> {
                 copy(finish = intent.enable)
             }

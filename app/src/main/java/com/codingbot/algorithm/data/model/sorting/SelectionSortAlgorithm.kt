@@ -25,14 +25,14 @@ class SelectionSortAlgorithm(): ISortingAlgorithm
 
     override fun initValue(
         viewModelScope: CoroutineScope,
-        arr: MutableList<SortingData>,
+        sortingListInit: MutableList<SortingData>,
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = arr
+        this.arr = sortingListInit
         this.iDisplaySortingUpdateEvent = iDisplaySortingUpdateEvent
 
-        backupArr = arr.toMutableList()
+        backupArr = sortingListInit.toMutableList()
     }
     override fun setSpeed(speed: Float) {
         this.sortingSpeed = speed
@@ -58,19 +58,33 @@ class SelectionSortAlgorithm(): ISortingAlgorithm
                     minIdx = j
                 }
             }
-            iDisplaySortingUpdateEvent.elementList(
-                list = arr,
-                swapTargetIdx1 = i,
-                swapTargetIdx2 = minIdx
+//            iDisplaySortingUpdateEvent.elementList(
+//                list = arr,
+//                swapTargetIdx1 = i,
+//                swapTargetIdx2 = minIdx
+//            )
+//            delay(sortingSpeed.toLong())
+            resultArr.add(
+                SortingDataResult(
+                    sortingDataList = arr.toMutableList(),
+                    swapTargetIdx1 = i,
+                    swapTargetIdx2 = minIdx
+                )
             )
-            delay(sortingSpeed.toLong())
             swap(arr, i, minIdx)
-            iDisplaySortingUpdateEvent.elementList(
-                list = arr,
-                swapTargetIdx1 = i,
-                swapTargetIdx2 = minIdx
+//            iDisplaySortingUpdateEvent.elementList(
+//                list = arr,
+//                swapTargetIdx1 = i,
+//                swapTargetIdx2 = minIdx
+//            )
+//            delay(sortingSpeed.toLong())
+            resultArr.add(
+                SortingDataResult(
+                    sortingDataList = arr.toMutableList(),
+                    swapTargetIdx1 = i,
+                    swapTargetIdx2 = minIdx
+                )
             )
-            delay(sortingSpeed.toLong())
         }
         iDisplaySortingUpdateEvent.finish(resultArr)
     }

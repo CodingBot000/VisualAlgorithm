@@ -1,6 +1,7 @@
 package com.codingbot.algorithm.data.model.sorting.contract
 
 import com.codingbot.algorithm.data.SortingData
+import com.codingbot.algorithm.data.SortingDataResult
 
 
 interface IDisplayHeapSortingUpdateEvent {
@@ -8,5 +9,5 @@ interface IDisplayHeapSortingUpdateEvent {
                     resultList: MutableList<SortingData>? = null,
                     swapTargetIdx1: Int,
                     swapTargetIdx2: Int)
-    fun finish()
+    fun finish(resultList: MutableList<SortingDataResult>? = null)
 }

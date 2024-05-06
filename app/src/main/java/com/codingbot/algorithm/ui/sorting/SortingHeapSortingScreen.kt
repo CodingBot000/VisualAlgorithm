@@ -109,6 +109,7 @@ fun SortingHeapSortingScreen(
 
             Spacer(modifier = Modifier.weight(1f))
             BottomInfoSection(
+                sortingType = sortingType,
                 moveCount = uiState.value.moveCount,
                 startButtonEnable = uiState.value.startButtonEnable,
                 finish = uiState.value.finish,

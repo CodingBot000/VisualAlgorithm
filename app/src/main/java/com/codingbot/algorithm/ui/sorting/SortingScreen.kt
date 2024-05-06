@@ -89,8 +89,11 @@ fun SortingScreen(
             }
 
             BottomInfoSection(
+                sortingType = sortingType,
                 moveCount = uiState.value.moveCount,
                 startButtonEnable = uiState.value.startButtonEnable,
+                forwardButtonEnable = uiState.value.forwardButtonEnable,
+                backwardButtonEnable = uiState.value.backwardButtonEnable,
                 playState = uiState.value.playState,
                 finish = uiState.value.finish,
                 onValueChange = { sliderPosition ->
@@ -118,10 +121,10 @@ fun SortingScreen(
                     sortingViewModel.pauseSorting()
                 },
                 onClickForward = {
-
+                    sortingViewModel.forward()
                 },
                 onClickBackward = {
-
+                    sortingViewModel.backward()
                 },
                 onClickReplay = {
                     sortingViewModel.restart()

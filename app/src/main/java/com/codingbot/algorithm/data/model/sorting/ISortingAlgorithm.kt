@@ -9,7 +9,7 @@ interface ISortingAlgorithm
     fun setSpeed(speed: Float)
     fun initValue(
         viewModelScope: CoroutineScope,
-        arr: MutableList<SortingData>,
+        sortingListInit: MutableList<SortingData>,
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     )
 

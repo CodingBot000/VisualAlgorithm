@@ -24,14 +24,14 @@ class InsertionSortAlgorithm(): ISortingAlgorithm
 
     override fun initValue(
         viewModelScope: CoroutineScope,
-        arr: MutableList<SortingData>,
+        sortingListInit: MutableList<SortingData>,
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = arr
+        this.arr = sortingListInit
         this.iDisplaySortingUpdateEvent = iDisplaySortingUpdateEvent
 
-        backupArr = arr.toMutableList()
+        backupArr = sortingListInit.toMutableList()
     }
 
     override fun setSpeed(speed: Float) {
@@ -53,23 +53,37 @@ class InsertionSortAlgorithm(): ISortingAlgorithm
             val tmp = arr[i]
             var j = i - 1
             while (j >= 0 && tmp.element < arr[j].element) {
-                iDisplaySortingUpdateEvent.elementList(
-                    list = arr,
-                    swapTargetIdx1 = j,
-                    swapTargetIdx2 = j + 1
+                resultArr.add(
+                    SortingDataResult(
+                        sortingDataList = arr.toMutableList(),
+                        swapTargetIdx1 = j,
+                        swapTargetIdx2 = j + 1
+                    )
                 )
-                delay(sortingSpeed.toLong())
+//                iDisplaySortingUpdateEvent.elementList(
+//                    list = arr,
+//                    swapTargetIdx1 = j,
+//                    swapTargetIdx2 = j + 1
+//                )
+//                delay(sortingSpeed.toLong())
                 arr[j + 1] = arr[j]
                 j--
 
             }
             arr[j + 1] = tmp
-            iDisplaySortingUpdateEvent.elementList(
-                list = arr,
-                swapTargetIdx1 = j,
-                swapTargetIdx2 = j + 1
+//            iDisplaySortingUpdateEvent.elementList(
+//                list = arr,
+//                swapTargetIdx1 = j,
+//                swapTargetIdx2 = j + 1
+//            )
+//            delay(sortingSpeed.toLong())
+            resultArr.add(
+                SortingDataResult(
+                    sortingDataList = arr.toMutableList(),
+                    swapTargetIdx1 = j,
+                    swapTargetIdx2 = j + 1
+                )
             )
-            delay(sortingSpeed.toLong())
         }
         iDisplaySortingUpdateEvent.finish(resultArr)
     }
