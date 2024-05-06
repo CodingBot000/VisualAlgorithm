@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.codingbot.algorithm.core.common.GraphList
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.data.model.graph.GraphAlgorithm
-import com.codingbot.algorithm.data.model.graph.IDisplayGraphUpdateEvent
+import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
 import com.codingbot.algorithm.data.model.graph.GraphBFSAlgorithm
 import com.codingbot.algorithm.data.model.graph.GraphDFSAlgorithm
 import com.codingbot.algorithm.ui.ChannelUiEvent

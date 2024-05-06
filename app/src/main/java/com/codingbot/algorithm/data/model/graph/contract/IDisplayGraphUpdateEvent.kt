@@ -1,4 +1,4 @@
-package com.codingbot.algorithm.data.model.graph
+package com.codingbot.algorithm.data.model.graph.contract
 
 
 interface IDisplayGraphUpdateEvent {

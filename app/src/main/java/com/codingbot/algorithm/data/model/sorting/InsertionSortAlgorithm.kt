@@ -1,16 +1,16 @@
-package com.codingbot.algorithm.data.model
+package com.codingbot.algorithm.data.model.sorting
 
 import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.data.SortingData
+import com.codingbot.algorithm.data.model.sorting.contract.IDisplaySortingUpdateEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Collections.swap
 
-class BubbleSortAlgorithm(): ISortingAlgorithm
+class InsertionSortAlgorithm(): ISortingAlgorithm
 {
-    val logger = Logger("BubbleSortAlgorithm")
+    val logger = Logger("InsertionSortAlgorithm")
 
     private lateinit var viewModelScope: CoroutineScope
     private lateinit var arr: MutableList<SortingData>
@@ -42,31 +42,32 @@ class BubbleSortAlgorithm(): ISortingAlgorithm
             sort()
         }
     }
-
     override suspend fun restart() {
         arr = backupArr.toMutableList()
         start()
     }
-
     private suspend fun sort() {
-        for (i in 0 until arrSize - 1) {
-            for (j in 0 until arrSize - i - 1) {
-                if (arr[j].element > arr[j + 1].element) {
-                    iDisplaySortingUpdateEvent.elementList(
-                        list = arr,
-                        swapTargetIdx1 = j,
-                        swapTargetIdx2 = j + 1
-                    )
-                    delay(sortingSpeed.toLong())
-                    swap(arr, j, j + 1)
-                    iDisplaySortingUpdateEvent.elementList(
-                        list = arr,
-                        swapTargetIdx1 = j,
-                        swapTargetIdx2 = j + 1
-                    )
-                    delay(sortingSpeed.toLong())
-                }
+        for (i in 1 until arrSize) {
+            val tmp = arr[i]
+            var j = i - 1
+            while (j >= 0 && tmp.element < arr[j].element) {
+                iDisplaySortingUpdateEvent.elementList(
+                    list = arr,
+                    swapTargetIdx1 = j,
+                    swapTargetIdx2 = j + 1
+                )
+                delay(sortingSpeed.toLong())
+                arr[j + 1] = arr[j]
+                j--
+
             }
+            arr[j + 1] = tmp
+            iDisplaySortingUpdateEvent.elementList(
+                list = arr,
+                swapTargetIdx1 = j,
+                swapTargetIdx2 = j + 1
+            )
+            delay(sortingSpeed.toLong())
         }
         iDisplaySortingUpdateEvent.finish()
     }

@@ -46,18 +46,20 @@ fun MainScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
 
-        Text(
-            modifier = Modifier
-                .padding(5.dp),
-            text = "Sorting",
-            color = CustomTheme.colors.black,
-            style = CustomTheme.typography.title3Regular
-        )
-
         LazyColumn(modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(10.dp)
         )
         {
+            item {
+                Text(
+                    modifier = Modifier
+                        .padding(5.dp),
+                    text = "Sorting",
+                    color = CustomTheme.colors.black,
+                    style = CustomTheme.typography.title3Regular
+                )
+            }
+
             itemsIndexed(uiState.value.selectSortList,
                 key = { index, item -> "$index _$item" })
             { index, item ->
@@ -72,20 +74,16 @@ fun MainScreen(
                     }
                 )
             }
-        }
+            item {
+                Text(
+                    modifier = Modifier
+                        .padding(5.dp),
+                    text = "Graph",
+                    color = CustomTheme.colors.black,
+                    style = CustomTheme.typography.title3Regular
+                )
+            }
 
-        Text(
-            modifier = Modifier
-                .padding(5.dp),
-            text = "Graph",
-            color = CustomTheme.colors.black,
-            style = CustomTheme.typography.title3Regular
-        )
-
-        LazyColumn(modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(10.dp)
-        )
-        {
             itemsIndexed(uiState.value.selectGraphList,
                 key = { index, item -> "$index _$item" })
             { index, item ->
