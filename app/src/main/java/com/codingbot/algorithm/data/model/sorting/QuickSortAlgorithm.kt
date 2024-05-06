@@ -3,6 +3,7 @@ package com.codingbot.algorithm.data.model.sorting
 import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.data.SortingData
+import com.codingbot.algorithm.data.SortingDataResult
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplaySortingUpdateEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -15,6 +16,7 @@ class QuickSortAlgorithm(): ISortingAlgorithm
 
     private lateinit var viewModelScope: CoroutineScope
     private lateinit var arr: MutableList<SortingData>
+    private var resultArr: MutableList<SortingDataResult> = mutableListOf<SortingDataResult>()
     private lateinit var iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
 
     private var sortingSpeed: Float = Const.sortingSpeed
@@ -50,7 +52,7 @@ class QuickSortAlgorithm(): ISortingAlgorithm
 
     private suspend fun sort() {
         quickSort(arr)
-        iDisplaySortingUpdateEvent.finish()
+        iDisplaySortingUpdateEvent.finish(resultArr)
     }
 
     private suspend fun quickSort(arr: MutableList<SortingData>) {

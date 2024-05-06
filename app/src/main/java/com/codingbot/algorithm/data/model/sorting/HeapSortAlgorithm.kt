@@ -3,6 +3,7 @@ package com.codingbot.algorithm.data.model.sorting
 import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.data.SortingData
+import com.codingbot.algorithm.data.SortingDataResult
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -15,6 +16,7 @@ class HeapSortAlgorithm
 
     private lateinit var viewModelScope: CoroutineScope
     private lateinit var arr: MutableList<SortingData>
+    private var resultArr: MutableList<SortingDataResult> = mutableListOf<SortingDataResult>()
     private lateinit var iDisplayHeapSortingUpdateEvent: IDisplayHeapSortingUpdateEvent
 
     private var sortingSpeed: Float = Const.sortingSpeed

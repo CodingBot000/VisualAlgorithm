@@ -3,6 +3,7 @@ package com.codingbot.algorithm.ui.sorting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,7 @@ import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.ScreenTitle
 import com.codingbot.algorithm.ui.theme.CustomTheme
+import com.codingbot.algorithm.viewmodel.PlayState
 import com.codingbot.algorithm.viewmodel.SortingViewModel
 
 @Composable
@@ -56,11 +58,26 @@ fun SortingScreen(
             .padding(horizontal = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
-
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//            ) {
+//                uiState.value.resultList.forEach { list ->
+//                    list.forEach { item ->
+//                        SortingBarCell(
+//                            sortingBarCellType = SortingBarCellType.SortingResult,
+//                            item = item,
+//                            screenWidth = screenWidth,
+//                            listSize = list.size
+//                        )
+//                    }
+//                }
+//            }
             LazyRow(
                 modifier = Modifier.fillMaxWidth()
             )
             {
+
                 itemsIndexed(uiState.value.elementList,
                     key = { index, item -> "$index _$item" })
                 { index, item ->
@@ -74,13 +91,37 @@ fun SortingScreen(
             BottomInfoSection(
                 moveCount = uiState.value.moveCount,
                 startButtonEnable = uiState.value.startButtonEnable,
+                playState = uiState.value.playState,
                 finish = uiState.value.finish,
                 onValueChange = { sliderPosition ->
                     sortingViewModel.setSortingSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
                 },
                 onClickStart = {
-                    sortingViewModel.startButtonEnabled(false)
+//                    with(sortingViewModel) {
+//                        if (uiState.value.playState == PlayState.INIT) {
+//                    sortingViewModel.startButtonEnabled(false)
                     sortingViewModel.start()
+//                        } else if (uiState.value.playState == PlayState.RESUME) {
+//                            resumeSorting()
+//                        } else if (uiState.value.playState == PlayState.PAUSE){
+//                            pauseSorting()
+//                        } else {
+//
+//                        }
+//                        startButtonEnabled(!uiState.value.startButtonEnable)
+//                    }
+                },
+                onClickResume = {
+                    sortingViewModel.resumeSorting()
+                },
+                onClickPause = {
+                    sortingViewModel.pauseSorting()
+                },
+                onClickForward = {
+
+                },
+                onClickBackward = {
+
                 },
                 onClickReplay = {
                     sortingViewModel.restart()
