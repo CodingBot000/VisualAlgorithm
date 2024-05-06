@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
-abstract class MviViewModel<STATE, INTENT>(
+abstract class BaseViewModel<STATE, INTENT>(
     initialState: STATE,
     sharingStarted: SharingStarted = SharingStarted.Lazily
 ) : ViewModel() {

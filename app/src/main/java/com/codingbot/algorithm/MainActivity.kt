@@ -14,9 +14,9 @@ import com.codingbot.algorithm.core.common.GraphList
 import com.codingbot.algorithm.core.common.Screen
 import com.codingbot.algorithm.core.common.SortingList
 import com.codingbot.algorithm.ui.graph.GraphScreen
+import com.codingbot.algorithm.ui.sorting.MainScreen
 import com.codingbot.algorithm.ui.sorting.SortingHeapSortingScreen
 import com.codingbot.algorithm.ui.sorting.SortingScreen
-import com.codingbot.algorithm.ui.sorting.SortingSelectScreen
 import com.codingbot.algorithm.ui.theme.VisualAlgorithmTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = Screen.SelectListScreen.route)
                         {
-                            SortingSelectScreen(navController = navController)
+                            MainScreen(navController = navController)
                         }
                         composable(
                             route = Screen.SortingScreen.routeWithArgs,

@@ -26,7 +26,7 @@ sealed interface MainUiEvent {
 }
 @HiltViewModel
 class MainViewModel @Inject constructor()
-    : MviViewModel<MainUiState, MainIntent>(MainUiState()),
+    : BaseViewModel<MainUiState, MainIntent>(MainUiState()),
     UiEvent<MainUiEvent> by ChannelUiEvent() {
     val logger = Logger("SortingViewModel")
 

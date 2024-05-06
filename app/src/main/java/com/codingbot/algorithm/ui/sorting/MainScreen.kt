@@ -3,6 +3,7 @@ package com.codingbot.algorithm.ui.sorting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +31,7 @@ import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.viewmodel.MainViewModel
 
 @Composable
-fun SortingSelectScreen(
+fun MainScreen(
     navController: NavController,
     mainViewModel: MainViewModel  = hiltViewModel()
 ) {
@@ -44,6 +45,14 @@ fun SortingSelectScreen(
         .padding(horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
+
+        Text(
+            modifier = Modifier
+                .padding(5.dp),
+            text = "Sorting",
+            color = CustomTheme.colors.black,
+            style = CustomTheme.typography.title3Regular
+        )
 
         LazyColumn(modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(10.dp)
@@ -64,6 +73,14 @@ fun SortingSelectScreen(
                 )
             }
         }
+
+        Text(
+            modifier = Modifier
+                .padding(5.dp),
+            text = "Graph",
+            color = CustomTheme.colors.black,
+            style = CustomTheme.typography.title3Regular
+        )
 
         LazyColumn(modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(10.dp)
@@ -99,14 +116,19 @@ private fun SelectionCell(
         shape = RoundedCornerShape(16.dp),
         elevation = 5.dp,
     ) {
-        Text(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-            text = itemName.replace("_", " "),
-            color = CustomTheme.colors.black,
-            style = CustomTheme.typography.title3Regular
-        )
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(5.dp),
+                text = itemName.replace("_", " "),
+                color = CustomTheme.colors.black,
+                style = CustomTheme.typography.title3Regular
+            )
+        }
     }
     Spacer(modifier = Modifier.width(10.dp))
 }

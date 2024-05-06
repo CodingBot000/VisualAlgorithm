@@ -39,7 +39,7 @@ sealed interface HeapSortingUiEvent {
 
 @HiltViewModel
 class SortingHeapSortingViewModel @Inject constructor()
-    : MviViewModel<HeapSortingUiState, HeapSortingIntent>(HeapSortingUiState()),
+    : BaseViewModel<HeapSortingUiState, HeapSortingIntent>(HeapSortingUiState()),
     UiEvent<HeapSortingUiEvent> by ChannelUiEvent()
 {
     val logger = Logger("SortingHeapSortingViewModel")
