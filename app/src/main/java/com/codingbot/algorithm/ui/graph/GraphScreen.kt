@@ -104,9 +104,8 @@ private fun overlayGrid(visitedArray: List<Boolean>, startIdx: Int, destIdx: Int
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
         content = {
-            logger { "qqqqq  visitedList overlayGrid array: $visitedArray" }
+            logger { "visitedList overlayGrid array: $visitedArray" }
             items(visitedArray.count()) { index ->
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()

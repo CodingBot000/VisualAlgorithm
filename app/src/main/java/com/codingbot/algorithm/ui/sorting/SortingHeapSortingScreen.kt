@@ -17,12 +17,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.codingbot.algorithm.R
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.ScreenTitle
@@ -38,7 +40,6 @@ fun SortingHeapSortingScreen(
     sortingType: String
 ) {
     val logger = remember { Logger("SortingHeapSortingScreen", true, "[Screen]") }
-    logger { "SortingHeapSortingViewModel:$sortingViewModel" }
 
     val uiState = sortingViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -64,7 +65,7 @@ fun SortingHeapSortingScreen(
             verticalArrangement = Arrangement.Center)
         {
             Text(
-                text = "Result",
+                text = stringResource(id = R.string.result),
                 color = CustomTheme.colors.textColorPrimary,
                 style = CustomTheme.typography.caption2Regular,
             )
@@ -89,7 +90,7 @@ fun SortingHeapSortingScreen(
 
             Spacer(modifier = Modifier.height(5.dp))
             Text(
-                text = "Array Temp",
+                text = stringResource(id = R.string.array_temp),
                 color = CustomTheme.colors.textColorPrimary,
                 style = CustomTheme.typography.caption2Regular
             )

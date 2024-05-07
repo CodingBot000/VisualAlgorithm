@@ -20,10 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.codingbot.algorithm.R
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.core.common.Screen
 import com.codingbot.algorithm.core.common.SortingList
@@ -35,8 +37,8 @@ fun MainScreen(
     navController: NavController,
     mainViewModel: MainViewModel  = hiltViewModel()
 ) {
-    val logger = remember { Logger("SortingSelectScreen", true, "[Screen]") }
-    logger { "mainViewModel:$mainViewModel" }
+    val logger = remember { Logger("MainScreen", true, "[Screen]") }
+
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier
@@ -54,7 +56,7 @@ fun MainScreen(
                 Text(
                     modifier = Modifier
                         .padding(5.dp),
-                    text = "Sorting",
+                    text = stringResource(id = R.string.sorting),
                     color = CustomTheme.colors.black,
                     style = CustomTheme.typography.title3Regular
                 )
@@ -78,7 +80,7 @@ fun MainScreen(
                 Text(
                     modifier = Modifier
                         .padding(5.dp),
-                    text = "Graph",
+                    text = stringResource(id = R.string.graph),
                     color = CustomTheme.colors.black,
                     style = CustomTheme.typography.title3Regular
                 )

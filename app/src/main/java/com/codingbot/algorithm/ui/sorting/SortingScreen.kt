@@ -36,7 +36,7 @@ fun SortingScreen(
     sortingType: String
 ) {
     val logger = remember { Logger("SortingScreen", true, "[Screen]") }
-    logger { "sortingViewModel:$sortingViewModel" }
+
     val uiState = sortingViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
@@ -59,21 +59,6 @@ fun SortingScreen(
             .padding(horizontal = Dimens.Sorting.SortingScreenHorizontalPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//            ) {
-//                uiState.value.resultList.forEach { list ->
-//                    list.forEach { item ->
-//                        SortingBarCell(
-//                            sortingBarCellType = SortingBarCellType.SortingResult,
-//                            item = item,
-//                            screenWidth = screenWidth,
-//                            listSize = list.size
-//                        )
-//                    }
-//                }
-//            }
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -83,7 +68,6 @@ fun SortingScreen(
                     key = { index, item -> "$index _$item" })
                 { _, item ->
                     val elementWidth = (screenWidth.value / uiState.value.elementList.size).dp - (Dimens.Sorting.SortingScreenHorizontalPadding * 2  / uiState.value.elementList.size)
-                    logger { "elementWidth : $elementWidth screenWidth.value:${screenWidth.value} size:${uiState.value.elementList.size}"}
                     SortingBarCell(
                         item = item,
                         elementWidth = elementWidth

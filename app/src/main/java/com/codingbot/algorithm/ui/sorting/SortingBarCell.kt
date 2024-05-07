@@ -35,7 +35,7 @@ fun SortingBarCell(
 ) {
     val logger = remember { Logger("SortingBarCell", true, "[Screen]") }
     val elementInnerWidth = elementWidth - 2.dp
-    logger { "elementWidth : $elementWidth $elementInnerWidth"}
+
     Column(
         modifier = Modifier
             .background(color = CustomTheme.colors.bg)
@@ -76,7 +76,6 @@ fun SortingBarCell(
                 .size(elementWidth)
                 .padding(5.dp),
         ) {
-            logger { "item.element.toString():${item.element.toString()}" }
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
