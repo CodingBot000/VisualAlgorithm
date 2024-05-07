@@ -3,17 +3,12 @@ package com.codingbot.algorithm.viewmodel
 import com.codingbot.algorithm.core.common.GraphList
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.core.common.SortingList
-import com.codingbot.algorithm.ui.ChannelUiEvent
-import com.codingbot.algorithm.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 data class MainUiState(
-    val buttonEnable: Boolean = false,
-    val elementSelected: Int = 0,
     val selectSortList: MutableList<SortingList> = mutableListOf<SortingList>(),
     val selectGraphList: MutableList<GraphList> = mutableListOf<GraphList>(),
-    val moveCount: Int = 0
 )
 
 sealed interface MainIntent {
@@ -21,13 +16,10 @@ sealed interface MainIntent {
     data class SelectGraphList(val selectList: MutableList<GraphList>): MainIntent
 }
 
-sealed interface MainUiEvent {
-    data class SelectSortList(val selectList: MutableList<SortingList>): MainUiEvent
-}
 @HiltViewModel
 class MainViewModel @Inject constructor()
-    : BaseViewModel<MainUiState, MainIntent>(MainUiState()),
-    UiEvent<MainUiEvent> by ChannelUiEvent() {
+    : BaseViewModel<MainUiState, MainIntent>(MainUiState())
+{
     val logger = Logger("SortingViewModel")
 
     init {

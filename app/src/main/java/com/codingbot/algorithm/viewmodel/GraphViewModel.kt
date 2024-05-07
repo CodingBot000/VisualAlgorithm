@@ -7,8 +7,6 @@ import com.codingbot.algorithm.data.model.graph.GraphBFSAlgorithm
 import com.codingbot.algorithm.data.model.graph.GraphDFSAlgorithm
 import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
 import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
-import com.codingbot.algorithm.ui.ChannelUiEvent
-import com.codingbot.algorithm.ui.UiEvent
 import kotlinx.coroutines.launch
 
 data class GraphUiState(
@@ -31,13 +29,8 @@ sealed interface GraphIntent {
     data class Finish(val finish: Boolean): GraphIntent
 }
 
-sealed interface GraphUiEvent {
-
-}
-
 class GraphViewModel
-    : BaseViewModel<GraphUiState, GraphIntent>(GraphUiState()),
-    UiEvent<GraphUiEvent> by ChannelUiEvent()
+    : BaseViewModel<GraphUiState, GraphIntent>(GraphUiState())
 {
     val logger = Logger("GraphViewModel")
 
@@ -95,8 +88,8 @@ class GraphViewModel
             viewModelScope = viewModelScope,
             graphListInit = baseGridArray,
             iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
-                override fun visitedList(list: Array<BooleanArray>) {
-                    val flatList = list.flatMap { it.asList() }
+                override fun visitedList(visitedList: Array<BooleanArray>) {
+                    val flatList = visitedList.flatMap { it.asList() }
                     execute(GraphIntent.ElementList(list = flatList))
                     execute(GraphIntent.MoveCount(moveCount = moveCount))
                 }

@@ -96,7 +96,7 @@ fun GraphScreen(
 @Composable
 private fun overlayGrid(visitedArray: List<Boolean>, startIdx: Int, destIdx: Int) {
     val logger = remember { Logger("GraphScreen", true, "[Screen]") }
-//    val array = remember { visitedArray.flatMap { it.asList() } }
+
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val columns = 5 // The number of columns in the grid

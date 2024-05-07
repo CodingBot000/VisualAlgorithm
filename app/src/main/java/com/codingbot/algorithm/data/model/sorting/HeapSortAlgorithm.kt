@@ -15,10 +15,9 @@ class HeapSortAlgorithm
     val logger = Logger("HeapSortAlgorithm")
 
     private lateinit var viewModelScope: CoroutineScope
-    private lateinit var arr: MutableList<SortingData>
+    private lateinit var arrOrigin: MutableList<SortingData>
     private var resultArr: MutableList<SortingHeapDataResult> = mutableListOf<SortingHeapDataResult>()
     private lateinit var iDisplayHeapSortingUpdateEvent: IDisplayHeapSortingUpdateEvent
-
     private var sortingSpeed: Float = Const.sortingSpeed
     private var backupArr = emptyList<SortingData>()
     private var arrSize = 0
@@ -29,46 +28,45 @@ class HeapSortAlgorithm
         iDisplayHeapSortingUpdateEvent: IDisplayHeapSortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = sortingListInit
+        this.arrOrigin = sortingListInit
         this.iDisplayHeapSortingUpdateEvent = iDisplayHeapSortingUpdateEvent
-
-        backupArr = arr.toMutableList()
+        arrSize = arrOrigin.size
+        backupArr = arrOrigin.toMutableList()
     }
     fun setSpeed(speed: Float) {
         this.sortingSpeed = speed
     }
 
     suspend fun start() {
-        arrSize = arr.size
         viewModelScope.launch {
             sort()
         }
     }
 
     suspend fun restart() {
-        arr = backupArr.toMutableList()
+        arrOrigin = backupArr.toMutableList()
         start()
     }
 
     private suspend fun sort() {
-        var results = MutableList(arr.count()) { SortingData() }
+        var results = MutableList(arrOrigin.count()) { SortingData() }
         heapSort(
-            array = arr,
+            array = arrOrigin,
             results = results)
         iDisplayHeapSortingUpdateEvent.elementList(
-            list = arr,
+            list = arrOrigin,
             resultList = results.toMutableList(),
             swapTargetIdx1 = -1,
             swapTargetIdx2 = -1
         )
-//        resultArr.add(
-//            SortingHeapDataResult(
-//                sortingDataList = arr,
-//                resultList = results.toMutableList(),
-//                swapTargetIdx1 = -1,
-//                swapTargetIdx2 = -1
-//            )
-//        )
+        resultArr.add(
+            SortingHeapDataResult(
+                sortingDataList = arrOrigin,
+                resultList = results.toMutableList(),
+                swapTargetIdx1 = -1,
+                swapTargetIdx2 = -1
+            )
+        )
         iDisplayHeapSortingUpdateEvent.finish()
     }
 
@@ -97,14 +95,14 @@ class HeapSortAlgorithm
                 swapTargetIdx2 = -1
             )
             delay(sortingSpeed.toLong())
-//            resultArr.add(
-//                SortingHeapDataResult(
-//                    sortingDataList = array,
-//                    resultList = results.toMutableList(),
-//                    swapTargetIdx1 = -1,
-//                    swapTargetIdx2 = -1
-//                )
-//            )
+            resultArr.add(
+                SortingHeapDataResult(
+                    sortingDataList = array,
+                    resultList = results.toMutableList(),
+                    swapTargetIdx1 = -1,
+                    swapTargetIdx2 = -1
+                )
+            )
             heapify(array, --arrayLen, 0, results)
         }
         return results
