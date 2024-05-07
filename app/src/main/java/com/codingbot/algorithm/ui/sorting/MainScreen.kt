@@ -62,7 +62,7 @@ fun MainScreen(
 
             itemsIndexed(uiState.value.selectSortList,
                 key = { index, item -> "$index _$item" })
-            { index, item ->
+            { _, item ->
                 SelectionCell(
                     itemName = item.name,
                     onClick = { navigateCellName ->
@@ -86,7 +86,7 @@ fun MainScreen(
 
             itemsIndexed(uiState.value.selectGraphList,
                 key = { index, item -> "$index _$item" })
-            { index, item ->
+            { _, item ->
                 SelectionCell(
                     itemName = item.name,
                     onClick = { navigateCellName ->

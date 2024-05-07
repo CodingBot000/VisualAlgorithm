@@ -24,6 +24,7 @@ import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.ScreenTitle
 import com.codingbot.algorithm.ui.theme.CustomTheme
+import com.codingbot.algorithm.ui.theme.Dimens
 import com.codingbot.algorithm.viewmodel.PlayState
 import com.codingbot.algorithm.viewmodel.SortingViewModel
 
@@ -55,7 +56,7 @@ fun SortingScreen(
 
         Column(modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 10.dp),
+            .padding(horizontal = Dimens.Sorting.SortingScreenHorizontalPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
 //            Row(
@@ -74,17 +75,19 @@ fun SortingScreen(
 //                }
 //            }
             LazyRow(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
             )
             {
-
                 itemsIndexed(uiState.value.elementList,
                     key = { index, item -> "$index _$item" })
-                { index, item ->
+                { _, item ->
+                    val elementWidth = (screenWidth.value / uiState.value.elementList.size).dp - (Dimens.Sorting.SortingScreenHorizontalPadding * 2  / uiState.value.elementList.size)
+                    logger { "elementWidth : $elementWidth screenWidth.value:${screenWidth.value} size:${uiState.value.elementList.size}"}
                     SortingBarCell(
                         item = item,
-                        screenWidth = screenWidth,
-                        listSize = uiState.value.elementList.size)
+                        elementWidth = elementWidth
+                    )
                 }
             }
 

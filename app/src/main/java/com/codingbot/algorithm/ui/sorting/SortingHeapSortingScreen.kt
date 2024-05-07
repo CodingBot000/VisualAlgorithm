@@ -27,6 +27,7 @@ import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.ScreenTitle
 import com.codingbot.algorithm.ui.theme.CustomTheme
+import com.codingbot.algorithm.ui.theme.Dimens
 import com.codingbot.algorithm.viewmodel.SortingHeapSortingViewModel
 
 @Composable
@@ -75,12 +76,13 @@ fun SortingHeapSortingScreen(
             {
                 itemsIndexed(uiState.value.heapSortingResultList,
                     key = { index, item -> "$index _$item" })
-                { index, item ->
+                { _, item ->
+                    val elementWidth = (screenWidth.value / uiState.value.elementList.size).dp - (Dimens.Sorting.SortingScreenHorizontalPadding * 2  / uiState.value.elementList.size)
                     SortingBarCell(
                         sortingBarCellType = SortingBarCellType.SortingResult,
                         item = item,
-                        screenWidth = screenWidth,
-                        listSize = uiState.value.heapSortingResultList.size)
+                        elementWidth = elementWidth
+                    )
                 }
             }
 
@@ -99,11 +101,12 @@ fun SortingHeapSortingScreen(
             {
                 itemsIndexed(uiState.value.elementList,
                     key = { index, item -> "$index _$item" })
-                { index, item ->
+                { _, item ->
+                    val elementWidth = (screenWidth.value / uiState.value.elementList.size).dp - (Dimens.Sorting.SortingScreenHorizontalPadding * 2  / uiState.value.elementList.size)
                     SortingBarCell(
                         item = item,
-                        screenWidth = screenWidth,
-                        listSize = uiState.value.elementList.size)
+                        elementWidth = elementWidth
+                    )
                 }
             }
 

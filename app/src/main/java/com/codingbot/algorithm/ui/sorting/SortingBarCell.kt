@@ -31,12 +31,11 @@ enum class SortingBarCellType {
 fun SortingBarCell(
     sortingBarCellType: SortingBarCellType = SortingBarCellType.SortingArray,
     item: SortingData,
-    screenWidth: Dp,
-    listSize: Int) {
+    elementWidth: Dp
+) {
     val logger = remember { Logger("SortingBarCell", true, "[Screen]") }
-
-    val elementWidth = (screenWidth.value / listSize).dp
     val elementInnerWidth = elementWidth - 2.dp
+    logger { "elementWidth : $elementWidth $elementInnerWidth"}
     Column(
         modifier = Modifier
             .background(color = CustomTheme.colors.bg)
@@ -74,7 +73,7 @@ fun SortingBarCell(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(elementInnerWidth)
+                .size(elementWidth)
                 .padding(5.dp),
         ) {
             logger { "item.element.toString():${item.element.toString()}" }

@@ -9,7 +9,7 @@ object Dimens {
         val SortingGraphWidth = Height.H10
         val SortingTextMarkingHeight = Height.H15
         val SortingTextOverayMarkRoundedCorner = Size.S8
-
+        val SortingScreenHorizontalPadding = Height.H10
     }
     object Height {
         val H170: Dp = 170.dp
