@@ -1,18 +1,26 @@
 package com.codingbot.algorithm.data.model.graph
 
+import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
+import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class GraphDFSAlgorithm: GraphAlgorithm() {
+class GraphDFSAlgorithm: IGraphAlgorithm {
 //    lateinit var mazeArray: Array<Array<GraphData>>
 //    fun setInit(mazeArray: Array<Array<GraphData>>) {
 //        this.mazeArray = mazeArray
 //    }
 //    lateinit var mazeArray: Array<IntArray>
+    lateinit var viewModelScope: CoroutineScope
+    lateinit var arr: Array<IntArray>
+    lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
+    lateinit var mazeArray: Array<IntArray>
 
+    private var speedValue: Float = Const.sortingSpeed
+    private var backupArr = emptyArray<IntArray>()
 
     var dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
     var m = 0
@@ -23,11 +31,11 @@ class GraphDFSAlgorithm: GraphAlgorithm() {
 
     override fun initValue(
         viewModelScope: CoroutineScope,
-        arr: Array<IntArray>,
+        graphListInit: Array<IntArray>,
         iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = arr
+        this.arr = graphListInit
         this.iDisplayGraphUpdateEvent = iDisplayGraphUpdateEvent
 
         backupArr = arr.clone()
@@ -96,16 +104,15 @@ class GraphDFSAlgorithm: GraphAlgorithm() {
         return false
     }
 
-    private fun print(visited: Array<BooleanArray>?) {
-
-        if (visited.isNullOrEmpty()) return
-
-        for (i in 0 until m) {
-            for (j in 0 until n) {
-                print("print:${visited[i][j].toString()}" + "\t")
-            }
-            println()
-        }
-    }
+//    private fun print(visited: Array<BooleanArray>?) {
+//        if (visited.isNullOrEmpty()) return
+//
+//        for (i in 0 until m) {
+//            for (j in 0 until n) {
+//                print("print:${visited[i][j].toString()}" + "\t")
+//            }
+//            println()
+//        }
+//    }
 
 }

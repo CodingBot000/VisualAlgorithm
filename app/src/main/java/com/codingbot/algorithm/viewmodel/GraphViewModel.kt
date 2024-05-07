@@ -3,10 +3,10 @@ package com.codingbot.algorithm.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.codingbot.algorithm.core.common.GraphList
 import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.data.model.graph.GraphAlgorithm
-import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
 import com.codingbot.algorithm.data.model.graph.GraphBFSAlgorithm
 import com.codingbot.algorithm.data.model.graph.GraphDFSAlgorithm
+import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
+import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
 import com.codingbot.algorithm.ui.ChannelUiEvent
 import com.codingbot.algorithm.ui.UiEvent
 import kotlinx.coroutines.launch
@@ -55,7 +55,7 @@ class GraphViewModel
     val destIdx: Int
         get() = getFlatArrayIndex(dest)
 
-    private var graphAlgorithm: GraphAlgorithm? = null
+    private var graphAlgorithm: IGraphAlgorithm? = null
 
     init {
         initGraph()
@@ -70,7 +70,7 @@ class GraphViewModel
     }
     fun setSpeed(speed: Float) {
         this.speed = speed
-        graphAlgorithm?.speedValue = speed
+        graphAlgorithm?.setSpeed(speed)
     }
     private fun initGraph() {
         val mazeInit = arrayOf(
@@ -87,60 +87,36 @@ class GraphViewModel
     fun initTrackingMaze(graphType: String) {
         this.graphType = graphType
         when (graphType) {
-            GraphList.BFS.name -> {
-                graphAlgorithm = GraphBFSAlgorithm()
-                (graphAlgorithm as? GraphBFSAlgorithm)?.initValue(
-                    viewModelScope = viewModelScope,
-                    arr = baseGridArray,
-                    iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
-                        override fun visitedList(list: Array<BooleanArray>) {
-                            val flatList = list.flatMap { it.asList() }
-                            execute(GraphIntent.ElementList(list = flatList))
-                            execute(GraphIntent.MoveCount(moveCount = moveCount))
-                        }
-
-                        override fun finish() {
-                            execute(GraphIntent.Finish(true))
-                        }
-                    }
-                )
-            }
-            GraphList.DFS.name -> {
-                graphAlgorithm = GraphDFSAlgorithm()
-                (graphAlgorithm as? GraphDFSAlgorithm)?.initValue(
-                    viewModelScope = viewModelScope,
-                    arr = baseGridArray,
-                    iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
-                        override fun visitedList(list: Array<BooleanArray>) {
-                            val flatList = list.flatMap { it.asList() }
-                            execute(GraphIntent.ElementList(list = flatList))
-                            execute(GraphIntent.MoveCount(moveCount = moveCount))
-                        }
-
-                        override fun finish() {
-                            execute(GraphIntent.Finish(true))
-                        }
-                    }
-                )
-            }
+            GraphList.BFS.name -> graphAlgorithm = GraphBFSAlgorithm()
+            GraphList.DFS.name -> graphAlgorithm = GraphDFSAlgorithm()
         }
+
+        graphAlgorithm?.initValue(
+            viewModelScope = viewModelScope,
+            graphListInit = baseGridArray,
+            iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
+                override fun visitedList(list: Array<BooleanArray>) {
+                    val flatList = list.flatMap { it.asList() }
+                    execute(GraphIntent.ElementList(list = flatList))
+                    execute(GraphIntent.MoveCount(moveCount = moveCount))
+                }
+
+                override fun finish() {
+                    execute(GraphIntent.Finish(true))
+                }
+            }
+        )
     }
 
     fun start() {
         viewModelScope.launch {
-            when (graphType) {
-                GraphList.BFS.name -> (graphAlgorithm as? GraphBFSAlgorithm)?.start(start, dest)
-                GraphList.DFS.name -> (graphAlgorithm as? GraphDFSAlgorithm)?.start(start, dest)
-            }
+            graphAlgorithm?.start(start, dest)
         }
     }
 
     fun restart() {
         viewModelScope.launch {
-            when (graphType) {
-                GraphList.BFS.name -> (graphAlgorithm as? GraphBFSAlgorithm)?.restart(start, dest)
-                GraphList.DFS.name -> (graphAlgorithm as? GraphDFSAlgorithm)?.restart(start, dest)
-            }
+            graphAlgorithm?.restart(start, dest)
         }
     }
     override suspend fun GraphUiState.reduce(intent: GraphIntent): GraphUiState =

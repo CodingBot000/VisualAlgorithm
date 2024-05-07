@@ -1,4 +1,4 @@
-package com.codingbot.algorithm.data.model.sorting
+package com.codingbot.algorithm.data.model.sorting.contract
 
 import com.codingbot.algorithm.data.SortingData
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplaySortingUpdateEvent

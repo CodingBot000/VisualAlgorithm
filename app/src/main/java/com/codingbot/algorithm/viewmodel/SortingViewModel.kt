@@ -9,7 +9,7 @@ import com.codingbot.algorithm.data.SortingData
 import com.codingbot.algorithm.data.SortingDataResult
 import com.codingbot.algorithm.data.model.sorting.BubbleSortAlgorithm
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplaySortingUpdateEvent
-import com.codingbot.algorithm.data.model.sorting.ISortingAlgorithm
+import com.codingbot.algorithm.data.model.sorting.contract.ISortingAlgorithm
 import com.codingbot.algorithm.data.model.sorting.InsertionSortAlgorithm
 import com.codingbot.algorithm.data.model.sorting.QuickSortAlgorithm
 import com.codingbot.algorithm.data.model.sorting.SelectionSortAlgorithm
