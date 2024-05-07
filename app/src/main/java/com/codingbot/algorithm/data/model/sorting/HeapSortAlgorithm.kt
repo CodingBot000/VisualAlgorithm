@@ -3,7 +3,6 @@ package com.codingbot.algorithm.data.model.sorting
 import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.data.SortingData
-import com.codingbot.algorithm.data.SortingDataResult
 import com.codingbot.algorithm.data.SortingHeapDataResult
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
 import kotlinx.coroutines.CoroutineScope
