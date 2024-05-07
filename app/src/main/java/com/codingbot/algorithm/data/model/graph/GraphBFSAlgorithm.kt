@@ -1,7 +1,6 @@
 package com.codingbot.algorithm.data.model.graph
 
 import com.codingbot.algorithm.core.common.Const
-import com.codingbot.algorithm.data.GraphData
 import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
 import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
 import kotlinx.coroutines.CoroutineScope
@@ -18,13 +17,14 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
 //    }
 //    lateinit var mazeArray: Array<IntArray>
     lateinit var viewModelScope: CoroutineScope
-    lateinit var arr: Array<IntArray>
+    lateinit var arrOrigin: Array<IntArray>
     lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
-    lateinit var mazeArray: Array<IntArray>
-
     private var speedValue: Float = Const.sortingSpeed
     private var backupArr = emptyArray<IntArray>()
 
+    var dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
+    var col = 0
+    var row = 0
     override fun setSpeed(speed: Float) {
         this.speedValue = speed
     }
@@ -35,10 +35,10 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
         iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = graphListInit
+        this.arrOrigin = graphListInit
         this.iDisplayGraphUpdateEvent = iDisplayGraphUpdateEvent
 
-        backupArr = arr.clone()
+        backupArr = arrOrigin.clone()
     }
 
     override suspend fun start(start: IntArray, dest: IntArray) {
@@ -48,33 +48,32 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
     }
 
     override suspend fun restart(start: IntArray, dest: IntArray) {
-        arr = backupArr.clone()
+        arrOrigin = backupArr.clone()
         viewModelScope.launch {
             trackingStart(start, dest)
         }
     }
 
     private suspend fun trackingStart(start: IntArray, dest: IntArray) {
-        bfs(arr, start, dest)
+        bfs(arrOrigin, start, dest)
         iDisplayGraphUpdateEvent.finish()
     }
 
-
-    var dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
-    var m = 0
-    var n = 0
-
-    private suspend fun bfs(maze: Array<IntArray>, start: IntArray, destination: IntArray): Boolean {
-        m = maze.size
-        n = maze[0].size
+    private suspend fun bfs(
+        mazeArr: Array<IntArray>,
+        start: IntArray,
+        destination: IntArray): Boolean
+    {
+        col = mazeArr.size
+        row = mazeArr[0].size
         if (start[0] == destination[0] && start[1] == destination[1]) return true
-        val visited = Array<BooleanArray>(m) {
-            BooleanArray(n)
+        val visited = Array<BooleanArray>(col) {
+            BooleanArray(row)
         }
         val queue: Queue<IntArray> = LinkedList()
         visited[start[0]][start[1]] = true
         iDisplayGraphUpdateEvent.visitedList(
-            list = visited
+            visitedList = visited
         )
         delay(speedValue.toLong())
         queue.offer(intArrayOf(start[0], start[1]))
@@ -86,7 +85,7 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                 var x = p[0]
                 var y = p[1]
                 // 2. dir 동서남북 이동방향을 하나씩 가져와서 아래  while을 수행한다
-                while (x >= 0 && x < m && y >= 0 && y < n && maze[x][y] == 0) {
+                while (x >= 0 && x < col && y >= 0 && y < row && mazeArr[x][y] == 0) {
                     // x, y가 위의 크기 조건이고, 현재위치가 0이면, 즉 벽이 아니라면 == 길이라면 루프를 다시 돈다.
                     // 루프를 다시돈다는건, dir로 받은 위치이동값이 더해지므로, 해당방향으로 계속 이동한다는것을 의미한다.
                     // 예를들어 dir이 {-1. 0} 이면 더해줄때마다 왼쪽으로 한칸씩 계속 이동하게 될것이다.
@@ -113,7 +112,7 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                 // 5. 방문한적이 없다면 방문한 표시를 한다.
                 visited[x][y] = true
                 iDisplayGraphUpdateEvent.visitedList(
-                    list = visited
+                    visitedList = visited
                 )
                 delay(speedValue.toLong())
                 println("check visited[$x][$y] true addQueue {$x, $y}")

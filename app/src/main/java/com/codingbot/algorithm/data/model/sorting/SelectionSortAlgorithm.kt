@@ -14,10 +14,9 @@ class SelectionSortAlgorithm(): ISortingAlgorithm
     val logger = Logger("SelectionSortAlgorithm")
 
     private lateinit var viewModelScope: CoroutineScope
-    private lateinit var arr: MutableList<SortingData>
+    private lateinit var arrOrigin: MutableList<SortingData>
     private var resultArr: MutableList<SortingDataResult> = mutableListOf<SortingDataResult>()
     private lateinit var iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
-
     private var backupArr = emptyList<SortingData>()
     private var arrSize = 0
 
@@ -27,21 +26,20 @@ class SelectionSortAlgorithm(): ISortingAlgorithm
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = sortingListInit
+        this.arrOrigin = sortingListInit
         this.iDisplaySortingUpdateEvent = iDisplaySortingUpdateEvent
-
+        arrSize = arrOrigin.size
         backupArr = sortingListInit.toMutableList()
     }
 
     override suspend fun start() {
-        arrSize = arr.size
         viewModelScope.launch {
             sort()
         }
     }
 
     override suspend fun restart() {
-        arr = backupArr.toMutableList()
+        arrOrigin = backupArr.toMutableList()
         start()
     }
 
@@ -49,7 +47,7 @@ class SelectionSortAlgorithm(): ISortingAlgorithm
         for (i in 0 until arrSize - 1) {
             var minIdx = i
             for (j in i + 1 until arrSize) {
-                if (arr[j].element < arr[minIdx].element) {
+                if (arrOrigin[j].element < arrOrigin[minIdx].element) {
                     minIdx = j
                 }
             }
@@ -61,12 +59,12 @@ class SelectionSortAlgorithm(): ISortingAlgorithm
 //            delay(sortingSpeed.toLong())
             resultArr.add(
                 SortingDataResult(
-                    sortingDataList = arr.toMutableList(),
+                    sortingDataList = arrOrigin.toMutableList(),
                     swapTargetIdx1 = i,
                     swapTargetIdx2 = minIdx
                 )
             )
-            swap(arr, i, minIdx)
+            swap(arrOrigin, i, minIdx)
 //            iDisplaySortingUpdateEvent.elementList(
 //                list = arr,
 //                swapTargetIdx1 = i,
@@ -75,7 +73,7 @@ class SelectionSortAlgorithm(): ISortingAlgorithm
 //            delay(sortingSpeed.toLong())
             resultArr.add(
                 SortingDataResult(
-                    sortingDataList = arr.toMutableList(),
+                    sortingDataList = arrOrigin.toMutableList(),
                     swapTargetIdx1 = i,
                     swapTargetIdx2 = minIdx
                 )

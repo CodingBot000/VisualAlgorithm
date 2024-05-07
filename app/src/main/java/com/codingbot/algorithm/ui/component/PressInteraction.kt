@@ -54,24 +54,3 @@ private class MultipleEventsCutterImpl : MultipleEventsCutter {
         lastProcessedMillis = now
     }
 }
-
-/**
- *  리스트 아이템(clickable 인경우만) 기본/pressed 상태 배경색 지정
- */
-@Composable
-fun Modifier.listItemClickable(
-    isWhite: Boolean = true,
-    onClick: () -> Unit = {}
-): Modifier {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed = interactionSource.collectIsPressedAsState()
-    val basicColor = if (isWhite) Color.Blue_50 else Color.Blue_10
-    val pressedColor = if (isWhite) Color.Blue_90 else Color.Blue_70
-    return this
-        .background(color = if(isPressed.value) pressedColor else basicColor)
-        .clickable(
-            interactionSource = interactionSource,
-            indication = null,
-            onClick = onClick,
-        )
-}

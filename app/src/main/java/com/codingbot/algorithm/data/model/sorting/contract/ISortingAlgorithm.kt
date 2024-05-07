@@ -11,7 +11,6 @@ interface ISortingAlgorithm
         sortingListInit: MutableList<SortingData>,
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     )
-
     suspend fun start()
     suspend fun restart()
 }

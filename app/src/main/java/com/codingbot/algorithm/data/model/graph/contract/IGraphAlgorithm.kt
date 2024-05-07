@@ -1,8 +1,5 @@
 package com.codingbot.algorithm.data.model.graph.contract
 
-import com.codingbot.algorithm.data.GraphData
-import com.codingbot.algorithm.data.SortingData
-import com.codingbot.algorithm.data.model.sorting.contract.IDisplaySortingUpdateEvent
 import kotlinx.coroutines.CoroutineScope
 
 interface IGraphAlgorithm

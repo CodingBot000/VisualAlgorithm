@@ -100,19 +100,7 @@ fun SortingScreen(
                     sortingViewModel.setSortingSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
                 },
                 onClickStart = {
-//                    with(sortingViewModel) {
-//                        if (uiState.value.playState == PlayState.INIT) {
-//                    sortingViewModel.startButtonEnabled(false)
                     sortingViewModel.start()
-//                        } else if (uiState.value.playState == PlayState.RESUME) {
-//                            resumeSorting()
-//                        } else if (uiState.value.playState == PlayState.PAUSE){
-//                            pauseSorting()
-//                        } else {
-//
-//                        }
-//                        startButtonEnabled(!uiState.value.startButtonEnable)
-//                    }
                 },
                 onClickResume = {
                     sortingViewModel.resumeSorting()

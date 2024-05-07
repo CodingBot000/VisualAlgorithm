@@ -14,10 +14,9 @@ class QuickSortAlgorithm(): ISortingAlgorithm
     val logger = Logger("QuickSortAlgorithm")
 
     private lateinit var viewModelScope: CoroutineScope
-    private lateinit var arr: MutableList<SortingData>
+    private lateinit var arrOrigin: MutableList<SortingData>
     private var resultArr: MutableList<SortingDataResult> = mutableListOf<SortingDataResult>()
     private lateinit var iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
-
     private var backupArr = emptyList<SortingData>()
     private var arrSize = 0
 
@@ -27,26 +26,25 @@ class QuickSortAlgorithm(): ISortingAlgorithm
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = sortingListInit
+        this.arrOrigin = sortingListInit
         this.iDisplaySortingUpdateEvent = iDisplaySortingUpdateEvent
-
+        arrSize = arrOrigin.size
         backupArr = sortingListInit.toMutableList()
     }
 
     override suspend fun start() {
-        arrSize = arr.size
         viewModelScope.launch {
             sort()
         }
     }
 
     override suspend fun restart() {
-        arr = backupArr.toMutableList()
+        arrOrigin = backupArr.toMutableList()
         start()
     }
 
     private suspend fun sort() {
-        quickSort(arr)
+        quickSort(arrOrigin)
         iDisplaySortingUpdateEvent.finish(resultArr)
     }
 

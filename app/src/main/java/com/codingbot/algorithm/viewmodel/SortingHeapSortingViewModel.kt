@@ -9,8 +9,6 @@ import com.codingbot.algorithm.data.SortingData
 import com.codingbot.algorithm.data.SortingDataResult
 import com.codingbot.algorithm.data.model.sorting.HeapSortAlgorithm
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
-import com.codingbot.algorithm.ui.ChannelUiEvent
-import com.codingbot.algorithm.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +16,6 @@ import kotlin.random.Random
 
 data class HeapSortingUiState(
     val startButtonEnable: Boolean = true,
-    val elementSelected: Int = 0,
     val elementList: MutableList<SortingData> = mutableListOf<SortingData>(),
     val heapSortingResultList: MutableList<SortingData> = mutableListOf<SortingData>(),
     val finish: Boolean = false,
@@ -27,21 +24,15 @@ data class HeapSortingUiState(
 
 sealed interface HeapSortingIntent {
     data class StartButtonEnable(val enable: Boolean): HeapSortingIntent
-    data class ElementSelected(val index: Int): HeapSortingIntent
     data class ElementList(val list: MutableList<SortingData>): HeapSortingIntent
     data class HeapSortingResultList(val heapSortingResultList: MutableList<SortingData>): HeapSortingIntent
     data class MoveCount(val moveCount: Int): HeapSortingIntent
     data class FinishSorting(val sortingType: String, val enable: Boolean): HeapSortingIntent
 }
 
-sealed interface HeapSortingUiEvent {
-
-}
-
 @HiltViewModel
 class SortingHeapSortingViewModel @Inject constructor()
-    : BaseViewModel<HeapSortingUiState, HeapSortingIntent>(HeapSortingUiState()),
-    UiEvent<HeapSortingUiEvent> by ChannelUiEvent()
+    : BaseViewModel<HeapSortingUiState, HeapSortingIntent>(HeapSortingUiState())
 {
     val logger = Logger("SortingHeapSortingViewModel")
     private val ELEMENT_RANDOM_FROM = -20
@@ -50,7 +41,7 @@ class SortingHeapSortingViewModel @Inject constructor()
     private var speed = INIT_SPEED
     private var moveCount = 0
     private var type: String = SortingList.BUBBLE_SORT.name
-    private val arr = mutableListOf<SortingData>()
+    private val originArr = mutableListOf<SortingData>()
     private var arrSize = 0
 
     private var sortingAlgorithm: HeapSortAlgorithm? = null
@@ -64,10 +55,10 @@ class SortingHeapSortingViewModel @Inject constructor()
     fun initSorting(sortingType: String) {
         this.type = sortingType
 
-        sortingAlgorithm = getAlogrithm(sortingType)
+        sortingAlgorithm = getAlogrithm()
         sortingAlgorithm?.initValue(
             viewModelScope = viewModelScope,
-            sortingListInit = arr,
+            sortingListInit = originArr,
             iDisplayHeapSortingUpdateEvent = object: IDisplayHeapSortingUpdateEvent {
                 override fun elementList(
                     list: MutableList<SortingData>,
@@ -85,7 +76,7 @@ class SortingHeapSortingViewModel @Inject constructor()
         )
     }
 
-    private fun getAlogrithm(sortingType: String) =
+    private fun getAlogrithm() =
         HeapSortAlgorithm()
 
     private fun initArray() {
@@ -97,16 +88,16 @@ class SortingHeapSortingViewModel @Inject constructor()
             to = Const.GRAPH_HEIGHT_TO
             )
         randomValues.forEachIndexed { index, randomNum ->
-            arr.add(
+            originArr.add(
                 SortingData(element = randomNum,
                     scaledNum = scaledNumberList[index])
             )
         }
 
-        arrSize = arr.size
-        var resultsEmpty = MutableList(arr.count()) { SortingData() }
+        arrSize = originArr.size
+        var resultsEmpty = MutableList(originArr.count()) { SortingData() }
         execute(HeapSortingIntent.HeapSortingResultList(heapSortingResultList = resultsEmpty))
-        execute(HeapSortingIntent.ElementList(arr))
+        execute(HeapSortingIntent.ElementList(originArr))
     }
 
     private fun initValues() {
@@ -130,58 +121,55 @@ class SortingHeapSortingViewModel @Inject constructor()
 
     fun restart() {
         moveCount = 0
-        execute(HeapSortingIntent.ElementList(arr))
+        execute(HeapSortingIntent.ElementList(originArr))
         viewModelScope.launch {
             sortingAlgorithm?.restart()
         }
     }
 
     private fun displayBars(
-        arr: MutableList<SortingData>,
+        sortingList: MutableList<SortingData>,
         resultList: MutableList<SortingData>?,
         swapTargetIdx1: Int,
         swapTargetIdx2: Int)
     {
-        if (swapTargetIdx1 >=0 && swapTargetIdx2 >=0) {
-            for (k in arr.indices) {
+        for (k in sortingList.indices) {
+            sortingList[k] =
                 if (k == swapTargetIdx1) {
-                    arr[k] = SortingData(
-                        element = arr[k].element,
-                        scaledNum = arr[k].scaledNum,
+                    SortingData(
+                        element = sortingList[k].element,
+                        scaledNum = sortingList[k].scaledNum,
                         swap1 = true,
                         swap2 = false
                     )
                 } else if (k == swapTargetIdx2) {
-                    arr[k] = SortingData(
-                        element = arr[k].element,
-                        scaledNum = arr[k].scaledNum,
+                    SortingData(
+                        element = sortingList[k].element,
+                        scaledNum = sortingList[k].scaledNum,
                         swap1 = false,
                         swap2 = true
                     )
                 } else {
-                    arr[k] = SortingData(
-                        element = arr[k].element,
-                        scaledNum = arr[k].scaledNum,
+                    SortingData(
+                        element = sortingList[k].element,
+                        scaledNum = sortingList[k].scaledNum,
                         swap1 = false,
                         swap2 = false
                     )
                 }
-            }
         }
+
         moveCount++
         if (resultList != null) {
             execute(HeapSortingIntent.HeapSortingResultList(heapSortingResultList = resultList))
         }
-        execute(HeapSortingIntent.ElementList(list = arr))
+        execute(HeapSortingIntent.ElementList(list = sortingList))
         execute(HeapSortingIntent.MoveCount(moveCount = moveCount))
     }
 
     override suspend fun HeapSortingUiState.reduce(intent: HeapSortingIntent): HeapSortingUiState =
         when (intent) {
             is HeapSortingIntent.StartButtonEnable -> copy(startButtonEnable = intent.enable)
-            is HeapSortingIntent.ElementSelected -> {
-                copy(elementSelected = intent.index)
-            }
             is HeapSortingIntent.ElementList -> {
                 val newList = intent.list.toMutableList()
                 copy(elementList = newList)

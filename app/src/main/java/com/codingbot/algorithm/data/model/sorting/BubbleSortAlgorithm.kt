@@ -14,11 +14,9 @@ class BubbleSortAlgorithm(): ISortingAlgorithm
     val logger = Logger("BubbleSortAlgorithm")
 
     private lateinit var viewModelScope: CoroutineScope
-    private lateinit var arr: MutableList<SortingData>
+    private lateinit var arrOrigin: MutableList<SortingData>
     private var resultArr: MutableList<SortingDataResult> = mutableListOf<SortingDataResult>()
     private lateinit var iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
-
-//    private var sortingSpeed: Float = Const.sortingSpeed
     private var backupArr = emptyList<SortingData>()
     private var arrSize = 0
 
@@ -28,39 +26,38 @@ class BubbleSortAlgorithm(): ISortingAlgorithm
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = sortingListInit
+        this.arrOrigin = sortingListInit
         this.iDisplaySortingUpdateEvent = iDisplaySortingUpdateEvent
-
+        arrSize = arrOrigin.size
         backupArr = sortingListInit.toMutableList()
     }
 
     override suspend fun start() {
-        arrSize = arr.size
         viewModelScope.launch {
             sort()
         }
     }
 
     override suspend fun restart() {
-        arr = backupArr.toMutableList()
+        arrOrigin = backupArr.toMutableList()
         start()
     }
 
     private suspend fun sort() {
         for (i in 0 until arrSize - 1) {
             for (j in 0 until arrSize - i - 1) {
-                if (arr[j].element > arr[j + 1].element) {
+                if (arrOrigin[j].element > arrOrigin[j + 1].element) {
                     resultArr.add(
                         SortingDataResult(
-                            sortingDataList = arr.toMutableList(),
+                            sortingDataList = arrOrigin.toMutableList(),
                             swapTargetIdx1 = j,
                             swapTargetIdx2 = j + 1
                         )
                     )
-                    swap(arr, j, j + 1)
+                    swap(arrOrigin, j, j + 1)
                     resultArr.add(
                         SortingDataResult(
-                            sortingDataList = arr.toMutableList(),
+                            sortingDataList = arrOrigin.toMutableList(),
                             swapTargetIdx1 = j,
                             swapTargetIdx2 = j + 1
                         )

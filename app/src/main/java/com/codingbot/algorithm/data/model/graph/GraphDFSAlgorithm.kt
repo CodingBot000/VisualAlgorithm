@@ -15,16 +15,14 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
 //    }
 //    lateinit var mazeArray: Array<IntArray>
     lateinit var viewModelScope: CoroutineScope
-    lateinit var arr: Array<IntArray>
+    lateinit var arrOrigin: Array<IntArray>
     lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
-    lateinit var mazeArray: Array<IntArray>
-
     private var speedValue: Float = Const.sortingSpeed
     private var backupArr = emptyArray<IntArray>()
 
     var dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
-    var m = 0
-    var n = 0
+    var col = 0
+    var row = 0
     override fun setSpeed(speed: Float) {
         this.speedValue = speed
     }
@@ -35,10 +33,10 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
         iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = graphListInit
+        this.arrOrigin = graphListInit
         this.iDisplayGraphUpdateEvent = iDisplayGraphUpdateEvent
 
-        backupArr = arr.clone()
+        backupArr = arrOrigin.clone()
     }
 
     override suspend fun start(start: IntArray, dest: IntArray) {
@@ -48,23 +46,23 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
     }
 
     override suspend fun restart(start: IntArray, dest: IntArray) {
-        arr = backupArr.clone()
+        arrOrigin = backupArr.clone()
         viewModelScope.launch {
             trackingStart(start, dest)
         }
     }
 
     private suspend fun trackingStart(start: IntArray, dest: IntArray) {
-        m = arr.size
-        n = arr[0].size
-        val visited = Array(m) { BooleanArray(n) }
+        col = arrOrigin.size
+        row = arrOrigin[0].size
+        val visited = Array(col) { BooleanArray(row) }
 
-        dfs(arr, start, dest, visited)
+        dfs(arrOrigin, start, dest, visited)
         iDisplayGraphUpdateEvent.finish()
     }
 
     private suspend fun dfs(
-        maze: Array<IntArray>,
+        mazeArr: Array<IntArray>,
         start: IntArray,
         destination: IntArray,
         visited: Array<BooleanArray>
@@ -72,13 +70,13 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
         println(
             "#####  in dfs method start x: " + start[0] + " y: " + start[1] + " visited " + visited[start[0]][start[1]]
         )
-        if (start[0] < 0 || start[0] >= m || start[1] < 0 || start[1] >= n || visited[start[0]][start[1]]) {
+        if (start[0] < 0 || start[0] >= col || start[1] < 0 || start[1] >= row || visited[start[0]][start[1]]) {
             println("in dfs return FALSE")
             return false
         }
         visited[start[0]][start[1]] = true
         iDisplayGraphUpdateEvent.visitedList(
-            list = visited
+            visitedList = visited
         )
         delay(speedValue.toLong())
         print(visited)
@@ -87,7 +85,7 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
             var x = start[0]
             var y = start[1]
             println("in dfs 11 x: $x y: $y")
-            while (x in 0..<m && y >= 0 && y < n && maze[x][y] != 1) {
+            while (x in 0..<col && y >= 0 && y < row && mazeArr[x][y] != 1) {
                 x += dir[0]
                 y += dir[1]
                 println("in dfs 22 x: " + x + " y: " + y + "   dir { " + dir[0] + " " + dir[1] + " }")
@@ -95,7 +93,7 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
             x -= dir[0]
             y -= dir[1]
             println("in dfs new int x: $x y: $y")
-            if (dfs(maze, intArrayOf(x, y), destination, visited)) {
+            if (dfs(mazeArr, intArrayOf(x, y), destination, visited)) {
                 println("in dfs call RESULT return * TRUE")
                 return true
             }

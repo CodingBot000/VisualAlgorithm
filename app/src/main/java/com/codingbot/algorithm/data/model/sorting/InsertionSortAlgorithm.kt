@@ -13,10 +13,9 @@ class InsertionSortAlgorithm(): ISortingAlgorithm
     val logger = Logger("InsertionSortAlgorithm")
 
     private lateinit var viewModelScope: CoroutineScope
-    private lateinit var arr: MutableList<SortingData>
+    private lateinit var arrOrigin: MutableList<SortingData>
     private var resultArr: MutableList<SortingDataResult> = mutableListOf<SortingDataResult>()
     private lateinit var iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
-
     private var backupArr = emptyList<SortingData>()
     private var arrSize = 0
 
@@ -26,30 +25,29 @@ class InsertionSortAlgorithm(): ISortingAlgorithm
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     ) {
         this.viewModelScope = viewModelScope
-        this.arr = sortingListInit
+        this.arrOrigin = sortingListInit
         this.iDisplaySortingUpdateEvent = iDisplaySortingUpdateEvent
-
+        arrSize = arrOrigin.size
         backupArr = sortingListInit.toMutableList()
     }
 
     override suspend fun start() {
-        arrSize = arr.size
         viewModelScope.launch {
             sort()
         }
     }
     override suspend fun restart() {
-        arr = backupArr.toMutableList()
+        arrOrigin = backupArr.toMutableList()
         start()
     }
     private suspend fun sort() {
         for (i in 1 until arrSize) {
-            val tmp = arr[i]
+            val tmp = arrOrigin[i]
             var j = i - 1
-            while (j >= 0 && tmp.element < arr[j].element) {
+            while (j >= 0 && tmp.element < arrOrigin[j].element) {
                 resultArr.add(
                     SortingDataResult(
-                        sortingDataList = arr.toMutableList(),
+                        sortingDataList = arrOrigin.toMutableList(),
                         swapTargetIdx1 = j,
                         swapTargetIdx2 = j + 1
                     )
@@ -60,11 +58,11 @@ class InsertionSortAlgorithm(): ISortingAlgorithm
 //                    swapTargetIdx2 = j + 1
 //                )
 //                delay(sortingSpeed.toLong())
-                arr[j + 1] = arr[j]
+                arrOrigin[j + 1] = arrOrigin[j]
                 j--
 
             }
-            arr[j + 1] = tmp
+            arrOrigin[j + 1] = tmp
 //            iDisplaySortingUpdateEvent.elementList(
 //                list = arr,
 //                swapTargetIdx1 = j,
@@ -73,7 +71,7 @@ class InsertionSortAlgorithm(): ISortingAlgorithm
 //            delay(sortingSpeed.toLong())
             resultArr.add(
                 SortingDataResult(
-                    sortingDataList = arr.toMutableList(),
+                    sortingDataList = arrOrigin.toMutableList(),
                     swapTargetIdx1 = j,
                     swapTargetIdx2 = j + 1
                 )
