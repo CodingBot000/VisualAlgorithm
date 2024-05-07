@@ -16,7 +16,7 @@ Each time you enter the screen, data is randomly extracted, allowing you to see 
 
     
 ## Download APK for install
-Go to the [apk file](https://www.dropbox.com/scl/fi/0pjrhd3b1481y7hqbhmkc/visual-algorithm-app-debug.apk?rlkey=2f79u2wgsszuaqpldurt4xd6e&dl=0) to download the latest APK.
+Go to the [apk file](https://www.dropbox.com/scl/fi/yh8ebus1k78pgj96euld8/visual-algorithm-app-debug.apk?rlkey=vga49vule8z6yapwb9953w545&dl=0) to download the latest APK.
 
 
 ## Tech stack
