@@ -116,17 +116,38 @@ fun SortingHeapSortingScreen(
                 sortingType = sortingType,
                 moveCount = uiState.value.moveCount,
                 startButtonEnable = uiState.value.startButtonEnable,
+                forwardButtonEnable = uiState.value.forwardButtonEnable,
+                backwardButtonEnable = uiState.value.backwardButtonEnable,
+                playState = uiState.value.playState,
                 finish = uiState.value.finish,
                 onValueChange = { sliderPosition ->
                     sortingViewModel.setSortingSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
                 },
                 onClickStart = {
-                    sortingViewModel.startButtonEnabled(false)
                     sortingViewModel.start()
+                },
+                onClickResume = {
+                    sortingViewModel.resumeSorting()
+                },
+                onClickPause = {
+                    sortingViewModel.pauseSorting()
+                },
+                onClickForward = {
+                    sortingViewModel.forward()
+                },
+                onClickBackward = {
+                    sortingViewModel.backward()
                 },
                 onClickReplay = {
                     sortingViewModel.restart()
                 }
+//                onClickStart = {
+//                    sortingViewModel.startButtonEnabled(false)
+//                    sortingViewModel.start()
+//                },
+//                onClickReplay = {
+//                    sortingViewModel.restart()
+//                }
             )
         }
     }

@@ -67,7 +67,7 @@ class HeapSortAlgorithm
                 swapTargetIdx2 = -1
             )
         )
-        iDisplayHeapSortingUpdateEvent.finish()
+        iDisplayHeapSortingUpdateEvent.finish(resultArr)
     }
 
     private suspend fun heapSort(
@@ -88,13 +88,13 @@ class HeapSortAlgorithm
             results[index] = array[0]
             index++
             array[0] = array[j]
-            iDisplayHeapSortingUpdateEvent.elementList(
-                list = array,
-                resultList = results.toMutableList(),
-                swapTargetIdx1 = -1,
-                swapTargetIdx2 = -1
-            )
-            delay(sortingSpeed.toLong())
+//            iDisplayHeapSortingUpdateEvent.elementList(
+//                list = array,
+//                resultList = results.toMutableList(),
+//                swapTargetIdx1 = -1,
+//                swapTargetIdx2 = -1
+//            )
+//            delay(sortingSpeed.toLong())
             resultArr.add(
                 SortingHeapDataResult(
                     sortingDataList = array,
@@ -131,36 +131,36 @@ class HeapSortAlgorithm
         if (pIdx != p) {
             val temp = array[p]
             array[p] = array[pIdx]
-            iDisplayHeapSortingUpdateEvent.elementList(
-                list = array,
-                swapTargetIdx1 = p,
-                swapTargetIdx2 = pIdx
-            )
-            delay(sortingSpeed.toLong())
-//            resultArr.add(
-//                SortingHeapDataResult(
-//                    sortingDataList = array,
-//                    resultList = null,
-//                    swapTargetIdx1 = p,
-//                    swapTargetIdx2 = pIdx
-//                )
+//            iDisplayHeapSortingUpdateEvent.elementList(
+//                list = array,
+//                swapTargetIdx1 = p,
+//                swapTargetIdx2 = pIdx
 //            )
+//            delay(sortingSpeed.toLong())
+            resultArr.add(
+                SortingHeapDataResult(
+                    sortingDataList = array,
+                    resultList = mutableListOf(),
+                    swapTargetIdx1 = p,
+                    swapTargetIdx2 = pIdx
+                )
+            )
 
             array[pIdx] = temp
-            iDisplayHeapSortingUpdateEvent.elementList(
-                list = array,
-                swapTargetIdx1 = pIdx,
-                swapTargetIdx2 = p
-            )
-            delay(sortingSpeed.toLong())
-//            resultArr.add(
-//                SortingHeapDataResult(
-//                    sortingDataList = array,
-//                    resultList = null,
-//                    swapTargetIdx1 = pIdx,
-//                    swapTargetIdx2 = p
-//                )
+//            iDisplayHeapSortingUpdateEvent.elementList(
+//                list = array,
+//                swapTargetIdx1 = pIdx,
+//                swapTargetIdx2 = p
 //            )
+//            delay(sortingSpeed.toLong())
+            resultArr.add(
+                SortingHeapDataResult(
+                    sortingDataList = array,
+                    resultList = mutableListOf(),
+                    swapTargetIdx1 = pIdx,
+                    swapTargetIdx2 = p
+                )
+            )
             heapify(array, heapSize, p, results)
         }
     }

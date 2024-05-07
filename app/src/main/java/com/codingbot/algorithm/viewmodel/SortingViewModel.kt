@@ -124,15 +124,12 @@ class SortingViewModel @Inject constructor()
     }
 
     fun pauseSorting() {
-//        playState = PlayState.PAUSE
         setPlayButtonState(PlayState.PAUSE)
 
     }
 
     fun resumeSorting() {
-//        playState = PlayState.RESUME
         setPlayButtonState(PlayState.RESUME)
-
         continuation?.resume(Unit)
         continuation = null
     }
