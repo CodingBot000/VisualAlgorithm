@@ -64,7 +64,27 @@ fun SortingScreen(
         bottomContent(
             uiState = uiState,
             sortingType = sortingType,
-            sortingViewModel = sortingViewModel
+            onValueChange = { sliderPosition ->
+                sortingViewModel.setSortingSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
+            },
+            onClickStart = {
+                sortingViewModel.start()
+            },
+            onClickResume = {
+                sortingViewModel.resumeSorting()
+            },
+            onClickPause = {
+                sortingViewModel.pauseSorting()
+            },
+            onClickForward = {
+                sortingViewModel.forward()
+            },
+            onClickBackward = {
+                sortingViewModel.backward()
+            },
+            onClickReplay = {
+                sortingViewModel.restart()
+            }
         )
     }
 }
@@ -105,7 +125,13 @@ private fun ColumnScope.middleContent(
 private fun ColumnScope.bottomContent(
     uiState: State<SortingUiState>,
     sortingType: String,
-    sortingViewModel: SortingViewModel
+    onValueChange: (Float) -> Unit,
+    onClickBackward:() -> Unit = {},
+    onClickStart:() -> Unit,
+    onClickResume:() -> Unit,
+    onClickPause:() -> Unit,
+    onClickForward:() -> Unit = {},
+    onClickReplay:() -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -121,25 +147,25 @@ private fun ColumnScope.bottomContent(
             playState = uiState.value.playState,
             finish = uiState.value.finish,
             onValueChange = { sliderPosition ->
-                sortingViewModel.setSortingSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
+                onValueChange(sliderPosition)
             },
             onClickStart = {
-                sortingViewModel.start()
+                onClickStart()
             },
             onClickResume = {
-                sortingViewModel.resumeSorting()
+                onClickResume()
             },
             onClickPause = {
-                sortingViewModel.pauseSorting()
+                onClickPause()
             },
             onClickForward = {
-                sortingViewModel.forward()
+                onClickForward()
             },
             onClickBackward = {
-                sortingViewModel.backward()
+                onClickBackward()
             },
             onClickReplay = {
-                sortingViewModel.restart()
+                onClickReplay()
             }
         )
     }

@@ -74,7 +74,22 @@ fun GraphScreen(
         bottomContent(
             uiState = uiState,
             graphType = graphType,
-            graphViewModel = graphViewModel
+            onValueChange = { sliderPosition ->
+                graphViewModel.setSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
+            },
+            onClickStart = {
+//                    graphViewModel.startButtonEnabled(false)
+                graphViewModel.start()
+            },
+            onClickResume = {
+                graphViewModel.resumeTracking()
+            },
+            onClickPause = {
+                graphViewModel.pauseTracking()
+            },
+            onClickReplay = {
+                graphViewModel.restart()
+            }
         )
     }
 }
@@ -102,7 +117,13 @@ private fun ColumnScope.middleContent(
 private fun ColumnScope.bottomContent(
     uiState: State<GraphUiState>,
     graphType: String,
-    graphViewModel: GraphViewModel
+    onValueChange: (Float) -> Unit,
+    onClickBackward:() -> Unit = {},
+    onClickStart:() -> Unit,
+    onClickResume:() -> Unit,
+    onClickPause:() -> Unit,
+    onClickForward:() -> Unit = {},
+    onClickReplay:() -> Unit = {}
 ) {
     BottomInfoSection(
         sortingType = graphType,
@@ -111,20 +132,25 @@ private fun ColumnScope.bottomContent(
         playState = uiState.value.playState,
         finish = uiState.value.finish,
         onValueChange = { sliderPosition ->
-            graphViewModel.setSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
+            onValueChange(sliderPosition)
         },
         onClickStart = {
-//                    graphViewModel.startButtonEnabled(false)
-            graphViewModel.start()
+            onClickStart()
         },
         onClickResume = {
-            graphViewModel.resumeTracking()
+            onClickResume()
         },
         onClickPause = {
-            graphViewModel.pauseTracking()
+            onClickPause()
+        },
+        onClickForward = {
+            onClickForward()
+        },
+        onClickBackward = {
+            onClickBackward()
         },
         onClickReplay = {
-            graphViewModel.restart()
+            onClickReplay()
         }
     )
 }
