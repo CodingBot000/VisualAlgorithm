@@ -11,6 +11,7 @@ class CustomColors(
     bg: Color,
     bgOpposite: Color,
     buttonBackground: Color,
+    buttonBackgroundDisabled: Color,
     buttonIcon: Color,
     white: Color,
     black: Color,
@@ -22,6 +23,8 @@ class CustomColors(
     var bgOpposite by mutableStateOf(bgOpposite)
         private set
     var buttonBackground by mutableStateOf(buttonBackground)
+        private set
+    var buttonBackgroundDisabled by mutableStateOf(buttonBackgroundDisabled)
         private set
     var buttonIcon by mutableStateOf(buttonIcon)
         private set
@@ -39,7 +42,8 @@ fun lightColors() = with(com.codingbot.algorithm.ui.theme.Color) {
         textColorPrimary = Black,
         bg = White,
         bgOpposite = Black,
-        buttonBackground = Blue_Gray_50.copy(alpha = .1f),
+        buttonBackground = Blue_30,
+        buttonBackgroundDisabled = Gray_40,
         buttonIcon = Black.copy(alpha = .1f),
         white = White,
         black = Black,
@@ -51,7 +55,8 @@ fun darkColors() = with(com.codingbot.algorithm.ui.theme.Color) {
         textColorPrimary = White,
         bg = Gray_95,
         bgOpposite = White,
-        buttonBackground = Blue_Gray_20.copy(alpha = .1f),
+        buttonBackground = Blue_70,
+        buttonBackgroundDisabled = Gray_70,
         buttonIcon = White.copy(alpha = .1f),
         white = White,
         black = Black,

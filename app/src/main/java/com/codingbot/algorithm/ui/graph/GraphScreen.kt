@@ -144,7 +144,7 @@ private fun baseGrid(mazeArray: Array<IntArray>, startIdx: Int, destIdx: Int) {
                         .aspectRatio(1f)
                         .background(
                             if (array[index] == 0) {
-                                Color.Yellow
+                                Color.Yellow_40
                             } else {
                                 Color.Blue_30
                             }
