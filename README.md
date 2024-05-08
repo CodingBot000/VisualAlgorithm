@@ -11,7 +11,7 @@ Each time you enter the screen, data is randomly extracted, allowing you to see 
 </br>
 
 
-[![Video Label](http://img.youtube.com/vi/SHzE8egF3V4/0.jpg)](https://youtu.be/SHzE8egF3V4)
+[![Video Label](http://img.youtube.com/vi/H1AjEfSJ7Uw/0.jpg)](https://youtu.be/H1AjEfSJ7Uw)
 - Click to view as a 'YouTube' video.  
 
     
