@@ -1,33 +1,23 @@
 package com.codingbot.algorithm.data.model.graph
 
-import com.codingbot.algorithm.core.common.Const
+import com.codingbot.algorithm.core.utils.deepCopy
 import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
 import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.LinkedList
-
 import java.util.Queue
 
 class GraphBFSAlgorithm: IGraphAlgorithm {
-//    lateinit var mazeArray: Array<Array<GraphData>>
-//    fun setInit(mazeArray: Array<Array<GraphData>>) {
-//        this.mazeArray = mazeArray
-//    }
-//    lateinit var mazeArray: Array<IntArray>
-    lateinit var viewModelScope: CoroutineScope
-    lateinit var arrOrigin: Array<IntArray>
-    lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
-    private var speedValue: Float = Const.sortingSpeed
+    private lateinit var viewModelScope: CoroutineScope
+    private lateinit var arrOrigin: Array<IntArray>
+    private lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
+    private var visitedResultHistory: MutableList<Array<BooleanArray>> = mutableListOf()
     private var backupArr = emptyArray<IntArray>()
 
-    var dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
-    var col = 0
-    var row = 0
-    override fun setSpeed(speed: Float) {
-        this.speedValue = speed
-    }
+    private val dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
+    private var col = 0
+    private var row = 0
 
     override fun initValue(
         viewModelScope: CoroutineScope,
@@ -38,7 +28,7 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
         this.arrOrigin = graphListInit
         this.iDisplayGraphUpdateEvent = iDisplayGraphUpdateEvent
 
-        backupArr = arrOrigin.clone()
+        backupArr = arrOrigin.deepCopy()
     }
 
     override suspend fun start(start: IntArray, dest: IntArray) {
@@ -48,7 +38,7 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
     }
 
     override suspend fun restart(start: IntArray, dest: IntArray) {
-        arrOrigin = backupArr.clone()
+        arrOrigin = backupArr.deepCopy()
         viewModelScope.launch {
             trackingStart(start, dest)
         }
@@ -56,7 +46,7 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
 
     private suspend fun trackingStart(start: IntArray, dest: IntArray) {
         bfs(arrOrigin, start, dest)
-        iDisplayGraphUpdateEvent.finish()
+        iDisplayGraphUpdateEvent.finish(visitedResultHistory)
     }
 
     private suspend fun bfs(
@@ -72,10 +62,8 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
         }
         val queue: Queue<IntArray> = LinkedList()
         visited[start[0]][start[1]] = true
-        iDisplayGraphUpdateEvent.visitedList(
-            visitedList = visited
-        )
-        delay(speedValue.toLong())
+        visitedResultHistory.add(visited.deepCopy())
+
         queue.offer(intArrayOf(start[0], start[1]))
         while (!queue.isEmpty()) {
             val p = queue.poll()
@@ -111,10 +99,8 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                 if (visited[x][y]) continue
                 // 5. 방문한적이 없다면 방문한 표시를 한다.
                 visited[x][y] = true
-                iDisplayGraphUpdateEvent.visitedList(
-                    visitedList = visited
-                )
-                delay(speedValue.toLong())
+                visitedResultHistory.add(visited.deepCopy())
+
                 println("check visited[$x][$y] true addQueue {$x, $y}")
                 print(visited)
                 println("========")
@@ -128,14 +114,4 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
         }
         return false
     }
-
-//    private fun print(visited: Array<BooleanArray>?) {
-//        if (visited == null || visited.size == 0) return
-//        for (i in 0 until m) {
-//            for (j in 0 until n) {
-//                print(visited[i][j].toString() + "\t")
-//            }
-//            println()
-//        }
-//    }
 }

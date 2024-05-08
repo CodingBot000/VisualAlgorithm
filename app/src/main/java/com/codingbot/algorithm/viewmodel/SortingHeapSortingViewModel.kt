@@ -53,15 +53,13 @@ class SortingHeapSortingViewModel @Inject constructor()
     private var moveCount = 0
     private var type: String = SortingList.BUBBLE_SORT.name
     private val originArr = mutableListOf<SortingData>()
-    private var heapSortingResultList = mutableListOf<SortingData>()
     private var arrSize = 0
-    private var sortingListInitSize = 0
     private var sortingResultHistoryList: MutableList<SortingHeapDataResult> = mutableListOf()
 
     private var sortingAlgorithm: HeapSortAlgorithm? = null
 
     private var continuation: Continuation<Unit>? = null
-    var curPlayState = PlayState.INIT
+    private var curPlayState = PlayState.INIT
     private var sortingProgressIndex = 0
 
     init {
@@ -82,18 +80,21 @@ class SortingHeapSortingViewModel @Inject constructor()
                     execute(HeapSortingIntent.FinishSorting(sortingType, true))
 
                     sortingResultHistoryList = resultList
-
-                    viewModelScope.launch {
-                        while (sortingProgressIndex < sortingResultHistoryList.size) {
-                            checkPaused()
-                            updateBars()
-                            decideForwardBackwardEnable()
-                            sortingProgressIndex++
-                        }
-                    }
+                    runAlgorithmProcess()
                 }
             }
         )
+    }
+
+    private fun runAlgorithmProcess() {
+        viewModelScope.launch {
+            while (sortingProgressIndex < sortingResultHistoryList.size) {
+                checkPaused()
+                sortingProgressIndex++
+                updateBars()
+                decideForwardBackwardEnable()
+            }
+        }
     }
 
     private suspend fun updateBars() {
@@ -132,6 +133,7 @@ class SortingHeapSortingViewModel @Inject constructor()
 
     private fun initValues() {
         moveCount = 0
+        sortingProgressIndex = 0
         speed = INIT_SPEED
     }
 
@@ -147,17 +149,18 @@ class SortingHeapSortingViewModel @Inject constructor()
     }
 
     private fun decideForwardBackwardEnable() {
-        val (forward, backward) = if (curPlayState == PlayState.PAUSE) {
-            if (sortingProgressIndex >= sortingResultHistoryList.size -1) {
-                Pair(false, true)
-            } else if (sortingProgressIndex <= 0) {
-                Pair(true, false)
+        val (forward, backward) =
+            if (curPlayState == PlayState.PAUSE) {
+                if (sortingProgressIndex >= sortingResultHistoryList.size -1) {
+                    Pair(false, true)
+                } else if (sortingProgressIndex <= 0) {
+                    Pair(true, false)
+                } else {
+                    Pair(true, true)
+                }
             } else {
-                Pair(true, true)
+                Pair(false, false)
             }
-        } else {
-            Pair(false, false)
-        }
         forwardBackwardEnable(
             forwardButtonEnable = forward,
             backwardButtonEnable = backward,
@@ -235,6 +238,7 @@ class SortingHeapSortingViewModel @Inject constructor()
 
     fun restart() {
         moveCount = 0
+        sortingProgressIndex = 0
         execute(HeapSortingIntent.ElementList(originArr))
         viewModelScope.launch {
             sortingAlgorithm?.restart()
@@ -274,7 +278,7 @@ class SortingHeapSortingViewModel @Inject constructor()
                 }
         }
 
-        moveCount++
+        moveCount = sortingProgressIndex
 
         execute(HeapSortingIntent.HeapSortingResultList(heapSortingResultList = resultList))
         execute(HeapSortingIntent.ElementList(list = sortingList))

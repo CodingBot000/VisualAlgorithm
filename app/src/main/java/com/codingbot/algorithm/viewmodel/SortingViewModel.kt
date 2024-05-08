@@ -60,9 +60,8 @@ class SortingViewModel @Inject constructor()
     private lateinit var sortingResultHistoryList: MutableList<SortingDataResult>
 
     private var sortingAlgorithm: ISortingAlgorithm? = null
-
     private var continuation: Continuation<Unit>? = null
-    var curPlayState = PlayState.INIT
+    private var curPlayState = PlayState.INIT
     private var sortingProgressIndex = 0
 
     init {
@@ -93,20 +92,22 @@ class SortingViewModel @Inject constructor()
                         enable = true))
 
                     sortingResultHistoryList = resultList
-
-                    viewModelScope.launch {
-                        while (sortingProgressIndex < sortingResultHistoryList.size) {
-                            checkPaused()
-                            updateBars()
-                            decideForwardBackwardEnable()
-                            sortingProgressIndex++
-                        }
-                    }
+                    runAlgorithmProcess()
                 }
             }
         )
     }
 
+    private fun runAlgorithmProcess() {
+        viewModelScope.launch {
+            while (sortingProgressIndex < sortingResultHistoryList.size) {
+                checkPaused()
+                sortingProgressIndex++
+                updateBars()
+                decideForwardBackwardEnable()
+            }
+        }
+    }
     private suspend fun updateBars() {
         try {
             with(sortingResultHistoryList[sortingProgressIndex]) {
@@ -138,6 +139,7 @@ class SortingViewModel @Inject constructor()
         viewModelScope.launch {
             if (sortingResultHistoryList.size -1 > sortingProgressIndex) {
                 sortingProgressIndex++
+                logger { "qqqq forwawrd moveCount:$moveCount  sortingProgressIndex:$sortingProgressIndex"}
                 logger { "forward sortingProgressIndex 1:$sortingProgressIndex" }
                 updateBars()
             } else {
@@ -155,6 +157,7 @@ class SortingViewModel @Inject constructor()
         viewModelScope.launch {
             if (0 < sortingProgressIndex) {
                 sortingProgressIndex--
+                logger { "qqqq backward moveCount:$moveCount  sortingProgressIndex:$sortingProgressIndex"}
                 logger { "backward sortingProgressIndex over:$sortingProgressIndex" }
                 updateBars()
             } else {
@@ -215,6 +218,7 @@ class SortingViewModel @Inject constructor()
 
     private fun initValues() {
         moveCount = 0
+        sortingProgressIndex = 0
         speed = INIT_SPEED
     }
 
@@ -256,6 +260,7 @@ class SortingViewModel @Inject constructor()
 
     fun restart() {
         moveCount = 0
+        sortingProgressIndex = 0
         execute(SortingIntent.ElementList(sortingListInit))
         viewModelScope.launch {
             sortingAlgorithm?.restart()
@@ -290,7 +295,8 @@ class SortingViewModel @Inject constructor()
                         swap2 = false)
                 }
         }
-        moveCount++
+        logger { "qqqq moveCount:$moveCount  sortingProgressIndex:$sortingProgressIndex"}
+        moveCount = sortingProgressIndex
         execute(SortingIntent.ElementList(list = sortingList))
         execute(SortingIntent.MoveCount(moveCount = moveCount))
     }

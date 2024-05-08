@@ -13,3 +13,12 @@ fun scaledNumber(randomValues: Array<Int>, from: Int, to: Int): List<Int> {
         ((data - min).toFloat() / (max - min) * range + from).toInt()
     }
 }
+
+fun Array<BooleanArray>.deepCopy(): Array<BooleanArray> {
+    return Array(size) { get(it).clone() }
+}
+
+fun Array<IntArray>.deepCopy(): Array<IntArray> {
+    return Array(size) { get(it).clone() }
+}
+

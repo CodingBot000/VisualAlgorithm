@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.Text
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ExitToApp
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -21,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -76,13 +78,20 @@ fun GraphScreen(
                 sortingType = graphType,
                 moveCount = uiState.value.moveCount,
                 startButtonEnable = uiState.value.startButtonEnable,
+                playState = uiState.value.playState,
                 finish = uiState.value.finish,
                 onValueChange = { sliderPosition ->
                     graphViewModel.setSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
                 },
                 onClickStart = {
-                    graphViewModel.startButtonEnabled(false)
+//                    graphViewModel.startButtonEnabled(false)
                     graphViewModel.start()
+                },
+                onClickResume = {
+                    graphViewModel.resumeTracking()
+                },
+                onClickPause = {
+                    graphViewModel.pauseTracking()
                 },
                 onClickReplay = {
                     graphViewModel.restart()
@@ -165,14 +174,9 @@ private fun baseGrid(mazeArray: Array<IntArray>, startIdx: Int, destIdx: Int) {
 @Composable
 private fun startAndGoalFlag(curIdx: Int, startIdx: Int, destIdx: Int) {
     if (curIdx == startIdx) {
-        Text(text = "START",
-            color = CustomTheme.colors.textColorPrimary,
-            fontWeight = FontWeight.Bold
-        )
+        Icon(imageVector = Icons.Rounded.Home , contentDescription = null)
     } else if (curIdx == destIdx) {
-        Text(text = "GOAL",
-            color = CustomTheme.colors.textColorPrimary,
-            fontWeight = FontWeight.Bold)
+        Icon(imageVector = Icons.Rounded.ExitToApp , contentDescription = null)
     }
 }
 

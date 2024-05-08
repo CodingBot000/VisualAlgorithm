@@ -1,31 +1,21 @@
 package com.codingbot.algorithm.data.model.graph
 
-import com.codingbot.algorithm.core.common.Const
+import com.codingbot.algorithm.core.utils.deepCopy
 import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
 import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 class GraphDFSAlgorithm: IGraphAlgorithm {
-//    lateinit var mazeArray: Array<Array<GraphData>>
-//    fun setInit(mazeArray: Array<Array<GraphData>>) {
-//        this.mazeArray = mazeArray
-//    }
-//    lateinit var mazeArray: Array<IntArray>
-    lateinit var viewModelScope: CoroutineScope
-    lateinit var arrOrigin: Array<IntArray>
-    lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
-    private var speedValue: Float = Const.sortingSpeed
+    private lateinit var viewModelScope: CoroutineScope
+    private lateinit var arrOrigin: Array<IntArray>
+    private var visitedResultHistory: MutableList<Array<BooleanArray>> = mutableListOf()
+    private lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
     private var backupArr = emptyArray<IntArray>()
 
-    var dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
-    var col = 0
-    var row = 0
-    override fun setSpeed(speed: Float) {
-        this.speedValue = speed
-    }
+    private val dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
+    private var col = 0
+    private var row = 0
 
     override fun initValue(
         viewModelScope: CoroutineScope,
@@ -36,7 +26,7 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
         this.arrOrigin = graphListInit
         this.iDisplayGraphUpdateEvent = iDisplayGraphUpdateEvent
 
-        backupArr = arrOrigin.clone()
+        backupArr = arrOrigin.deepCopy()
     }
 
     override suspend fun start(start: IntArray, dest: IntArray) {
@@ -46,7 +36,7 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
     }
 
     override suspend fun restart(start: IntArray, dest: IntArray) {
-        arrOrigin = backupArr.clone()
+        arrOrigin = backupArr.deepCopy()
         viewModelScope.launch {
             trackingStart(start, dest)
         }
@@ -58,7 +48,7 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
         val visited = Array(col) { BooleanArray(row) }
 
         dfs(arrOrigin, start, dest, visited)
-        iDisplayGraphUpdateEvent.finish()
+        iDisplayGraphUpdateEvent.finish(visitedResultHistory)
     }
 
     private suspend fun dfs(
@@ -75,10 +65,8 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
             return false
         }
         visited[start[0]][start[1]] = true
-        iDisplayGraphUpdateEvent.visitedList(
-            visitedList = visited
-        )
-        delay(speedValue.toLong())
+        visitedResultHistory.add(visited.deepCopy())
+
         print(visited)
         if (start[0] == destination[0] && start[1] == destination[1]) return true
         for (dir in dirs) {
