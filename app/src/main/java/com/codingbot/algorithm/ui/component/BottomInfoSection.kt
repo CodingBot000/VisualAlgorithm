@@ -58,7 +58,8 @@ fun BottomInfoSection(sortingType: String,
     )
 
     val hiddenButton = remember(sortingType) {
-        !arrayListOf(GraphList.BFS.name, GraphList.DFS.name, SortingList.HEAP_SORT.name).contains(sortingType)
+//        !arrayListOf(GraphList.BFS.name, GraphList.DFS.name, SortingList.HEAP_SORT.name).contains(sortingType)
+        !arrayListOf(GraphList.BFS.name, GraphList.DFS.name).contains(sortingType)
     }
 
     Row(modifier = Modifier
