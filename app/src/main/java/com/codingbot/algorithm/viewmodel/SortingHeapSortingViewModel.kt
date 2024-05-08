@@ -6,7 +6,6 @@ import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.core.common.SortingList
 import com.codingbot.algorithm.core.utils.scaledNumber
 import com.codingbot.algorithm.data.SortingData
-import com.codingbot.algorithm.data.SortingDataResult
 import com.codingbot.algorithm.data.SortingHeapDataResult
 import com.codingbot.algorithm.data.model.sorting.HeapSortAlgorithm
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
@@ -57,7 +56,7 @@ class SortingHeapSortingViewModel @Inject constructor()
     private var heapSortingResultList = mutableListOf<SortingData>()
     private var arrSize = 0
     private var sortingListInitSize = 0
-    private var sortingResultList: MutableList<SortingHeapDataResult> = mutableListOf()
+    private var sortingResultHistoryList: MutableList<SortingHeapDataResult> = mutableListOf()
 
     private var sortingAlgorithm: HeapSortAlgorithm? = null
 
@@ -78,23 +77,14 @@ class SortingHeapSortingViewModel @Inject constructor()
             viewModelScope = viewModelScope,
             sortingListInit = originArr,
             iDisplayHeapSortingUpdateEvent = object: IDisplayHeapSortingUpdateEvent {
-                override fun elementList(
-                    list: MutableList<SortingData>,
-                    result: MutableList<SortingData>,
-                    swapTargetIdx1: Int,
-                    swapTargetIdx2: Int
-                ) {
-                    heapSortingResultList = result
-                    displayBars(list, result, swapTargetIdx1, swapTargetIdx2)
-                }
 
                 override fun finish(resultList: MutableList<SortingHeapDataResult>) {
                     execute(HeapSortingIntent.FinishSorting(sortingType, true))
 
-                    sortingResultList = resultList
+                    sortingResultHistoryList = resultList
 
                     viewModelScope.launch {
-                        while (sortingProgressIndex < sortingResultList.size) {
+                        while (sortingProgressIndex < sortingResultHistoryList.size) {
                             checkPaused()
                             updateBars()
                             decideForwardBackwardEnable()
@@ -108,7 +98,7 @@ class SortingHeapSortingViewModel @Inject constructor()
 
     private suspend fun updateBars() {
         try {
-            with(sortingResultList[sortingProgressIndex]) {
+            with(sortingResultHistoryList[sortingProgressIndex]) {
                 displayBars(sortingDataList, resultList, swapTargetIdx1, swapTargetIdx2)
                 delay(speed.toLong())
             }
@@ -146,7 +136,7 @@ class SortingHeapSortingViewModel @Inject constructor()
     }
 
     fun setSortingSpeed(sortingSpeed: Float) {
-        sortingAlgorithm?.setSpeed(sortingSpeed)
+        speed = sortingSpeed
     }
 
     fun setPlayButtonState(playState: PlayState) {
@@ -158,7 +148,7 @@ class SortingHeapSortingViewModel @Inject constructor()
 
     private fun decideForwardBackwardEnable() {
         val (forward, backward) = if (curPlayState == PlayState.PAUSE) {
-            if (sortingProgressIndex >= sortingResultList.size -1) {
+            if (sortingProgressIndex >= sortingResultHistoryList.size -1) {
                 Pair(false, true)
             } else if (sortingProgressIndex <= 0) {
                 Pair(true, false)
@@ -193,7 +183,7 @@ class SortingHeapSortingViewModel @Inject constructor()
 
     fun forward() {
         viewModelScope.launch {
-            if (sortingResultList.size -1 > sortingProgressIndex) {
+            if (sortingResultHistoryList.size -1 > sortingProgressIndex) {
                 sortingProgressIndex++
                 logger { "forward sortingProgressIndex 1:$sortingProgressIndex" }
                 updateBars()
@@ -258,26 +248,26 @@ class SortingHeapSortingViewModel @Inject constructor()
         swapTargetIdx1: Int,
         swapTargetIdx2: Int)
     {
-        for (k in sortingList.indices) {
-            sortingList[k] =
-                if (k == swapTargetIdx1) {
+        for (i in sortingList.indices) {
+            sortingList[i] =
+                if (i == swapTargetIdx1) {
                     SortingData(
-                        element = sortingList[k].element,
-                        scaledNum = sortingList[k].scaledNum,
+                        element = sortingList[i].element,
+                        scaledNum = sortingList[i].scaledNum,
                         swap1 = true,
                         swap2 = false
                     )
-                } else if (k == swapTargetIdx2) {
+                } else if (i == swapTargetIdx2) {
                     SortingData(
-                        element = sortingList[k].element,
-                        scaledNum = sortingList[k].scaledNum,
+                        element = sortingList[i].element,
+                        scaledNum = sortingList[i].scaledNum,
                         swap1 = false,
                         swap2 = true
                     )
                 } else {
                     SortingData(
-                        element = sortingList[k].element,
-                        scaledNum = sortingList[k].scaledNum,
+                        element = sortingList[i].element,
+                        scaledNum = sortingList[i].scaledNum,
                         swap1 = false,
                         swap2 = false
                     )

@@ -6,9 +6,5 @@ import com.codingbot.algorithm.data.SortingHeapDataResult
 
 
 interface IDisplayHeapSortingUpdateEvent {
-    fun elementList(list: MutableList<SortingData>,
-                    resultList: MutableList<SortingData>,
-                    swapTargetIdx1: Int,
-                    swapTargetIdx2: Int)
     fun finish(resultList: MutableList<SortingHeapDataResult>)
 }

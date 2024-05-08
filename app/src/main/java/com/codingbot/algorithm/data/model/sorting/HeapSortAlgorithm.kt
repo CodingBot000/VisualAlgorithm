@@ -6,7 +6,6 @@ import com.codingbot.algorithm.data.SortingData
 import com.codingbot.algorithm.data.SortingHeapDataResult
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -18,7 +17,6 @@ class HeapSortAlgorithm
     private lateinit var arrOrigin: MutableList<SortingData>
     private var resultArr: MutableList<SortingHeapDataResult> = mutableListOf<SortingHeapDataResult>()
     private lateinit var iDisplayHeapSortingUpdateEvent: IDisplayHeapSortingUpdateEvent
-    private var sortingSpeed: Float = Const.sortingSpeed
     private var backupArr = emptyList<SortingData>()
     private var arrSize = 0
 
@@ -32,9 +30,6 @@ class HeapSortAlgorithm
         this.iDisplayHeapSortingUpdateEvent = iDisplayHeapSortingUpdateEvent
         arrSize = arrOrigin.size
         backupArr = arrOrigin.toMutableList()
-    }
-    fun setSpeed(speed: Float) {
-        this.sortingSpeed = speed
     }
 
     suspend fun start() {
@@ -51,17 +46,12 @@ class HeapSortAlgorithm
     private suspend fun sort() {
         var results = MutableList(arrOrigin.count()) { SortingData() }
         heapSort(
-            array = arrOrigin,
+            array = arrOrigin.toMutableList(),
             results = results)
-        iDisplayHeapSortingUpdateEvent.elementList(
-            list = arrOrigin,
-            resultList = results.toMutableList(),
-            swapTargetIdx1 = -1,
-            swapTargetIdx2 = -1
-        )
+
         resultArr.add(
             SortingHeapDataResult(
-                sortingDataList = arrOrigin,
+                sortingDataList = arrOrigin.toMutableList(),
                 resultList = results.toMutableList(),
                 swapTargetIdx1 = -1,
                 swapTargetIdx2 = -1
@@ -84,20 +74,13 @@ class HeapSortAlgorithm
 
         // 하나씩 추출
         for (j in arrayLen - 1 downTo 0) {
-//            results.add(array[0])
             results[index] = array[0]
             index++
             array[0] = array[j]
-//            iDisplayHeapSortingUpdateEvent.elementList(
-//                list = array,
-//                resultList = results.toMutableList(),
-//                swapTargetIdx1 = -1,
-//                swapTargetIdx2 = -1
-//            )
-//            delay(sortingSpeed.toLong())
+
             resultArr.add(
                 SortingHeapDataResult(
-                    sortingDataList = array,
+                    sortingDataList = array.toMutableList(),
                     resultList = results.toMutableList(),
                     swapTargetIdx1 = -1,
                     swapTargetIdx2 = -1
@@ -131,32 +114,21 @@ class HeapSortAlgorithm
         if (pIdx != p) {
             val temp = array[p]
             array[p] = array[pIdx]
-//            iDisplayHeapSortingUpdateEvent.elementList(
-//                list = array,
-//                swapTargetIdx1 = p,
-//                swapTargetIdx2 = pIdx
-//            )
-//            delay(sortingSpeed.toLong())
+
             resultArr.add(
                 SortingHeapDataResult(
-                    sortingDataList = array,
-                    resultList = mutableListOf(),
+                    sortingDataList = array.toMutableList(),
+                    resultList = results.toMutableList(),
                     swapTargetIdx1 = p,
                     swapTargetIdx2 = pIdx
                 )
             )
 
             array[pIdx] = temp
-//            iDisplayHeapSortingUpdateEvent.elementList(
-//                list = array,
-//                swapTargetIdx1 = pIdx,
-//                swapTargetIdx2 = p
-//            )
-//            delay(sortingSpeed.toLong())
             resultArr.add(
                 SortingHeapDataResult(
-                    sortingDataList = array,
-                    resultList = mutableListOf(),
+                    sortingDataList = array.toMutableList(),
+                    resultList = results.toMutableList(),
                     swapTargetIdx1 = pIdx,
                     swapTargetIdx2 = p
                 )

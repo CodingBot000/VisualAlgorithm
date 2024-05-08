@@ -57,7 +57,7 @@ class SortingViewModel @Inject constructor()
     private var type: String = SortingList.BUBBLE_SORT.name
     private val sortingListInit = mutableListOf<SortingData>()
     private var sortingListInitSize = 0
-    private lateinit var sortingResultList: MutableList<SortingDataResult>
+    private lateinit var sortingResultHistoryList: MutableList<SortingDataResult>
 
     private var sortingAlgorithm: ISortingAlgorithm? = null
 
@@ -92,10 +92,10 @@ class SortingViewModel @Inject constructor()
                         sortingType = sortingType,
                         enable = true))
 
-                    sortingResultList = resultList
+                    sortingResultHistoryList = resultList
 
                     viewModelScope.launch {
-                        while (sortingProgressIndex < sortingResultList.size) {
+                        while (sortingProgressIndex < sortingResultHistoryList.size) {
                             checkPaused()
                             updateBars()
                             decideForwardBackwardEnable()
@@ -109,7 +109,7 @@ class SortingViewModel @Inject constructor()
 
     private suspend fun updateBars() {
         try {
-            with(sortingResultList[sortingProgressIndex]) {
+            with(sortingResultHistoryList[sortingProgressIndex]) {
                 displayBars(sortingDataList, swapTargetIdx1, swapTargetIdx2)
                 delay(speed.toLong())
             }
@@ -136,7 +136,7 @@ class SortingViewModel @Inject constructor()
 
     fun forward() {
         viewModelScope.launch {
-            if (sortingResultList.size -1 > sortingProgressIndex) {
+            if (sortingResultHistoryList.size -1 > sortingProgressIndex) {
                 sortingProgressIndex++
                 logger { "forward sortingProgressIndex 1:$sortingProgressIndex" }
                 updateBars()
@@ -231,7 +231,7 @@ class SortingViewModel @Inject constructor()
 
     private fun decideForwardBackwardEnable() {
         val (forward, backward) = if (curPlayState == PlayState.PAUSE) {
-            if (sortingProgressIndex >= sortingResultList.size -1) {
+            if (sortingProgressIndex >= sortingResultHistoryList.size -1) {
                 Pair(false, true)
             } else if (sortingProgressIndex <= 0) {
                 Pair(true, false)
@@ -268,24 +268,24 @@ class SortingViewModel @Inject constructor()
         swapTargetIdx1: Int,
         swapTargetIdx2: Int)
     {
-        for (k in sortingList.indices) {
-            sortingList[k] =
-                if (k == swapTargetIdx1) {
+        for (i in sortingList.indices) {
+            sortingList[i] =
+                if (i == swapTargetIdx1) {
                     SortingData(
-                        element = sortingList[k].element,
-                        scaledNum = sortingList[k].scaledNum,
+                        element = sortingList[i].element,
+                        scaledNum = sortingList[i].scaledNum,
                         swap1 = true,
                         swap2 = false)
-                } else if (k == swapTargetIdx2) {
+                } else if (i == swapTargetIdx2) {
                     SortingData(
-                        element = sortingList[k].element,
-                        scaledNum = sortingList[k].scaledNum,
+                        element = sortingList[i].element,
+                        scaledNum = sortingList[i].scaledNum,
                         swap1 = false,
                         swap2 = true)
                 } else {
                     SortingData(
-                        element = sortingList[k].element,
-                        scaledNum = sortingList[k].scaledNum,
+                        element = sortingList[i].element,
+                        scaledNum = sortingList[i].scaledNum,
                         swap1 = false,
                         swap2 = false)
                 }
