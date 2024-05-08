@@ -10,7 +10,7 @@ interface IGraphAlgorithm
         iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
     )
 
-    fun setSpeed(speed: Float)
+//    fun setSpeed(speed: Float)
     suspend fun start(start: IntArray, dest: IntArray)
     suspend fun restart(start: IntArray, dest: IntArray)
 }
