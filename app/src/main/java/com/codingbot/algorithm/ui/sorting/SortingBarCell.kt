@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.data.SortingData
 import com.codingbot.algorithm.ui.theme.Color
+import com.codingbot.algorithm.ui.theme.CustomColors
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.ui.theme.Dimens
 
@@ -46,7 +47,7 @@ fun SortingBarCell(
             modifier = Modifier
                 .width(elementInnerWidth)
                 .height(Dimens.Sorting.SortingGraphHeight)
-                .background(color = Color.Blue_Gray_10),
+                .background(color = CustomTheme.colors.elementBarBackground),
             contentAlignment = Alignment.BottomCenter
         ) {
             Box(
@@ -56,14 +57,14 @@ fun SortingBarCell(
                     .background(
                         color =
                             if (sortingBarCellType == SortingBarCellType.SortingResult) {
-                                Color.Red_50
+                                CustomTheme.colors.elementBarResult
                             } else {
                                 if (item.swap1) {
-                                    Color.Blue_30
+                                    CustomTheme.colors.elementSwap1
                                 } else if (item.swap2) {
-                                    Color.Blue_Gray_30
+                                    CustomTheme.colors.elementSwap2
                                 } else {
-                                    Color.Blue_90
+                                    CustomTheme.colors.elementNormal
                                 }
                            },
                     )
@@ -86,9 +87,9 @@ fun SortingBarCell(
                             androidx.compose.ui.graphics.Color.Transparent
                         } else {
                             if (item.swap1) {
-                                Color.Blue_30
+                                CustomTheme.colors.elementSwap1
                             } else if (item.swap2) {
-                                Color.Blue_Gray_30
+                                CustomTheme.colors.elementSwap2
                             } else {
                                 androidx.compose.ui.graphics.Color.Transparent
                             }
@@ -99,19 +100,17 @@ fun SortingBarCell(
                 Text(
                     text = item.element.toString(),
                     color = CustomTheme.colors.textColorPrimary,
-                    style = CustomTheme.typography.caption2Regular,
-                    fontWeight =
-                    if (sortingBarCellType == SortingBarCellType.SortingResult) {
-                        FontWeight.Bold
-                    } else {
-                        if (item.swap1) {
-                            FontWeight.Bold
-                        } else if (item.swap2) {
-                            FontWeight.ExtraBold
-                        } else {
-                            FontWeight.Normal
-                        }
-                    }
+                    style = if (sortingBarCellType == SortingBarCellType.SortingResult) {
+                                CustomTheme.typography.caption2Bold
+                            } else {
+                                if (item.swap1) {
+                                    CustomTheme.typography.caption2Bold
+                                } else if (item.swap2) {
+                                    CustomTheme.typography.caption2ExtraBold
+                                } else {
+                                    CustomTheme.typography.caption2Regular
+                                }
+                            }
                 )
             }
         }

@@ -13,6 +13,11 @@ class CustomColors(
     buttonBackground: Color,
     buttonBackgroundDisabled: Color,
     buttonIcon: Color,
+    elementBarBackground: Color,
+    elementBarResult: Color,
+    elementSwap1: Color,
+    elementSwap2: Color,
+    elementNormal: Color,
     white: Color,
     black: Color,
 ) {
@@ -28,7 +33,15 @@ class CustomColors(
         private set
     var buttonIcon by mutableStateOf(buttonIcon)
         private set
-
+    var elementBarBackground by mutableStateOf(elementBarBackground)
+        private set
+    var elementBarResult by mutableStateOf(elementBarResult)
+        private set
+    var elementSwap1 by mutableStateOf(elementSwap1)
+        private set
+    var elementSwap2 by mutableStateOf(elementSwap2)
+        private set
+    var elementNormal by mutableStateOf(elementNormal)
     var white by mutableStateOf(white)
         private set
 
@@ -45,6 +58,11 @@ fun lightColors() = with(com.codingbot.algorithm.ui.theme.Color) {
         buttonBackground = Blue_30,
         buttonBackgroundDisabled = Gray_40,
         buttonIcon = Black.copy(alpha = .1f),
+        elementBarBackground = Blue_Gray_10,
+        elementBarResult = Red_40,
+        elementSwap1 = Orange_30,
+        elementSwap2 = Orange_60 ,
+        elementNormal = Blue_80,
         white = White,
         black = Black,
     )
@@ -58,6 +76,11 @@ fun darkColors() = with(com.codingbot.algorithm.ui.theme.Color) {
         buttonBackground = Blue_70,
         buttonBackgroundDisabled = Gray_70,
         buttonIcon = White.copy(alpha = .1f),
+        elementBarBackground = Blue_Gray_50,
+        elementBarResult = Red_70,
+        elementSwap1 = Orange_50,
+        elementSwap2 = Orange_80,
+        elementNormal = Blue_90,
         white = White,
         black = Black,
     )

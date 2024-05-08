@@ -103,6 +103,13 @@ class CustomTypography {
             fontWeight = FontWeight.Bold,
             lineHeight = 14.px
         )
+    val caption2ExtraBold: TextStyle
+        @Composable get() = TextStyle(
+            fontSize = 10.px,
+            fontFamily = NotoSansKr,
+            fontWeight = FontWeight.ExtraBold,
+            lineHeight = 14.px
+        )
 
     val captionBold: TextStyle
         @Composable get() = TextStyle(

@@ -2,9 +2,9 @@ package com.codingbot.algorithm.ui.graph
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +17,7 @@ import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.ScreenTitle
 import com.codingbot.algorithm.ui.theme.Color
 import com.codingbot.algorithm.ui.theme.CustomTheme
+import com.codingbot.algorithm.viewmodel.GraphUiState
 import com.codingbot.algorithm.viewmodel.GraphViewModel
 
 
@@ -54,7 +56,8 @@ fun GraphScreen(
 
     Column(modifier = Modifier
         .background(color = CustomTheme.colors.bg)
-        .fillMaxSize())
+        .fillMaxSize()
+        .padding(horizontal = 10.dp))
     {
         ScreenTitle(
             title = graphType,
@@ -62,45 +65,69 @@ fun GraphScreen(
                 navController.popBackStack()
             }
         )
-
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
-
-            Box {
-                baseGrid(graphViewModel.baseGridArray, startIdx, destIdx)
-                overlayGrid(visitedArray = uiState.value.visitedList, startIdx, destIdx)
-            }
-
-            BottomInfoSection(
-                sortingType = graphType,
-                moveCount = uiState.value.moveCount,
-                startButtonEnable = uiState.value.startButtonEnable,
-                playState = uiState.value.playState,
-                finish = uiState.value.finish,
-                onValueChange = { sliderPosition ->
-                    graphViewModel.setSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
-                },
-                onClickStart = {
-//                    graphViewModel.startButtonEnabled(false)
-                    graphViewModel.start()
-                },
-                onClickResume = {
-                    graphViewModel.resumeTracking()
-                },
-                onClickPause = {
-                    graphViewModel.pauseTracking()
-                },
-                onClickReplay = {
-                    graphViewModel.restart()
-                }
-            )
-        }
+        middleContent(
+            uiState = uiState,
+            baseGridArray = graphViewModel.baseGridArray,
+            startIdx = startIdx,
+            destIdx = destIdx
+        )
+        bottomContent(
+            uiState = uiState,
+            graphType = graphType,
+            graphViewModel = graphViewModel
+        )
     }
 }
 
+
+@Composable
+private fun ColumnScope.middleContent(
+    uiState: State<GraphUiState>,
+    baseGridArray: Array<IntArray>,
+    startIdx: Int,
+    destIdx: Int
+)
+{
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f),
+        contentAlignment = Alignment.Center
+    ) {
+        baseGrid(baseGridArray, startIdx, destIdx)
+        overlayGrid(visitedArray = uiState.value.visitedList, startIdx, destIdx)
+    }
+}
+@Composable
+private fun ColumnScope.bottomContent(
+    uiState: State<GraphUiState>,
+    graphType: String,
+    graphViewModel: GraphViewModel
+) {
+    BottomInfoSection(
+        sortingType = graphType,
+        moveCount = uiState.value.moveCount,
+        startButtonEnable = uiState.value.startButtonEnable,
+        playState = uiState.value.playState,
+        finish = uiState.value.finish,
+        onValueChange = { sliderPosition ->
+            graphViewModel.setSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
+        },
+        onClickStart = {
+//                    graphViewModel.startButtonEnabled(false)
+            graphViewModel.start()
+        },
+        onClickResume = {
+            graphViewModel.resumeTracking()
+        },
+        onClickPause = {
+            graphViewModel.pauseTracking()
+        },
+        onClickReplay = {
+            graphViewModel.restart()
+        }
+    )
+}
 
 @Composable
 private fun overlayGrid(visitedArray: List<Boolean>, startIdx: Int, destIdx: Int) {
