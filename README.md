@@ -11,12 +11,12 @@ Each time you enter the screen, data is randomly extracted, allowing you to see 
 </br>
 
 
-[![Video Label](http://img.youtube.com/vi/H1AjEfSJ7Uw/0.jpg)](https://youtu.be/H1AjEfSJ7Uw)
+[![Video Label](http://img.youtube.com/vi/la5x8Y5GqOg/0.jpg)](https://youtu.be/la5x8Y5GqOg)
 - Click to view as a 'YouTube' video.  
 
     
 ## Download APK for install
-Go to the [apk file](https://www.dropbox.com/scl/fi/q22h7i035rn3wztkrr337/visual-algorithm-app-debug.apk?rlkey=ey7z9mqot9fscqh453srtnhhn&dl=0) to download the latest APK.
+Go to the [apk file](https://www.dropbox.com/scl/fi/n5r47ypmoucpv8g8afzwz/visual-algorithm-app-debug.apk?rlkey=apa3ikeqvcnp53mvvxwfppwv8&dl=0) to download the latest APK.
 
 
 ## Tech stack
