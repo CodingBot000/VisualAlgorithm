@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -31,13 +30,10 @@ import com.codingbot.algorithm.R
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.ScreenTitle
-import com.codingbot.algorithm.ui.theme.Color
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.ui.theme.Dimens
 import com.codingbot.algorithm.viewmodel.HeapSortingUiState
 import com.codingbot.algorithm.viewmodel.SortingHeapSortingViewModel
-import com.codingbot.algorithm.viewmodel.SortingUiState
-import com.codingbot.algorithm.viewmodel.SortingViewModel
 
 @Composable
 fun SortingHeapSortingScreen(
@@ -51,7 +47,7 @@ fun SortingHeapSortingScreen(
     val uiState = sortingViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        sortingViewModel.initSorting(sortingType)
+        sortingViewModel.initValue(sortingType)
     }
 
     Column(modifier = Modifier
@@ -74,16 +70,16 @@ fun SortingHeapSortingScreen(
             uiState = uiState,
             sortingType = sortingType,
             onValueChange = { sliderPosition ->
-                sortingViewModel.setSortingSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
+                sortingViewModel.setSpeedValue(((10 - sliderPosition.toInt()) * 100).toFloat())
             },
             onClickStart = {
                 sortingViewModel.start()
             },
             onClickResume = {
-                sortingViewModel.resumeSorting()
+                sortingViewModel.resume()
             },
             onClickPause = {
-                sortingViewModel.pauseSorting()
+                sortingViewModel.pause()
             },
             onClickForward = {
                 sortingViewModel.forward()
@@ -139,7 +135,6 @@ private fun ColumnScope.middleContent(
                     )
                 }
             }
-
 
             Spacer(modifier = Modifier.height(5.dp))
             Text(

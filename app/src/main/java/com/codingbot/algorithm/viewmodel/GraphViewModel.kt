@@ -3,24 +3,24 @@ package com.codingbot.algorithm.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.codingbot.algorithm.core.common.GraphList
 import com.codingbot.algorithm.core.common.Logger
+import com.codingbot.algorithm.core.common.SortingList
+import com.codingbot.algorithm.data.SortingData
 import com.codingbot.algorithm.data.model.graph.GraphBFSAlgorithm
 import com.codingbot.algorithm.data.model.graph.GraphDFSAlgorithm
 import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
 import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
+import com.codingbot.algorithm.data.model.sorting.BubbleSortAlgorithm
+import com.codingbot.algorithm.data.model.sorting.InsertionSortAlgorithm
+import com.codingbot.algorithm.data.model.sorting.QuickSortAlgorithm
+import com.codingbot.algorithm.data.model.sorting.SelectionSortAlgorithm
+import com.codingbot.algorithm.data.model.sorting.contract.ISortingAlgorithm
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
 data class GraphUiState(
     val startButtonEnable: Boolean = true,
-//    val visitedList: Array<BooleanArray> = Array<BooleanArray>(Const.GRAPH_ARRAY_SIZE) {
-//        BooleanArray(Const.GRAPH_ARRAY_SIZE)
-//    },
-//    val visitedList: Array<IntArray> = Array<IntArray>(Const.GRAPH_ARRAY_SIZE) {
-//        IntArray(Const.GRAPH_ARRAY_SIZE)
-//    },
     val playState: PlayState = PlayState.INIT,
     val visitedList: List<Boolean> = emptyList(),
     val moveCount: Int = 0,
@@ -36,48 +36,45 @@ sealed interface GraphIntent {
 }
 
 class GraphViewModel
-    : BaseViewModel<GraphUiState, GraphIntent>(GraphUiState())
+    : AlgorithmViewModel<GraphUiState, GraphIntent>(GraphUiState())
 {
     val logger = Logger("GraphViewModel")
 
-    private val INIT_SPEED = 500f
-    private var speed = INIT_SPEED
-    private var moveCount = 0
+    lateinit var originArr: Array<IntArray>
+    private var resultHistoryList: MutableList<Array<BooleanArray>> = mutableListOf()
+    private var algorithm: IGraphAlgorithm? = null
+
     var arrColSize = 0
-    var graphType: String = GraphList.BFS.name
-
-    private lateinit var trackingResultHistoryList: MutableList<Array<BooleanArray>>
-    private var graphAlgorithm: IGraphAlgorithm? = null
-    private var continuation: Continuation<Unit>? = null
-    private var curPlayState = PlayState.INIT
-    private var sortingProgressIndex = 0
-
     val start = intArrayOf(0, 4)
     val dest = intArrayOf(4, 4)
-
     val startIdx: Int
         get() = getFlatArrayIndex(start)
     val destIdx: Int
         get() = getFlatArrayIndex(dest)
 
-
     init {
-        initGraph()
+        initArray()
     }
 
-    lateinit var baseGridArray: Array<IntArray>
     private fun getFlatArrayIndex(pos: IntArray): Int {
         return pos[0] * arrColSize + pos[1]
+    }
+    private fun getAlogritm(type: String): IGraphAlgorithm =
+        when (type) {
+            GraphList.BFS.name -> GraphBFSAlgorithm()
+            GraphList.DFS.name -> GraphDFSAlgorithm()
+            else -> { GraphBFSAlgorithm() }
+        }
+
+    fun setSpeedValue(speed: Float) {
+        this.speed = speed
     }
 
     fun startButtonEnabled(enable: Boolean) {
         execute(GraphIntent.StartButtonEnable(enable))
     }
-    fun setSpeed(speed: Float) {
-        this.speed = speed
-//        graphAlgorithm?.setSpeed(speed)
-    }
-    private fun initGraph() {
+
+    override fun initArray() {
         val mazeInit = arrayOf(
             intArrayOf(0, 0, 1, 0, 0),
             intArrayOf(0, 0, 0, 0, 0),
@@ -86,99 +83,133 @@ class GraphViewModel
             intArrayOf(0, 0, 0, 0, 0)
         )
         arrColSize = mazeInit.size
-        baseGridArray = mazeInit
+        originArr = mazeInit
     }
 
-    fun initTrackingMaze(graphType: String) {
-        this.graphType = graphType
-        when (graphType) {
-            GraphList.BFS.name -> graphAlgorithm = GraphBFSAlgorithm()
-            GraphList.DFS.name -> graphAlgorithm = GraphDFSAlgorithm()
-        }
+    override fun initValue(type: String) {
+        this.type = type
 
-        graphAlgorithm?.initValue(
+        algorithm = getAlogritm(type)
+        algorithm?.initValue(
             viewModelScope = viewModelScope,
-            graphListInit = baseGridArray,
+            graphListInit = originArr,
             iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
-//                override fun visitedList(visitedList: Array<BooleanArray>) {
-//                    val flatList = visitedList.flatMap { it.asList() }
-//                    execute(GraphIntent.ElementList(list = flatList))
-//                    execute(GraphIntent.MoveCount(moveCount = moveCount))
-//                }
 
                 override fun finish(resultVisitedArray: MutableList<Array<BooleanArray>>) {
                     execute(GraphIntent.Finish(true))
 
-                    trackingResultHistoryList = resultVisitedArray
+                    resultHistoryList = resultVisitedArray
                     runAlgorithmProcess()
                 }
             }
         )
     }
 
-    private fun runAlgorithmProcess() {
+    override fun runAlgorithmProcess() {
         viewModelScope.launch {
-            while (sortingProgressIndex < trackingResultHistoryList.size) {
+            while (progressIndex < resultHistoryList.size) {
                 checkPaused()
-                sortingProgressIndex++
+                progressIndex++
                 updateBars()
 //                decideForwardBackwardEnable()
             }
         }
     }
-    private suspend fun updateBars() {
+
+    override suspend fun updateBars() {
         try {
-            trackingResultHistoryList[sortingProgressIndex].run {
+            resultHistoryList[progressIndex].run {
 //                displayBars(sortingDataList, swapTargetIdx1, swapTargetIdx2)
-                val flatList = this.flatMap { it.asList() }
-                execute(GraphIntent.ElementList(list = flatList))
-                execute(GraphIntent.MoveCount(moveCount = moveCount))
+                displayBars(this)
                 delay(speed.toLong())
             }
         } catch (e: IndexOutOfBoundsException) {
             logger { "updateBars sortingIndexException: $e" }
         }
     }
-    private suspend fun checkPaused() {
+
+    override suspend fun checkPaused() {
         if (curPlayState == PlayState.PAUSE) {
             suspendCancellableCoroutine<Unit> { continuation = it }
         }
     }
 
-    fun setPlayButtonState(playState: PlayState) {
-        curPlayState = playState
-        execute(GraphIntent.PlayButtonState(playState))
-        logger { "setPlayButtonState:$playState" }
-//        decideForwardBackwardEnable()
+    override fun start() {
+        viewModelScope.launch {
+            algorithm?.start(start, dest)
+            setPlayButtonState(PlayState.PLAYING)
+        }
     }
-    fun pauseTracking() {
+
+    override fun restart() {
+        moveCount = 0
+        progressIndex = 0
+        viewModelScope.launch {
+            initArray()
+            algorithm?.restart(start, dest)
+            setPlayButtonState(PlayState.PLAYING)
+        }
+    }
+    override fun pause() {
         setPlayButtonState(PlayState.PAUSE)
-
     }
 
-    fun resumeTracking() {
+    override fun resume() {
         setPlayButtonState(PlayState.RESUME)
         continuation?.resume(Unit)
         continuation = null
     }
 
-    fun start() {
-        viewModelScope.launch {
-            graphAlgorithm?.start(start, dest)
-            setPlayButtonState(PlayState.PLAYING)
-        }
+
+    override fun forward() {
+        TODO("Not yet implemented")
     }
 
-    fun restart() {
-        moveCount = 0
-        sortingProgressIndex = 0
-        viewModelScope.launch {
-            initGraph()
-            graphAlgorithm?.restart(start, dest)
-            setPlayButtonState(PlayState.PLAYING)
-        }
+    override fun backward() {
+        TODO("Not yet implemented")
     }
 
+    override fun setPlayButtonState(playState: PlayState) {
+        curPlayState = playState
+        execute(GraphIntent.PlayButtonState(playState))
+        logger { "setPlayButtonState:$playState" }
+//        decideForwardBackwardEnable()
+    }
+
+    override fun decideForwardBackwardEnable() {
+        val (forward, backward) = if (curPlayState == PlayState.PAUSE) {
+            if (progressIndex >= resultHistoryList.size -1) {
+                Pair(false, true)
+            } else if (progressIndex <= 0) {
+                Pair(true, false)
+            } else {
+                Pair(true, true)
+            }
+        } else {
+            Pair(false, false)
+        }
+        forwardBackwardEnable(
+            forwardButtonEnable = forward,
+            backwardButtonEnable = backward,
+        )
+    }
+
+
+    override fun forwardBackwardEnable(
+        forwardButtonEnable: Boolean,
+        backwardButtonEnable: Boolean
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    private fun displayBars(
+        trackingList: Array<BooleanArray>
+    )
+    {
+        val flatList = trackingList.flatMap { it.asList() }
+        execute(GraphIntent.ElementList(list = flatList))
+        execute(GraphIntent.MoveCount(moveCount = moveCount))
+    }
 
     override suspend fun GraphUiState.reduce(intent: GraphIntent): GraphUiState =
         when (intent) {
