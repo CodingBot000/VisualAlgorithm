@@ -51,7 +51,7 @@ fun GraphScreen(
     val destIdx by remember { mutableStateOf(graphViewModel.destIdx) }
 
     LaunchedEffect(key1 = Unit) {
-        graphViewModel.initTrackingMaze(graphType)
+        graphViewModel.initValue(graphType)
     }
 
     Column(modifier = Modifier
@@ -67,7 +67,7 @@ fun GraphScreen(
         )
         middleContent(
             uiState = uiState,
-            baseGridArray = graphViewModel.baseGridArray,
+            baseGridArray = graphViewModel.originArr,
             startIdx = startIdx,
             destIdx = destIdx
         )
@@ -75,17 +75,17 @@ fun GraphScreen(
             uiState = uiState,
             graphType = graphType,
             onValueChange = { sliderPosition ->
-                graphViewModel.setSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
+                graphViewModel.setSpeedValue(((10 - sliderPosition.toInt()) * 100).toFloat())
             },
             onClickStart = {
 //                    graphViewModel.startButtonEnabled(false)
                 graphViewModel.start()
             },
             onClickResume = {
-                graphViewModel.resumeTracking()
+                graphViewModel.resume()
             },
             onClickPause = {
-                graphViewModel.pauseTracking()
+                graphViewModel.pause()
             },
             onClickReplay = {
                 graphViewModel.restart()

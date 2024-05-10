@@ -42,7 +42,7 @@ fun SortingScreen(
     val uiState = sortingViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        sortingViewModel.initSorting(sortingType)
+        sortingViewModel.initValue(sortingType)
     }
 
     Column(modifier = Modifier
@@ -65,16 +65,16 @@ fun SortingScreen(
             uiState = uiState,
             sortingType = sortingType,
             onValueChange = { sliderPosition ->
-                sortingViewModel.setSortingSpeed(((10 - sliderPosition.toInt()) * 100).toFloat())
+                sortingViewModel.setSpeedValue(((10 - sliderPosition.toInt()) * 100).toFloat())
             },
             onClickStart = {
                 sortingViewModel.start()
             },
             onClickResume = {
-                sortingViewModel.resumeSorting()
+                sortingViewModel.resume()
             },
             onClickPause = {
-                sortingViewModel.pauseSorting()
+                sortingViewModel.pause()
             },
             onClickForward = {
                 sortingViewModel.forward()
