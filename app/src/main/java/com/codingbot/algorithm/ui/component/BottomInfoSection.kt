@@ -23,7 +23,7 @@ import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.viewmodel.PlayState
 
 @Composable
-fun BottomInfoSection(sortingType: String,
+fun BottomInfoSection(algorithmType: String,
                       moveCount: Int,
                       backwardButtonEnable: Boolean = true,
                       startButtonEnable: Boolean = true,
@@ -38,14 +38,21 @@ fun BottomInfoSection(sortingType: String,
                       onClickForward:() -> Unit = {},
                       onClickReplay:() -> Unit = {}) {
     var sliderPosition by remember { mutableStateOf(5f) }
-
+    val graphTracking = remember(algorithmType) {
+        arrayListOf(GraphList.BFS.name, GraphList.DFS.name).contains(algorithmType)
+    }
     Column(modifier = Modifier
         .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally)
     {
         Text(
-            text = "Sorting Count: $moveCount",
+            text = if (graphTracking) {
+                    "Sorting Count: "
+                } else {
+                    "Graph Tracking Count: "
+                }
+                    + moveCount,
             color = CustomTheme.colors.textColorPrimary)
         Text(
             text = "interval speed: ${sliderPosition.toInt()}",
@@ -62,26 +69,23 @@ fun BottomInfoSection(sortingType: String,
             steps = 9
         )
 
-        val hiddenButton = remember(sortingType) {
-            !arrayListOf(GraphList.BFS.name, GraphList.DFS.name).contains(sortingType)
-        }
+//        val hiddenButton = remember(algorithmType) {
+//            !arrayListOf(GraphList.BFS.name, GraphList.DFS.name).contains(sortingType)
+//        }
 
         Row(modifier = Modifier
             .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center)
         {
+            ControlButton(
+                resId = R.drawable.icon_redo_48px,
+                onClick = {
+                    onClickBackward()
+                },
+                isEnable = backwardButtonEnable
+            )
 
-            if (hiddenButton) {
-                ControlButton(
-                    resId = R.drawable.icon_redo_48px,
-                    onClick = {
-                        onClickBackward()
-                    },
-                    isEnable = backwardButtonEnable
-                )
-
-                Spacer(Modifier.width(10.dp))
-            }
+            Spacer(Modifier.width(10.dp))
 
             ControlButton(
                 resId =
@@ -102,16 +106,14 @@ fun BottomInfoSection(sortingType: String,
             )
 
             Spacer(Modifier.width(10.dp))
-            if (hiddenButton) {
-                ControlButton(
-                    resId = R.drawable.icon_fast_forward_48px,
-                    onClick = {
-                        onClickForward()
-                    },
-                    isEnable = forwardButtonEnable
-                )
-                Spacer(Modifier.width(10.dp))
-            }
+            ControlButton(
+                resId = R.drawable.icon_fast_forward_48px,
+                onClick = {
+                    onClickForward()
+                },
+                isEnable = forwardButtonEnable
+            )
+            Spacer(Modifier.width(10.dp))
 
 //            ControlButton(
 //                resId = R.drawable.icon_refresh_48px,
