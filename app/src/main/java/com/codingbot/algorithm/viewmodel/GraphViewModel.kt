@@ -21,6 +21,8 @@ import kotlin.coroutines.resume
 
 data class GraphUiState(
     val startButtonEnable: Boolean = true,
+    val forwardButtonEnable: Boolean = false,
+    val backwardButtonEnable: Boolean = false,
     val playState: PlayState = PlayState.INIT,
     val visitedList: List<Boolean> = emptyList(),
     val moveCount: Int = 0,
@@ -28,6 +30,7 @@ data class GraphUiState(
 )
 
 sealed interface GraphIntent {
+    data class ButtonEnableForwardAndBackward(val forwardButtonEnable: Boolean, val backwardButtonEnable: Boolean): GraphIntent
     data class StartButtonEnable(val enable: Boolean): GraphIntent
     data class PlayButtonState(val playState: PlayState): GraphIntent
     data class ElementList(val list: List<Boolean>): GraphIntent
@@ -111,7 +114,7 @@ class GraphViewModel
                 checkPaused()
                 progressIndex++
                 updateBars()
-//                decideForwardBackwardEnable()
+                decideForwardBackwardEnable()
             }
         }
     }
@@ -119,10 +122,11 @@ class GraphViewModel
     override suspend fun updateBars() {
         try {
             resultHistoryList[progressIndex].run {
-//                displayBars(sortingDataList, swapTargetIdx1, swapTargetIdx2)
                 displayBars(this)
                 delay(speed.toLong())
+                logger { "updateBars speed.toLong(): ${speed.toLong()}" }
             }
+            moveCount = progressIndex
         } catch (e: IndexOutOfBoundsException) {
             logger { "updateBars sortingIndexException: $e" }
         }
@@ -162,18 +166,44 @@ class GraphViewModel
 
 
     override fun forward() {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            if (resultHistoryList.size -1 > progressIndex) {
+                progressIndex++
+                logger { "forward progressIndex 1:$progressIndex" }
+                updateBars()
+            } else {
+                logger { "forward progressIndex over:$progressIndex" }
+                forwardBackwardEnable(
+                    forwardButtonEnable = false,
+                    backwardButtonEnable = true,
+                )
+            }
+            decideForwardBackwardEnable()
+        }
     }
 
     override fun backward() {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            if (0 < progressIndex) {
+                progressIndex--
+                logger { "backward progressIndex over:$progressIndex" }
+                updateBars()
+            } else {
+                logger { "backward progressIndex over:$progressIndex" }
+                forwardBackwardEnable(
+                    forwardButtonEnable = true,
+                    backwardButtonEnable = false,
+                )
+            }
+            decideForwardBackwardEnable()
+        }
     }
 
     override fun setPlayButtonState(playState: PlayState) {
         curPlayState = playState
         execute(GraphIntent.PlayButtonState(playState))
         logger { "setPlayButtonState:$playState" }
-//        decideForwardBackwardEnable()
+        decideForwardBackwardEnable()
     }
 
     override fun decideForwardBackwardEnable() {
@@ -199,7 +229,7 @@ class GraphViewModel
         forwardButtonEnable: Boolean,
         backwardButtonEnable: Boolean
     ) {
-        TODO("Not yet implemented")
+        execute(GraphIntent.ButtonEnableForwardAndBackward(forwardButtonEnable, backwardButtonEnable))
     }
 
     private fun displayBars(
@@ -214,6 +244,11 @@ class GraphViewModel
     override suspend fun GraphUiState.reduce(intent: GraphIntent): GraphUiState =
         when (intent) {
             is GraphIntent.StartButtonEnable -> copy(startButtonEnable = intent.enable)
+            is GraphIntent.ButtonEnableForwardAndBackward ->
+                copy(
+                    forwardButtonEnable = intent.forwardButtonEnable,
+                    backwardButtonEnable = intent.backwardButtonEnable
+                )
             is GraphIntent.PlayButtonState -> {
                 copy(playState = intent.playState)
             }

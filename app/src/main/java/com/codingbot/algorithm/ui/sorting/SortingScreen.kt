@@ -139,7 +139,7 @@ private fun ColumnScope.bottomContent(
         contentAlignment = Alignment.BottomCenter
     ) {
         BottomInfoSection(
-            sortingType = sortingType,
+            algorithmType = sortingType,
             moveCount = uiState.value.moveCount,
             startButtonEnable = uiState.value.startButtonEnable,
             forwardButtonEnable = uiState.value.forwardButtonEnable,

@@ -9,7 +9,9 @@ import kotlinx.coroutines.launch
 class GraphDFSAlgorithm: IGraphAlgorithm {
     private lateinit var viewModelScope: CoroutineScope
     private lateinit var arrOrigin: Array<IntArray>
+    private var resultArr: MutableList<MutableList<Array<BooleanArray>>> = mutableListOf<MutableList<Array<BooleanArray>>>()
     private var visitedResultHistory: MutableList<Array<BooleanArray>> = mutableListOf()
+
     private lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
     private var backupArr = emptyArray<IntArray>()
 
@@ -60,6 +62,7 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
         println(
             "#####  in dfs method start x: " + start[0] + " y: " + start[1] + " visited " + visited[start[0]][start[1]]
         )
+
         if (start[0] < 0 || start[0] >= col || start[1] < 0 || start[1] >= row || visited[start[0]][start[1]]) {
             println("in dfs return FALSE")
             return false
@@ -73,13 +76,15 @@ class GraphDFSAlgorithm: IGraphAlgorithm {
             var x = start[0]
             var y = start[1]
             println("in dfs 11 x: $x y: $y")
-            while (x in 0..<col && y >= 0 && y < row && mazeArr[x][y] != 1) {
+            while (x in 0..<col && y >= 0 && y < row && mazeArr[x][y] != 1)
+            {
                 x += dir[0]
                 y += dir[1]
                 println("in dfs 22 x: " + x + " y: " + y + "   dir { " + dir[0] + " " + dir[1] + " }")
             }
             x -= dir[0]
             y -= dir[1]
+
             println("in dfs new int x: $x y: $y")
             if (dfs(mazeArr, intArrayOf(x, y), destination, visited)) {
                 println("in dfs call RESULT return * TRUE")
