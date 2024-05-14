@@ -136,6 +136,7 @@ class SortingViewModel @Inject constructor()
                 checkPaused()
                 progressIndex++
                 updateBars()
+                checkPaused() // When reaching the end, check once more and switch to pause mode if it is the end.
                 decideForwardBackwardEnable()
             }
         }
@@ -151,11 +152,20 @@ class SortingViewModel @Inject constructor()
         }
     }
     override suspend fun checkPaused() {
+        if (progressIndex >= resultHistoryList.size -1) {
+            curPlayState = PlayState.PAUSE
+            pause()
+        }
         if (curPlayState == PlayState.PAUSE) {
             suspendCancellableCoroutine<Unit> { continuation = it }
         }
     }
 
+    private fun isLoadingEnded() {
+        if (progressIndex >= resultHistoryList.size -1) {
+            curPlayState = PlayState.PAUSE
+        }
+    }
     override fun start() {
         viewModelScope.launch {
             algorithm?.start()
