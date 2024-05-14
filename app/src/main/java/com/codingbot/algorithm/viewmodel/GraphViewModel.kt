@@ -114,6 +114,7 @@ class GraphViewModel
                 checkPaused()
                 progressIndex++
                 updateBars()
+                checkPaused() // When reaching the end, check once more and switch to pause mode if it is the end.
                 decideForwardBackwardEnable()
             }
         }
@@ -133,6 +134,10 @@ class GraphViewModel
     }
 
     override suspend fun checkPaused() {
+        if (progressIndex >= resultHistoryList.size -1) {
+            curPlayState = PlayState.PAUSE
+            pause()
+        }
         if (curPlayState == PlayState.PAUSE) {
             suspendCancellableCoroutine<Unit> { continuation = it }
         }

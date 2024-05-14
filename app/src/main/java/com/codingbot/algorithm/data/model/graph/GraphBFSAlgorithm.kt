@@ -13,6 +13,7 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
     private lateinit var arrOrigin: Array<IntArray>
     private lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
     private var visitedResultHistory: MutableList<Array<BooleanArray>> = mutableListOf()
+    private lateinit var visualVisited: Array<BooleanArray>
     private var backupArr = emptyArray<IntArray>()
 
     private val dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
@@ -57,12 +58,12 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
         col = mazeArr.size
         row = mazeArr[0].size
         if (start[0] == destination[0] && start[1] == destination[1]) return true
-        val visited = Array<BooleanArray>(col) {
-            BooleanArray(row)
-        }
+        val visited = Array<BooleanArray>(col) { BooleanArray(row) }
+        visualVisited = Array<BooleanArray>(col) { BooleanArray(row) }
         val queue: Queue<IntArray> = LinkedList()
         visited[start[0]][start[1]] = true
-        visitedResultHistory.add(visited.deepCopy())
+        visualVisited[start[0]][start[1]] = true
+        visitedResultHistory.add(visualVisited.deepCopy())
 
         queue.offer(intArrayOf(start[0], start[1]))
         while (!queue.isEmpty()) {
@@ -73,7 +74,7 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                 var x = p[0]
                 var y = p[1]
                 // 2. dir 동서남북 이동방향을 하나씩 가져와서 아래  while을 수행한다
-                while (x >= 0 && x < col && y >= 0 && y < row && mazeArr[x][y] == 0) {
+                while (x in 0..<col && y in 0..<row && mazeArr[x][y] == 0) {
                     // x, y가 위의 크기 조건이고, 현재위치가 0이면, 즉 벽이 아니라면 == 길이라면 루프를 다시 돈다.
                     // 루프를 다시돈다는건, dir로 받은 위치이동값이 더해지므로, 해당방향으로 계속 이동한다는것을 의미한다.
                     // 예를들어 dir이 {-1. 0} 이면 더해줄때마다 왼쪽으로 한칸씩 계속 이동하게 될것이다.
@@ -84,7 +85,10 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                     println("11 x: $x y: $y")
                     x += dir[0]
                     y += dir[1]
-                    println("22x: $x y: $y")
+                    if (x in 0..<col && y in 0..<row && mazeArr[x][y] != 1 && !visualVisited[x][y]) {
+                        visualVisited[x][y] = true
+                        visitedResultHistory.add(visualVisited.deepCopy())
+                    }
                 }
                 // 3. 위에서 막힌데까지 이동한뒤에 막힌걸 인식했으므로 다시 이전자리로 되돌아가야한다.
                 // 예를 들어 첫번째 이동은 시작위치 (0,4)
@@ -99,7 +103,8 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                 if (visited[x][y]) continue
                 // 5. 방문한적이 없다면 방문한 표시를 한다.
                 visited[x][y] = true
-                visitedResultHistory.add(visited.deepCopy())
+                visualVisited[x][y] = true
+                visitedResultHistory.add(visualVisited.deepCopy())
 
                 println("check visited[$x][$y] true addQueue {$x, $y}")
                 print(visited)

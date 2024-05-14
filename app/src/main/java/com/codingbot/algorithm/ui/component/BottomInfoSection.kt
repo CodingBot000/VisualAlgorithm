@@ -48,9 +48,9 @@ fun BottomInfoSection(algorithmType: String,
     {
         Text(
             text = if (graphTracking) {
-                    "Sorting Count: "
-                } else {
                     "Graph Tracking Count: "
+                } else {
+                    "Sorting Count: "
                 }
                     + moveCount,
             color = CustomTheme.colors.textColorPrimary)
