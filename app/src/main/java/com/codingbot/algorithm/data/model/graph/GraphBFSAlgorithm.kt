@@ -1,6 +1,8 @@
 package com.codingbot.algorithm.data.model.graph
 
 import com.codingbot.algorithm.core.utils.deepCopy
+import com.codingbot.algorithm.data.TrackingData
+import com.codingbot.algorithm.data.TrackingDataResult
 import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
 import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
 import kotlinx.coroutines.CoroutineScope
@@ -12,9 +14,12 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
     private lateinit var viewModelScope: CoroutineScope
     private lateinit var arrOrigin: Array<IntArray>
     private lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
-    private var visitedResultHistory: MutableList<Array<BooleanArray>> = mutableListOf()
-    private lateinit var visualVisited: Array<BooleanArray>
+//    private var visitedResultHistory: MutableList<Array<BooleanArray>> = mutableListOf()
+    private var visitedResultHistory: MutableList<TrackingDataResult> = mutableListOf()
+//    private lateinit var visualVisited: Array<BooleanArray>
+    private lateinit var visualVisited:Array<Array<TrackingData>>
     private var backupArr = emptyArray<IntArray>()
+    private var order = 0
 
     private val dirs = arrayOf(intArrayOf(-1, 0), intArrayOf(1, 0), intArrayOf(0, -1), intArrayOf(0, 1))
     private var col = 0
@@ -57,13 +62,31 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
     {
         col = mazeArr.size
         row = mazeArr[0].size
-        if (start[0] == destination[0] && start[1] == destination[1]) return true
+
+        // Reaching the destination
+        if (start[0] == destination[0] && start[1] == destination[1]) {
+            return true
+        }
+
         val visited = Array<BooleanArray>(col) { BooleanArray(row) }
-        visualVisited = Array<BooleanArray>(col) { BooleanArray(row) }
+        visualVisited = Array(col) { Array(row) { TrackingData() } }
+
         val queue: Queue<IntArray> = LinkedList()
         visited[start[0]][start[1]] = true
-        visualVisited[start[0]][start[1]] = true
-        visitedResultHistory.add(visualVisited.deepCopy())
+        visualVisited[start[0]][start[1]] =
+            TrackingData(
+                order = order,
+                isVisited = true
+            )
+        visitedResultHistory.add(
+            TrackingDataResult(
+                result = visualVisited.deepCopy(),
+                targetX = start[0],
+                targetY = start[1],
+                order = order
+            )
+        )
+        order++
 
         queue.offer(intArrayOf(start[0], start[1]))
         while (!queue.isEmpty()) {
@@ -85,9 +108,21 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                     println("11 x: $x y: $y")
                     x += dir[0]
                     y += dir[1]
-                    if (x in 0..<col && y in 0..<row && mazeArr[x][y] != 1 && !visualVisited[x][y]) {
-                        visualVisited[x][y] = true
-                        visitedResultHistory.add(visualVisited.deepCopy())
+                    if (x in 0..<col && y in 0..<row && mazeArr[x][y] != 1 && !visualVisited[x][y].isVisited) {
+                        visualVisited[x][y] =
+                            TrackingData(
+                                order = order,
+                                isVisited = true
+                            )
+                        visitedResultHistory.add(
+                            TrackingDataResult(
+                                result = visualVisited.deepCopy(),
+                                targetX = x,
+                                targetY = y,
+                                order = order
+                            )
+                        )
+                        order++
                     }
                 }
                 // 3. 위에서 막힌데까지 이동한뒤에 막힌걸 인식했으므로 다시 이전자리로 되돌아가야한다.
@@ -103,8 +138,20 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                 if (visited[x][y]) continue
                 // 5. 방문한적이 없다면 방문한 표시를 한다.
                 visited[x][y] = true
-                visualVisited[x][y] = true
-                visitedResultHistory.add(visualVisited.deepCopy())
+                visualVisited[x][y] =
+                    TrackingData(
+                        order = order,
+                        isVisited = true
+                    )
+                visitedResultHistory.add(
+                    TrackingDataResult(
+                        result = visualVisited.deepCopy(),
+                        targetX = x,
+                        targetY = y,
+                        order = order
+                    )
+                )
+                order++
 
                 println("check visited[$x][$y] true addQueue {$x, $y}")
                 print(visited)

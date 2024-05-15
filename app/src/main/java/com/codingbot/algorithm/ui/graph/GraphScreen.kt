@@ -9,10 +9,14 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
@@ -21,6 +25,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -29,9 +34,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.codingbot.algorithm.core.common.InitValue
 import com.codingbot.algorithm.core.common.Logger
+import com.codingbot.algorithm.data.TrackingData
+import com.codingbot.algorithm.data.model.graph.GenerateMazeArray
 import com.codingbot.algorithm.ui.component.BottomInfoSection
+import com.codingbot.algorithm.ui.component.LogBottomSheet
 import com.codingbot.algorithm.ui.component.ScreenTitle
+import com.codingbot.algorithm.ui.component.TopIcon
+import com.codingbot.algorithm.ui.component.clickableSingle
 import com.codingbot.algorithm.ui.theme.Color
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.viewmodel.GraphUiState
@@ -47,6 +58,7 @@ fun GraphScreen(
     val logger = remember { Logger("GraphScreen", true, "[Screen]") }
 
     val uiState = graphViewModel.uiState.collectAsStateWithLifecycle()
+    var isLogBottomSheetOpen by remember { mutableStateOf(false) }
     val startIdx by remember { mutableStateOf(graphViewModel.startIdx) }
     val destIdx by remember { mutableStateOf(graphViewModel.destIdx) }
 
@@ -63,6 +75,14 @@ fun GraphScreen(
             title = graphType,
             onClickBack = {
                 navController.popBackStack()
+            },
+            trailingIcon = {
+                TopIcon(
+                    imageVector = Icons.Filled.List,
+                    onClick = {
+                        isLogBottomSheetOpen = !isLogBottomSheetOpen
+                    }
+                )
             }
         )
         middleContent(
@@ -97,6 +117,13 @@ fun GraphScreen(
                 graphViewModel.restart()
             }
         )
+
+        if (isLogBottomSheetOpen) {
+            LogBottomSheet(
+                logHistoryString = graphViewModel.getHistoryList().toString(),
+                closeSheet = { isLogBottomSheetOpen = false }
+            )
+        }
     }
 }
 
@@ -115,8 +142,16 @@ private fun ColumnScope.middleContent(
             .weight(1f),
         contentAlignment = Alignment.Center
     ) {
-        baseGrid(baseGridArray, startIdx, destIdx)
-        overlayGrid(visitedArray = uiState.value.visitedList, startIdx, destIdx)
+        baseGrid(
+            mazeArray = baseGridArray,
+            columns = InitValue.MAZE_COLUMS,
+            startIdx = startIdx,
+            destIdx = destIdx
+        )
+        overlayGrid(
+            visitedArray = uiState.value.visitedList,
+            columns = InitValue.MAZE_COLUMS
+        )
     }
 }
 @Composable
@@ -164,13 +199,12 @@ private fun ColumnScope.bottomContent(
 }
 
 @Composable
-private fun overlayGrid(visitedArray: List<Boolean>, startIdx: Int, destIdx: Int) {
+private fun overlayGrid(
+    visitedArray: List<TrackingData>,
+    columns: Int
+) {
     val logger = remember { Logger("GraphScreen", true, "[Screen]") }
 
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val columns = 5 // The number of columns in the grid
-    val boxSize = screenWidth / columns
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
         content = {
@@ -180,15 +214,16 @@ private fun overlayGrid(visitedArray: List<Boolean>, startIdx: Int, destIdx: Int
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .alpha(if (visitedArray[index]) 0.5f else 0.0f)
+                        .alpha(if (visitedArray[index].isVisited) 0.5f else 0.0f)
                         .border(1.dp, color = Color.Red_50)
-                        .then(if (visitedArray[index]) Modifier.background(Color.Pink40) else Modifier),
+                        .then(if (visitedArray[index].isVisited) Modifier.background(Color.Pink40) else Modifier),
                     contentAlignment = Alignment.Center
                 ) {
-                    startAndGoalFlag(
-                        curIdx = index,
-                        startIdx = startIdx,
-                        destIdx = destIdx)
+                    Text(
+                        text = visitedArray[index].order.toString(),
+                        color = CustomTheme.colors.textColorPrimary,
+                        style = CustomTheme.typography.title3Bold,
+                    )
                 }
 
             }
@@ -198,12 +233,14 @@ private fun overlayGrid(visitedArray: List<Boolean>, startIdx: Int, destIdx: Int
 
 
 @Composable
-private fun baseGrid(mazeArray: Array<IntArray>, startIdx: Int, destIdx: Int) {
+private fun baseGrid(
+    mazeArray: Array<IntArray>,
+    columns: Int,
+    startIdx: Int,
+    destIdx: Int
+) {
     val array = remember { mazeArray.flatMap { it.asList() } }
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val columns = 5 // The number of columns in the grid
-    val boxSize = screenWidth / columns
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
         content = {
@@ -235,9 +272,21 @@ private fun baseGrid(mazeArray: Array<IntArray>, startIdx: Int, destIdx: Int) {
 @Composable
 private fun startAndGoalFlag(curIdx: Int, startIdx: Int, destIdx: Int) {
     if (curIdx == startIdx) {
-        Icon(imageVector = Icons.Rounded.Home , contentDescription = null)
+        Icon(
+            modifier = Modifier
+                .size(32.dp)
+                .alpha(0.5f),
+            imageVector = Icons.Rounded.Home,
+            contentDescription = null
+        )
     } else if (curIdx == destIdx) {
-        Icon(imageVector = Icons.Rounded.ExitToApp , contentDescription = null)
+        Icon(
+            modifier = Modifier
+                .size(32.dp)
+                .alpha(0.5f),
+            imageVector = Icons.Rounded.ExitToApp,
+            contentDescription = null
+        )
     }
 }
 

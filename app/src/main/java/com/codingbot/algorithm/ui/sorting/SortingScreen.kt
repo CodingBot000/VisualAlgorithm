@@ -5,15 +5,24 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -24,7 +33,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.ui.component.BottomInfoSection
+import com.codingbot.algorithm.ui.component.LogBottomSheet
 import com.codingbot.algorithm.ui.component.ScreenTitle
+import com.codingbot.algorithm.ui.component.TopIcon
+import com.codingbot.algorithm.ui.component.clickableSingle
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.ui.theme.Dimens
 import com.codingbot.algorithm.viewmodel.SortingUiState
@@ -40,6 +52,7 @@ fun SortingScreen(
     val logger = remember { Logger("SortingScreen", true, "[Screen]") }
 
     val uiState = sortingViewModel.uiState.collectAsStateWithLifecycle()
+    var isLogBottomSheetOpen by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = Unit) {
         sortingViewModel.initValue(sortingType)
@@ -55,6 +68,14 @@ fun SortingScreen(
             title = sortingType,
             onClickBack = {
                 navController.popBackStack()
+            },
+            trailingIcon = {
+                TopIcon(
+                    imageVector = Icons.Filled.List,
+                    onClick = {
+                        isLogBottomSheetOpen = !isLogBottomSheetOpen
+                    }
+                )
             }
         )
         middleContent(
@@ -86,6 +107,13 @@ fun SortingScreen(
                 sortingViewModel.restart()
             }
         )
+
+        if (isLogBottomSheetOpen) {
+            LogBottomSheet(
+                logHistoryString = sortingViewModel.getHistoryList().toString(),
+                closeSheet = { isLogBottomSheetOpen = false }
+            )
+        }
     }
 }
 

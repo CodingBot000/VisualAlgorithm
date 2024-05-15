@@ -17,3 +17,15 @@ data class SortingHeapDataResult(
     val swapTargetIdx1: Int = 0,
     val swapTargetIdx2: Int = 0
 )
+
+data class TrackingData(
+    val order: Int = 0,
+    val isVisited: Boolean = false
+)
+data class TrackingDataResult(
+//    val result: Array<BooleanArray>,
+    val result: Array<Array<TrackingData>>,
+    val targetX: Int,
+    val targetY: Int,
+    val order: Int
+)
