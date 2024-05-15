@@ -57,7 +57,20 @@ class SortingViewModel @Inject constructor()
         initArray()
     }
 
-    private fun getAlogritm(sortingType: String): ISortingAlgorithm =
+    fun getHistoryList(): StringBuilder {
+        val sb = StringBuilder()
+        if (resultHistoryList.isNotEmpty()) {
+            for (i in 0..progressIndex) {
+                sb.append(makeLogHistory(i, resultHistoryList[i]) + "\n")
+            }
+        }
+        return sb
+    }
+
+    private fun makeLogHistory(index: Int, data: SortingDataResult): String =
+        "step:$index  [swaping] target 1:(index:${data.swapTargetIdx1} - element:${data.sortingDataList[data.swapTargetIdx1].element})  <-->  target 2: (index:${data.swapTargetIdx2} - element:${data.sortingDataList[data.swapTargetIdx2].element})"
+
+    private fun getAlgorithm(sortingType: String): ISortingAlgorithm =
         when (sortingType) {
             SortingList.BUBBLE_SORT.name -> {
                 BubbleSortAlgorithm()
@@ -104,7 +117,7 @@ class SortingViewModel @Inject constructor()
     override fun initValue(type: String) {
         this.type = type
 
-        algorithm = getAlogritm(type)
+        algorithm = getAlgorithm(type)
         algorithm?.initValue(
             viewModelScope = viewModelScope,
             sortingListInit = originArr,

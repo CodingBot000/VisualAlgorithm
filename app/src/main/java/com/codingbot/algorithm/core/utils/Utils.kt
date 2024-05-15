@@ -1,5 +1,7 @@
 package com.codingbot.algorithm.core.utils
 
+import com.codingbot.algorithm.data.TrackingData
+
 fun scaledNumber(randomValues: Array<Int>, from: Int, to: Int): List<Int> {
     val min = randomValues.minOrNull() ?: return listOf() // 최솟값이 없다면 빈 리스트 반환
     val max = randomValues.maxOrNull() ?: return listOf() // 최댓값이 없다면 빈 리스트 반환
@@ -11,6 +13,14 @@ fun scaledNumber(randomValues: Array<Int>, from: Int, to: Int): List<Int> {
     return randomValues.map { data ->
         // 각 원소를 from에서 to 사이로 변환
         ((data - min).toFloat() / (max - min) * range + from).toInt()
+    }
+}
+
+fun Array<Array<TrackingData>>.deepCopy(): Array<Array<TrackingData>> {
+    return Array(size) { i ->
+        Array(this[i].size) { j ->
+            this[i][j].copy()
+        }
     }
 }
 

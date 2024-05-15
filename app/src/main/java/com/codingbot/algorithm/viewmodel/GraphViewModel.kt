@@ -2,18 +2,14 @@ package com.codingbot.algorithm.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.codingbot.algorithm.core.common.GraphList
+import com.codingbot.algorithm.core.common.InitValue
 import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.core.common.SortingList
-import com.codingbot.algorithm.data.SortingData
+import com.codingbot.algorithm.data.TrackingData
+import com.codingbot.algorithm.data.TrackingDataResult
 import com.codingbot.algorithm.data.model.graph.GraphBFSAlgorithm
 import com.codingbot.algorithm.data.model.graph.GraphDFSAlgorithm
 import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
 import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
-import com.codingbot.algorithm.data.model.sorting.BubbleSortAlgorithm
-import com.codingbot.algorithm.data.model.sorting.InsertionSortAlgorithm
-import com.codingbot.algorithm.data.model.sorting.QuickSortAlgorithm
-import com.codingbot.algorithm.data.model.sorting.SelectionSortAlgorithm
-import com.codingbot.algorithm.data.model.sorting.contract.ISortingAlgorithm
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -24,7 +20,7 @@ data class GraphUiState(
     val forwardButtonEnable: Boolean = false,
     val backwardButtonEnable: Boolean = false,
     val playState: PlayState = PlayState.INIT,
-    val visitedList: List<Boolean> = emptyList(),
+    val visitedList: List<TrackingData> = emptyList(),
     val moveCount: Int = 0,
     val finish: Boolean = false
 )
@@ -33,7 +29,7 @@ sealed interface GraphIntent {
     data class ButtonEnableForwardAndBackward(val forwardButtonEnable: Boolean, val backwardButtonEnable: Boolean): GraphIntent
     data class StartButtonEnable(val enable: Boolean): GraphIntent
     data class PlayButtonState(val playState: PlayState): GraphIntent
-    data class ElementList(val list: List<Boolean>): GraphIntent
+    data class ElementList(val list: List<TrackingData>): GraphIntent
     data class MoveCount(val moveCount: Int): GraphIntent
     data class Finish(val finish: Boolean): GraphIntent
 }
@@ -44,25 +40,37 @@ class GraphViewModel
     val logger = Logger("GraphViewModel")
 
     lateinit var originArr: Array<IntArray>
-    private var resultHistoryList: MutableList<Array<BooleanArray>> = mutableListOf()
+    private var resultHistoryList: MutableList<TrackingDataResult> = mutableListOf()
     private var algorithm: IGraphAlgorithm? = null
 
     var arrColSize = 0
-    val start = intArrayOf(0, 4)
-    val dest = intArrayOf(4, 4)
+
     val startIdx: Int
-        get() = getFlatArrayIndex(start)
+        get() = getFlatArrayIndex(InitValue.MAZE_START)
     val destIdx: Int
-        get() = getFlatArrayIndex(dest)
+        get() = getFlatArrayIndex(InitValue.MAZE_DEST)
 
     init {
         initArray()
     }
 
+    fun getHistoryList(): StringBuilder {
+        val sb = StringBuilder()
+        if (resultHistoryList.isNotEmpty()) {
+            for (i in 0..progressIndex) {
+                sb.append(makeLogHistory(i, resultHistoryList[i]) + "\n")
+            }
+        }
+        return sb
+    }
+
+    private fun makeLogHistory(index: Int, data: TrackingDataResult): String =
+        "step:$index  [tracking] target order:${data.order}  pos:(x:${data.targetX} y:${data.targetY})"
+
     private fun getFlatArrayIndex(pos: IntArray): Int {
         return pos[0] * arrColSize + pos[1]
     }
-    private fun getAlogritm(type: String): IGraphAlgorithm =
+    private fun getAlgorithm(type: String): IGraphAlgorithm =
         when (type) {
             GraphList.BFS.name -> GraphBFSAlgorithm()
             GraphList.DFS.name -> GraphDFSAlgorithm()
@@ -78,27 +86,20 @@ class GraphViewModel
     }
 
     override fun initArray() {
-        val mazeInit = arrayOf(
-            intArrayOf(0, 0, 1, 0, 0),
-            intArrayOf(0, 0, 0, 0, 0),
-            intArrayOf(0, 0, 0, 1, 0),
-            intArrayOf(1, 1, 0, 1, 1),
-            intArrayOf(0, 0, 0, 0, 0)
-        )
-        arrColSize = mazeInit.size
-        originArr = mazeInit
+        arrColSize = InitValue.MAZE_INIT.size
+        originArr = InitValue.MAZE_INIT
     }
 
     override fun initValue(type: String) {
         this.type = type
 
-        algorithm = getAlogritm(type)
+        algorithm = getAlgorithm(type)
         algorithm?.initValue(
             viewModelScope = viewModelScope,
             graphListInit = originArr,
             iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
 
-                override fun finish(resultVisitedArray: MutableList<Array<BooleanArray>>) {
+                override fun finish(resultVisitedArray: MutableList<TrackingDataResult>) {
                     execute(GraphIntent.Finish(true))
 
                     resultHistoryList = resultVisitedArray
@@ -145,7 +146,7 @@ class GraphViewModel
 
     override fun start() {
         viewModelScope.launch {
-            algorithm?.start(start, dest)
+            algorithm?.start(InitValue.MAZE_START, InitValue.MAZE_DEST)
             setPlayButtonState(PlayState.PLAYING)
         }
     }
@@ -155,7 +156,7 @@ class GraphViewModel
         progressIndex = 0
         viewModelScope.launch {
             initArray()
-            algorithm?.restart(start, dest)
+            algorithm?.restart(InitValue.MAZE_START, InitValue.MAZE_DEST)
             setPlayButtonState(PlayState.PLAYING)
         }
     }
@@ -238,10 +239,10 @@ class GraphViewModel
     }
 
     private fun displayBars(
-        trackingList: Array<BooleanArray>
+        trackingList: TrackingDataResult
     )
     {
-        val flatList = trackingList.flatMap { it.asList() }
+        val flatList = trackingList.result.flatMap { it.asList() }
         execute(GraphIntent.ElementList(list = flatList))
         execute(GraphIntent.MoveCount(moveCount = moveCount))
     }

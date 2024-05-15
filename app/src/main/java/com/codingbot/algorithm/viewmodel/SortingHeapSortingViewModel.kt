@@ -5,6 +5,7 @@ import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.core.utils.scaledNumber
 import com.codingbot.algorithm.data.SortingData
+import com.codingbot.algorithm.data.SortingDataResult
 import com.codingbot.algorithm.data.SortingHeapDataResult
 import com.codingbot.algorithm.data.model.sorting.HeapSortAlgorithm
 import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
@@ -51,6 +52,23 @@ class SortingHeapSortingViewModel @Inject constructor()
     init {
         initArray()
     }
+
+    fun getHistoryList(): StringBuilder {
+        val sb = StringBuilder()
+        if (resultHistoryList.isNotEmpty()) {
+            for (i in 0..progressIndex) {
+                sb.append(makeLogHistory(i, resultHistoryList[i]) + "\n")
+            }
+        }
+        return sb
+    }
+
+    private fun makeLogHistory(index: Int, data: SortingHeapDataResult): String =
+        if (data.swapTargetIdx1 >= 0 && data.swapTargetIdx2 >= 0) {
+            "step:$index  [swaping] target 1:(index:${data.swapTargetIdx1} - element:${data.sortingDataList[data.swapTargetIdx1].element})  <-->  target 2: (index:${data.swapTargetIdx2} - element:${data.sortingDataList[data.swapTargetIdx2].element})"
+        } else {
+            "\n" + data.resultList.joinToString(separator = " ", prefix = "[result] :") { it.element.toString() } + "\n"
+        }
 
     private fun getAlogrithm() = HeapSortAlgorithm()
 
