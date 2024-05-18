@@ -1,4 +1,4 @@
-package com.codingbot.algorithm.data
+package com.codingbot.algorithm.domain.model
 
 data class SortingData(
     val element:Int = 0,

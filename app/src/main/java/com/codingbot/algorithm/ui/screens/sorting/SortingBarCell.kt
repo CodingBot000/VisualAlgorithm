@@ -1,4 +1,4 @@
-package com.codingbot.algorithm.ui.sorting
+package com.codingbot.algorithm.ui.screens.sorting
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,14 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.data.SortingData
-import com.codingbot.algorithm.ui.theme.Color
-import com.codingbot.algorithm.ui.theme.CustomColors
+import com.codingbot.algorithm.domain.model.SortingData
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.ui.theme.Dimens
 

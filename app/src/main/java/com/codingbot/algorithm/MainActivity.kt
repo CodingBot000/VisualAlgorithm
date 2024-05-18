@@ -13,10 +13,10 @@ import androidx.navigation.compose.rememberNavController
 import com.codingbot.algorithm.core.common.GraphList
 import com.codingbot.algorithm.core.common.Screen
 import com.codingbot.algorithm.core.common.SortingList
-import com.codingbot.algorithm.ui.graph.GraphScreen
-import com.codingbot.algorithm.ui.sorting.MainScreen
-import com.codingbot.algorithm.ui.sorting.SortingHeapSortingScreen
-import com.codingbot.algorithm.ui.sorting.SortingScreen
+import com.codingbot.algorithm.ui.screens.graph.GraphScreen
+import com.codingbot.algorithm.ui.screens.MainScreen
+import com.codingbot.algorithm.ui.screens.sorting.SortingHeapSortingScreen
+import com.codingbot.algorithm.ui.screens.sorting.SortingScreen
 import com.codingbot.algorithm.ui.theme.VisualAlgorithmTheme
 import dagger.hilt.android.AndroidEntryPoint
 

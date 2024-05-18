@@ -1,4 +1,4 @@
-package com.codingbot.algorithm.data.model.graph.contract
+package com.codingbot.algorithm.domain.algorithm.graph.contract
 
 import kotlinx.coroutines.CoroutineScope
 

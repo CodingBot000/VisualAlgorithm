@@ -1,19 +1,22 @@
-package com.codingbot.algorithm.ui.sorting
+package com.codingbot.algorithm.ui.screens.sorting
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
@@ -26,11 +29,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.codingbot.algorithm.R
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.LogBottomSheet
@@ -39,17 +44,17 @@ import com.codingbot.algorithm.ui.component.TopIcon
 import com.codingbot.algorithm.ui.component.clickableSingle
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.ui.theme.Dimens
-import com.codingbot.algorithm.viewmodel.SortingUiState
-import com.codingbot.algorithm.viewmodel.SortingViewModel
+import com.codingbot.algorithm.viewmodel.HeapSortingUiState
+import com.codingbot.algorithm.viewmodel.SortingHeapSortingViewModel
 
 @Composable
-fun SortingScreen(
+fun SortingHeapSortingScreen(
     navController: NavController,
-    sortingViewModel: SortingViewModel = hiltViewModel(),
+    sortingViewModel: SortingHeapSortingViewModel = hiltViewModel(),
     screenWidth: Dp = LocalConfiguration.current.screenWidthDp.dp,
     sortingType: String
 ) {
-    val logger = remember { Logger("SortingScreen", true, "[Screen]") }
+    val logger = remember { Logger("SortingHeapSortingScreen", true, "[Screen]") }
 
     val uiState = sortingViewModel.uiState.collectAsStateWithLifecycle()
     var isLogBottomSheetOpen by remember { mutableStateOf(false) }
@@ -119,30 +124,68 @@ fun SortingScreen(
 
 @Composable
 private fun ColumnScope.middleContent(
-    uiState: State<SortingUiState>,
+    uiState: State<HeapSortingUiState>,
     screenWidth: Dp)
 {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .weight(1f),
-        contentAlignment = Alignment.Center
+            .weight(1f)
     ) {
-        LazyRow(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Dimens.Sorting.SortingScreenHorizontalPadding)
+                .padding(horizontal = Dimens.Sorting.SortingScreenHorizontalPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         )
         {
-            itemsIndexed(uiState.value.elementList,
-                key = { index, item -> "$index _$item" })
-            { _, item ->
-                val elementWidth =
-                    (screenWidth.value / uiState.value.elementList.size).dp - (Dimens.Sorting.SortingScreenHorizontalPadding * 2 / uiState.value.elementList.size)
-                SortingBarCell(
-                    item = item,
-                    elementWidth = elementWidth
-                )
+            Text(
+                text = stringResource(id = R.string.result),
+                color = CustomTheme.colors.textColorPrimary,
+                style = CustomTheme.typography.title2Bold,
+            )
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+            {
+                itemsIndexed(uiState.value.heapSortingResultList,
+                    key = { index, item -> "$index _$item" })
+                { _, item ->
+                    val elementWidth =
+                        (screenWidth.value / uiState.value.elementList.size).dp - (Dimens.Sorting.SortingScreenHorizontalPadding * 2 / uiState.value.elementList.size)
+                    SortingBarCell(
+                        sortingBarCellType = SortingBarCellType.SortingResult,
+                        item = item,
+                        elementWidth = elementWidth
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(
+                text = stringResource(id = R.string.array_temp),
+                color = CustomTheme.colors.textColorPrimary,
+                style = CustomTheme.typography.title2Bold
+            )
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+            {
+                itemsIndexed(uiState.value.elementList,
+                    key = { index, item -> "$index _$item" })
+                { _, item ->
+                    val elementWidth =
+                        (screenWidth.value / uiState.value.elementList.size).dp - (Dimens.Sorting.SortingScreenHorizontalPadding * 2 / uiState.value.elementList.size)
+                    SortingBarCell(
+                        item = item,
+                        elementWidth = elementWidth
+                    )
+                }
             }
         }
     }
@@ -151,7 +194,7 @@ private fun ColumnScope.middleContent(
 
 @Composable
 private fun ColumnScope.bottomContent(
-    uiState: State<SortingUiState>,
+    uiState: State<HeapSortingUiState>,
     sortingType: String,
     onValueChange: (Float) -> Unit,
     onClickBackward:() -> Unit = {},
@@ -198,4 +241,3 @@ private fun ColumnScope.bottomContent(
         )
     }
 }
-

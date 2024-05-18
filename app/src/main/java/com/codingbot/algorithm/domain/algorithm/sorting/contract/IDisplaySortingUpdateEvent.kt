@@ -1,7 +1,7 @@
-package com.codingbot.algorithm.data.model.sorting.contract
+package com.codingbot.algorithm.domain.algorithm.sorting.contract
 
-import com.codingbot.algorithm.data.SortingData
-import com.codingbot.algorithm.data.SortingDataResult
+import com.codingbot.algorithm.domain.model.SortingData
+import com.codingbot.algorithm.domain.model.SortingDataResult
 
 interface IDisplaySortingUpdateEvent {
     fun elementList(list: MutableList<SortingData>,
