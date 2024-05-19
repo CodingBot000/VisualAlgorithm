@@ -1,10 +1,9 @@
-package com.codingbot.algorithm.data.model.sorting
+package com.codingbot.algorithm.domain.algorithm.sorting
 
-import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.data.SortingData
-import com.codingbot.algorithm.data.SortingHeapDataResult
-import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
+import com.codingbot.algorithm.domain.model.SortingData
+import com.codingbot.algorithm.domain.model.SortingHeapDataResult
+import com.codingbot.algorithm.domain.algorithm.sorting.contract.IDisplayHeapSortingUpdateEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

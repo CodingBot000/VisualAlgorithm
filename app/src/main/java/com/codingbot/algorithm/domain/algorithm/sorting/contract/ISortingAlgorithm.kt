@@ -1,7 +1,6 @@
-package com.codingbot.algorithm.data.model.sorting.contract
+package com.codingbot.algorithm.domain.algorithm.sorting.contract
 
-import com.codingbot.algorithm.data.SortingData
-import com.codingbot.algorithm.data.model.sorting.contract.IDisplaySortingUpdateEvent
+import com.codingbot.algorithm.domain.model.SortingData
 import kotlinx.coroutines.CoroutineScope
 
 interface ISortingAlgorithm

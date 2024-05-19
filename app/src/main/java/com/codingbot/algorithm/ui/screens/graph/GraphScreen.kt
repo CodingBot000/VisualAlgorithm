@@ -1,4 +1,4 @@
-package com.codingbot.algorithm.ui.graph
+package com.codingbot.algorithm.ui.screens.graph
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Icon
@@ -29,20 +28,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.codingbot.algorithm.core.common.InitValue
 import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.data.TrackingData
-import com.codingbot.algorithm.data.model.graph.GenerateMazeArray
+import com.codingbot.algorithm.domain.model.TrackingData
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.LogBottomSheet
 import com.codingbot.algorithm.ui.component.ScreenTitle
 import com.codingbot.algorithm.ui.component.TopIcon
-import com.codingbot.algorithm.ui.component.clickableSingle
 import com.codingbot.algorithm.ui.theme.Color
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.viewmodel.GraphUiState

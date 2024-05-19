@@ -4,11 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.codingbot.algorithm.core.common.Const
 import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.core.utils.scaledNumber
-import com.codingbot.algorithm.data.SortingData
-import com.codingbot.algorithm.data.SortingDataResult
-import com.codingbot.algorithm.data.SortingHeapDataResult
-import com.codingbot.algorithm.data.model.sorting.HeapSortAlgorithm
-import com.codingbot.algorithm.data.model.sorting.contract.IDisplayHeapSortingUpdateEvent
+import com.codingbot.algorithm.domain.model.SortingData
+import com.codingbot.algorithm.domain.model.SortingHeapDataResult
+import com.codingbot.algorithm.domain.algorithm.sorting.HeapSortAlgorithm
+import com.codingbot.algorithm.domain.algorithm.sorting.contract.IDisplayHeapSortingUpdateEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

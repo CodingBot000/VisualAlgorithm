@@ -1,6 +1,6 @@
 package com.codingbot.algorithm.core.utils
 
-import com.codingbot.algorithm.data.TrackingData
+import com.codingbot.algorithm.domain.model.TrackingData
 
 fun scaledNumber(randomValues: Array<Int>, from: Int, to: Int): List<Int> {
     val min = randomValues.minOrNull() ?: return listOf() // 최솟값이 없다면 빈 리스트 반환

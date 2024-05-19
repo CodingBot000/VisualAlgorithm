@@ -1,10 +1,10 @@
-package com.codingbot.algorithm.data.model.graph
+package com.codingbot.algorithm.domain.algorithm.graph
 
 import com.codingbot.algorithm.core.utils.deepCopy
-import com.codingbot.algorithm.data.TrackingData
-import com.codingbot.algorithm.data.TrackingDataResult
-import com.codingbot.algorithm.data.model.graph.contract.IDisplayGraphUpdateEvent
-import com.codingbot.algorithm.data.model.graph.contract.IGraphAlgorithm
+import com.codingbot.algorithm.domain.model.TrackingData
+import com.codingbot.algorithm.domain.model.TrackingDataResult
+import com.codingbot.algorithm.domain.algorithm.graph.contract.IDisplayGraphUpdateEvent
+import com.codingbot.algorithm.domain.algorithm.graph.contract.IGraphAlgorithm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.LinkedList

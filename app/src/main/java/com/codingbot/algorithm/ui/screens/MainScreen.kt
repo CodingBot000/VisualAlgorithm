@@ -1,4 +1,4 @@
-package com.codingbot.algorithm.ui.sorting
+package com.codingbot.algorithm.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
