@@ -1,0 +1,73 @@
+<mxfile host="app.diagrams.net" modified="2024-08-27T10:30:18.228Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" etag="vIk44jbMAn3owK384l5M" version="24.6.4" type="device">
+  <diagram name="Page-1" id="12i9Tz8TXJzrE2WMOmTM">
+    <mxGraphModel dx="1763" dy="1697" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-83" value="Intent" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-497.5" y="-680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-84" value="View" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-640" y="-550" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-86" value="Model" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-780" y="-680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-87" value="Algorithm&lt;div&gt;Interface&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-640" y="-810" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-88" value="Algorithm&lt;div&gt;Builder&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-640" y="-940" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-89" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="xg9G_hMcbVAoIhS0TIve-83">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-547.5" y="-550" as="sourcePoint" />
+            <mxPoint x="-490" y="-610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-90" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=0.458;exitY=0.001;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="xg9G_hMcbVAoIhS0TIve-83" target="xg9G_hMcbVAoIhS0TIve-87">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-470" y="-680" as="sourcePoint" />
+            <mxPoint x="-387.5" y="-750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-91" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=0.326;exitY=1.036;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="xg9G_hMcbVAoIhS0TIve-87">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-605" y="-610" as="sourcePoint" />
+            <mxPoint x="-685" y="-680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-92" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="xg9G_hMcbVAoIhS0TIve-86" target="xg9G_hMcbVAoIhS0TIve-84">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-591" y="-738" as="sourcePoint" />
+            <mxPoint x="-675" y="-670" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-94" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="xg9G_hMcbVAoIhS0TIve-88">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-580" y="-820" as="sourcePoint" />
+            <mxPoint x="-532.5" y="-860" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-95" value="init Algorithm" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-490" y="-730" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-96" value="Tracking Algorithm&lt;div&gt;History By Event&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-630" y="-690" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-99" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="xg9G_hMcbVAoIhS0TIve-86">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-647.5" y="-650" as="sourcePoint" />
+            <mxPoint x="-497.5" y="-650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-100" value="Start Algorithm Event&lt;div&gt;or&lt;/div&gt;&lt;div&gt;Tracking Algorithm Event&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-497.5" y="-590" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="xg9G_hMcbVAoIhS0TIve-101" value="Reduce&lt;div&gt;Algorithm result&lt;/div&gt;&lt;div&gt;for drawing&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-770" y="-600" width="110" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
