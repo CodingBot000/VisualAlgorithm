@@ -49,6 +49,7 @@ fun MainScreen(
         .padding(horizontal = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
+
         Text(
             modifier = Modifier
                 .padding(5.dp),
@@ -103,55 +104,6 @@ fun MainScreen(
                 }
             }
         )
-//        LazyColumn(modifier = Modifier.fillMaxWidth(),
-//            contentPadding = PaddingValues(10.dp)
-//        )
-//        {
-//            item {
-//                Text(
-//                    modifier = Modifier
-//                        .padding(5.dp),
-//                    text = stringResource(id = R.string.sorting),
-//                    color = CustomTheme.colors.black,
-//                    style = CustomTheme.typography.title3Regular
-//                )
-//            }
-//
-//            itemsIndexed(uiState.value.selectSortList,
-//                key = { index, item -> "$index _$item" })
-//            { _, item ->
-//                SelectionCell(
-//                    itemName = item.name,
-//                    onClick = { navigateCellName ->
-//                        if ( navigateCellName == SortingList.HEAP_SORT.name) {
-//                            navController.navigate(Screen.SortingHeapSortingScreen.route(navigateCellName))
-//                        } else {
-//                            navController.navigate(Screen.SortingScreen.route(navigateCellName))
-//                        }
-//                    }
-//                )
-//            }
-//            item {
-//                Text(
-//                    modifier = Modifier
-//                        .padding(5.dp),
-//                    text = stringResource(id = R.string.graph),
-//                    color = CustomTheme.colors.black,
-//                    style = CustomTheme.typography.title3Regular
-//                )
-//            }
-//
-//            itemsIndexed(uiState.value.selectGraphList,
-//                key = { index, item -> "$index _$item" })
-//            { _, item ->
-//                SelectionCell(
-//                    itemName = item.name,
-//                    onClick = { navigateCellName ->
-//                        navController.navigate(Screen.GraphScreen.route(navigateCellName))
-//                    }
-//                )
-//            }
-//        }
     }
 }
 

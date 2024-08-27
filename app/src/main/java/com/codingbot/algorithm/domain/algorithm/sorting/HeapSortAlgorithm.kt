@@ -8,7 +8,6 @@ import com.codingbot.algorithm.domain.algorithm.sorting.contract.ISortingHeapSor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
 class HeapSortAlgorithm: ISortingHeapSortingAlgorithm
 {
     val logger = Logger("HeapSortAlgorithm")

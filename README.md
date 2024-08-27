@@ -5,9 +5,12 @@
 </br>
 </br>
 It visually represents the operation of the algorithm. 
-Pause and resume are possible during playback.
-While paused, you can track the history of the algorithm's operations using back and forward buttons. 
-Each time you enter the screen, data is randomly extracted, allowing you to see the algorithm operating on different elements every time.
+<ul>
+<li>Pause and resume are possible during playback.</li>
+<li>While paused, you can track the history of the algorithm's operations using back and forward buttons.</li>
+<li>Each time you enter the screen, data is randomly extracted, allowing you to see the algorithm operating on different elements every time.</li>
+ <li>Can track the log and view it through the bottom sheet bar.</li>
+ </ul>
 </br>
 
 
