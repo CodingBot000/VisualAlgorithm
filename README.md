@@ -29,3 +29,5 @@ Go to the [apk file](https://www.dropbox.com/scl/fi/3oiwv4bqplpshzwnjzr6a/visual
 - Jetpack
 - MVI Architecture
 
+## Project Structure
+![Alt text](https://github.com/CodingBot000/VisualAlgorithm.drawio.png)
