@@ -31,3 +31,5 @@ Go to the [apk file](https://www.dropbox.com/scl/fi/3oiwv4bqplpshzwnjzr6a/visual
 
 ## Project Structure
 ![Alt text](https://github.com/CodingBot000/VisualAlgorithm/blob/main/VisualAlgorithm.drawio.png)
+![Alt text](https://github.com/CodingBot000/VisualAlgorithm/blob/main/VisualAlgorithm_MVI_Preview.drawio.png)
+
