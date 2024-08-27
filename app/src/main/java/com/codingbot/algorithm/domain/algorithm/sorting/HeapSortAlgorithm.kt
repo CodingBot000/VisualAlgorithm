@@ -4,11 +4,12 @@ import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.domain.model.SortingData
 import com.codingbot.algorithm.domain.model.SortingHeapDataResult
 import com.codingbot.algorithm.domain.algorithm.sorting.contract.IDisplayHeapSortingUpdateEvent
+import com.codingbot.algorithm.domain.algorithm.sorting.contract.ISortingHeapSortingAlgorithm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-class HeapSortAlgorithm
+class HeapSortAlgorithm: ISortingHeapSortingAlgorithm
 {
     val logger = Logger("HeapSortAlgorithm")
 
@@ -19,7 +20,7 @@ class HeapSortAlgorithm
     private var backupArr = emptyList<SortingData>()
     private var arrSize = 0
 
-    fun initValue(
+    override fun initValue(
         viewModelScope: CoroutineScope,
         sortingListInit: MutableList<SortingData>,
         iDisplayHeapSortingUpdateEvent: IDisplayHeapSortingUpdateEvent
@@ -31,13 +32,13 @@ class HeapSortAlgorithm
         backupArr = arrOrigin.toMutableList()
     }
 
-    suspend fun start() {
+    override suspend fun start() {
         viewModelScope.launch {
             sort()
         }
     }
 
-    suspend fun restart() {
+    override suspend fun restart() {
         arrOrigin = backupArr.toMutableList()
         start()
     }
