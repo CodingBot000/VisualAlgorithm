@@ -8,6 +8,7 @@ import com.codingbot.algorithm.domain.model.SortingData
 import com.codingbot.algorithm.domain.model.SortingHeapDataResult
 import com.codingbot.algorithm.domain.algorithm.sorting.HeapSortAlgorithm
 import com.codingbot.algorithm.domain.algorithm.sorting.contract.IDisplayHeapSortingUpdateEvent
+import com.codingbot.algorithm.domain.algorithm.sorting.contract.ISortingHeapSortingAlgorithm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -46,7 +47,8 @@ class SortingHeapSortingViewModel @Inject constructor()
 
     private val originArr = mutableListOf<SortingData>()
     private var resultHistoryList: MutableList<SortingHeapDataResult> = mutableListOf()
-    private var algorithm: HeapSortAlgorithm? = null
+//    private var algorithm: HeapSortAlgorithm? = null
+    private var algorithm: ISortingHeapSortingAlgorithm? = null
 
     init {
         initArray()

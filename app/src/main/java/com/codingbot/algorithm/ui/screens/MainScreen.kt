@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -48,55 +50,60 @@ fun MainScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
 
-        LazyColumn(modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(10.dp)
+        Text(
+            modifier = Modifier
+                .padding(5.dp),
+            text = stringResource(id = R.string.sorting),
+            color = CustomTheme.colors.white,
+            style = CustomTheme.typography.title3Regular
         )
-        {
-            item {
-                Text(
-                    modifier = Modifier
-                        .padding(5.dp),
-                    text = stringResource(id = R.string.sorting),
-                    color = CustomTheme.colors.black,
-                    style = CustomTheme.typography.title3Regular
-                )
-            }
-
-            itemsIndexed(uiState.value.selectSortList,
-                key = { index, item -> "$index _$item" })
-            { _, item ->
-                SelectionCell(
-                    itemName = item.name,
-                    onClick = { navigateCellName ->
-                        if ( navigateCellName == SortingList.HEAP_SORT.name) {
-                            navController.navigate(Screen.SortingHeapSortingScreen.route(navigateCellName))
-                        } else {
-                            navController.navigate(Screen.SortingScreen.route(navigateCellName))
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            content = {
+                items(uiState.value.selectSortList.count()) { index ->
+                    val item = uiState.value.selectSortList[index]
+                    SelectionCell(
+                        itemName = item.name,
+                        onClick = { navigateCellName ->
+                            if ( navigateCellName == SortingList.HEAP_SORT.name) {
+                                navController.navigate(Screen.SortingHeapSortingScreen.route(navigateCellName))
+                            } else {
+                                navController.navigate(Screen.SortingScreen.route(navigateCellName))
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
-            item {
-                Text(
-                    modifier = Modifier
-                        .padding(5.dp),
-                    text = stringResource(id = R.string.graph),
-                    color = CustomTheme.colors.black,
-                    style = CustomTheme.typography.title3Regular
-                )
-            }
+        )
 
-            itemsIndexed(uiState.value.selectGraphList,
-                key = { index, item -> "$index _$item" })
-            { _, item ->
-                SelectionCell(
-                    itemName = item.name,
-                    onClick = { navigateCellName ->
-                        navController.navigate(Screen.GraphScreen.route(navigateCellName))
-                    }
-                )
+        Text(
+            modifier = Modifier
+                .padding(5.dp),
+            text = stringResource(id = R.string.graph),
+            color = CustomTheme.colors.white,
+            style = CustomTheme.typography.title3Regular
+        )
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            content = {
+                items(uiState.value.selectGraphList.count()) { index ->
+                    val item = uiState.value.selectGraphList[index]
+                    SelectionCell(
+                        itemName = item.name,
+                        onClick = { navigateCellName ->
+                            navController.navigate(Screen.GraphScreen.route(navigateCellName))
+                        }
+                    )
+                }
             }
-        }
+        )
     }
 }
 
@@ -124,7 +131,7 @@ private fun SelectionCell(
             Text(
                 modifier = Modifier
                     .padding(5.dp),
-                text = itemName.replace("_", " "),
+                text = itemName.replace("_", "\n"),
                 color = CustomTheme.colors.black,
                 style = CustomTheme.typography.title3Regular
             )
