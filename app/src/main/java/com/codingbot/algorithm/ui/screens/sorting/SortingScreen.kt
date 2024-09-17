@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.codingbot.algorithm.core.common.Logger
+import com.algorithm.utils.Logger
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.LogBottomSheet
 import com.codingbot.algorithm.ui.component.ScreenTitle
@@ -44,7 +44,7 @@ fun SortingScreen(
     screenWidth: Dp = LocalConfiguration.current.screenWidthDp.dp,
     sortingType: String
 ) {
-    val logger = remember { Logger("SortingScreen", true, "[Screen]") }
+    val logger = remember { com.algorithm.utils.Logger("SortingScreen", true, "[Screen]") }
 
     val uiState = sortingViewModel.uiState.collectAsStateWithLifecycle()
     var isLogBottomSheetOpen by remember { mutableStateOf(false) }
@@ -66,7 +66,6 @@ fun SortingScreen(
             },
             trailingIcon = {
                 TopIcon(
-                    imageVector = Icons.Filled.List,
                     onClick = {
                         isLogBottomSheetOpen = !isLogBottomSheetOpen
                     }

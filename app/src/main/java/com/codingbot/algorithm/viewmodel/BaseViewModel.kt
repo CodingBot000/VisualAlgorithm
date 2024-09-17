@@ -2,7 +2,7 @@ package com.codingbot.algorithm.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codingbot.algorithm.core.common.Logger
+import com.algorithm.utils.Logger
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -15,7 +15,7 @@ abstract class BaseViewModel<STATE, INTENT>(
     initialState: STATE,
     sharingStarted: SharingStarted = SharingStarted.Lazily
 ) : ViewModel() {
-    val loggerMvi = Logger ( "MviViewModel")
+    val loggerMvi = com.algorithm.utils.Logger("MviViewModel")
     private val intentStateMachine = Channel<INTENT> {
         loggerMvi { "channel unDelievered intent: $it" }
     }

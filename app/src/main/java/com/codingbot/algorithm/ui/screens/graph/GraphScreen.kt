@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
@@ -32,9 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.codingbot.algorithm.core.common.InitValue
-import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.domain.model.TrackingData
+import com.algorithm.common.InitValue
+import com.algorithm.model.TrackingData
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.LogBottomSheet
 import com.codingbot.algorithm.ui.component.ScreenTitle
@@ -51,7 +49,7 @@ fun GraphScreen(
     graphViewModel: GraphViewModel = hiltViewModel(),
     graphType: String
 ) {
-    val logger = remember { Logger("GraphScreen", true, "[Screen]") }
+    val logger = remember { com.algorithm.utils.Logger("GraphScreen", true, "[Screen]") }
 
     val uiState = graphViewModel.uiState.collectAsStateWithLifecycle()
     var isLogBottomSheetOpen by remember { mutableStateOf(false) }
@@ -74,7 +72,6 @@ fun GraphScreen(
             },
             trailingIcon = {
                 TopIcon(
-                    imageVector = Icons.Filled.List,
                     onClick = {
                         isLogBottomSheetOpen = !isLogBottomSheetOpen
                     }
@@ -140,13 +137,13 @@ private fun ColumnScope.middleContent(
     ) {
         baseGrid(
             mazeArray = baseGridArray,
-            columns = InitValue.MAZE_COLUMS,
+            columns = com.algorithm.common.InitValue.MAZE_COLUMS,
             startIdx = startIdx,
             destIdx = destIdx
         )
         overlayGrid(
             visitedArray = uiState.value.visitedList,
-            columns = InitValue.MAZE_COLUMS
+            columns = com.algorithm.common.InitValue.MAZE_COLUMS
         )
     }
 }
@@ -196,10 +193,10 @@ private fun ColumnScope.bottomContent(
 
 @Composable
 private fun overlayGrid(
-    visitedArray: List<TrackingData>,
+    visitedArray: List<com.algorithm.model.TrackingData>,
     columns: Int
 ) {
-    val logger = remember { Logger("GraphScreen", true, "[Screen]") }
+    val logger = remember { com.algorithm.utils.Logger("GraphScreen", true, "[Screen]") }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),

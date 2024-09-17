@@ -1,18 +1,11 @@
 package com.codingbot.algorithm.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.codingbot.algorithm.core.common.Const
-import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.core.common.SortingList
-import com.codingbot.algorithm.core.utils.scaledNumber
-import com.codingbot.algorithm.domain.model.SortingData
-import com.codingbot.algorithm.domain.model.SortingDataResult
-import com.codingbot.algorithm.domain.algorithm.sorting.BubbleSortAlgorithm
-import com.codingbot.algorithm.domain.algorithm.sorting.InsertionSortAlgorithm
-import com.codingbot.algorithm.domain.algorithm.sorting.QuickSortAlgorithm
-import com.codingbot.algorithm.domain.algorithm.sorting.SelectionSortAlgorithm
-import com.codingbot.algorithm.domain.algorithm.sorting.contract.IDisplaySortingUpdateEvent
-import com.codingbot.algorithm.domain.algorithm.sorting.contract.ISortingAlgorithm
+import com.algorithm.common.Const
+import com.algorithm.domain.repository.SortingRepository
+import com.algorithm.domain.sorting.IDisplaySortingUpdateEvent
+import com.algorithm.domain.sorting.ISortingAlgorithm
+import com.algorithm.utils.scaledNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,8 +19,8 @@ data class SortingUiState(
     val forwardButtonEnable: Boolean = false,
     val backwardButtonEnable: Boolean = false,
     val playState: PlayState = PlayState.INIT,
-    val elementList: MutableList<SortingData> = mutableListOf<SortingData>(),
-    val resultList: MutableList<MutableList<SortingDataResult>> = mutableListOf<MutableList<SortingDataResult>>(),
+    val elementList: MutableList<com.algorithm.model.SortingData> = mutableListOf<com.algorithm.model.SortingData>(),
+    val resultList: MutableList<MutableList<com.algorithm.model.SortingDataResult>> = mutableListOf<MutableList<com.algorithm.model.SortingDataResult>>(),
     val finish: Boolean = false,
     val moveCount: Int = 0
 )
@@ -35,7 +28,7 @@ data class SortingUiState(
 sealed interface SortingIntent {
     data class ButtonEnableForwardAndBackward(val forwardButtonEnable: Boolean, val backwardButtonEnable: Boolean): SortingIntent
     data class PlayButtonState(val playState: PlayState): SortingIntent
-    data class ElementList(val list: MutableList<SortingData>): SortingIntent
+    data class ElementList(val list: MutableList<com.algorithm.model.SortingData>): SortingIntent
     data class MoveCount(val moveCount: Int): SortingIntent
     data class FinishSorting(val sortingType: String, val enable: Boolean): SortingIntent
 }
@@ -44,13 +37,15 @@ enum class PlayState {
     INIT, RESUME, PLAYING, PAUSE, BACKWARD, FORWARD
 }
 @HiltViewModel
-class SortingViewModel @Inject constructor()
+class SortingViewModel @Inject constructor(
+    private val sortingRepository: SortingRepository
+)
     : AlgorithmViewModel<SortingUiState, SortingIntent>(SortingUiState())
 {
-    val logger = Logger("SortingViewModel")
+    val logger = com.algorithm.utils.Logger("SortingViewModel")
 
-    private val originArr = mutableListOf<SortingData>()
-    private var resultHistoryList: MutableList<SortingDataResult> = mutableListOf()
+    private val originArr = mutableListOf<com.algorithm.model.SortingData>()
+    private var resultHistoryList: MutableList<com.algorithm.model.SortingDataResult> = mutableListOf()
     private var algorithm: ISortingAlgorithm? = null
 
     init {
@@ -67,27 +62,8 @@ class SortingViewModel @Inject constructor()
         return sb
     }
 
-    private fun makeLogHistory(index: Int, data: SortingDataResult): String =
+    private fun makeLogHistory(index: Int, data: com.algorithm.model.SortingDataResult): String =
         "step:$index  [swaping] target 1:(index:${data.swapTargetIdx1} - element:${data.sortingDataList[data.swapTargetIdx1].element})  <-->  target 2: (index:${data.swapTargetIdx2} - element:${data.sortingDataList[data.swapTargetIdx2].element})"
-
-    private fun getAlgorithm(sortingType: String): ISortingAlgorithm =
-        when (sortingType) {
-            SortingList.BUBBLE_SORT.name -> {
-                BubbleSortAlgorithm()
-            }
-            SortingList.SELECTION_SORT.name -> {
-                SelectionSortAlgorithm()
-            }
-            SortingList.INSERTION_SORT.name -> {
-                InsertionSortAlgorithm()
-            }
-            SortingList.QUICK_SORT.name -> {
-                QuickSortAlgorithm()
-            }
-            else -> {
-                BubbleSortAlgorithm()
-            }
-        }
 
     fun setSpeedValue(speed: Float) {
         this.speed = speed
@@ -98,7 +74,7 @@ class SortingViewModel @Inject constructor()
         progressIndex = 0
         speed = INIT_SPEED
 
-        val randomValues = Array(Const.ARRAYS_SIZE) { Random.nextInt(ELEMENT_RANDOM_FROM, ELEMENT_RANDOM_TO) }
+        val randomValues = Array(com.algorithm.common.Const.ARRAYS_SIZE) { Random.nextInt(ELEMENT_RANDOM_FROM, ELEMENT_RANDOM_TO) }
         val scaledNumberList = scaledNumber(
             randomValues = randomValues,
             from = Const.GRAPH_HEIGHT_FROM,
@@ -106,8 +82,10 @@ class SortingViewModel @Inject constructor()
         )
         randomValues.forEachIndexed { index, randomNum ->
             originArr.add(
-                SortingData(element = randomNum,
-                    scaledNum = scaledNumberList[index])
+                com.algorithm.model.SortingData(
+                    element = randomNum,
+                    scaledNum = scaledNumberList[index]
+                )
             )
         }
 
@@ -116,21 +94,19 @@ class SortingViewModel @Inject constructor()
 
     override fun initValue(type: String) {
         this.type = type
-
-        algorithm = getAlgorithm(type)
+        algorithm = sortingRepository.getAlgorithm(type)
         algorithm?.initValue(
-            viewModelScope = viewModelScope,
             sortingListInit = originArr,
             iDisplaySortingUpdateEvent = object: IDisplaySortingUpdateEvent {
                 override fun elementList(
-                    list: MutableList<SortingData>,
+                    list: MutableList<com.algorithm.model.SortingData>,
                     swapTargetIdx1: Int,
                     swapTargetIdx2: Int
                 ) {
                     displayBars(list, swapTargetIdx1, swapTargetIdx2)
                 }
 
-                override fun finish(resultList: MutableList<SortingDataResult>) {
+                override fun finish(resultList: MutableList<com.algorithm.model.SortingDataResult>) {
 
                     execute(SortingIntent.FinishSorting(
                         sortingType = type,
@@ -272,30 +248,33 @@ class SortingViewModel @Inject constructor()
     }
 
     private fun displayBars(
-        sortingList: MutableList<SortingData>,
+        sortingList: MutableList<com.algorithm.model.SortingData>,
         swapTargetIdx1: Int,
         swapTargetIdx2: Int)
     {
         for (i in sortingList.indices) {
             sortingList[i] =
                 if (i == swapTargetIdx1) {
-                    SortingData(
+                    com.algorithm.model.SortingData(
                         element = sortingList[i].element,
                         scaledNum = sortingList[i].scaledNum,
                         swap1 = true,
-                        swap2 = false)
+                        swap2 = false
+                    )
                 } else if (i == swapTargetIdx2) {
-                    SortingData(
+                    com.algorithm.model.SortingData(
                         element = sortingList[i].element,
                         scaledNum = sortingList[i].scaledNum,
                         swap1 = false,
-                        swap2 = true)
+                        swap2 = true
+                    )
                 } else {
-                    SortingData(
+                    com.algorithm.model.SortingData(
                         element = sortingList[i].element,
                         scaledNum = sortingList[i].scaledNum,
                         swap1 = false,
-                        swap2 = false)
+                        swap2 = false
+                    )
                 }
         }
         moveCount = progressIndex

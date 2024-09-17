@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.codingbot.algorithm.R
-import com.codingbot.algorithm.core.common.GraphList
+import com.algorithm.common.GraphList
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.viewmodel.PlayState
 
@@ -39,7 +39,7 @@ fun BottomInfoSection(algorithmType: String,
                       onClickReplay:() -> Unit = {}) {
     var sliderPosition by remember { mutableStateOf(5f) }
     val graphTracking = remember(algorithmType) {
-        arrayListOf(GraphList.BFS.name, GraphList.DFS.name).contains(algorithmType)
+        arrayListOf(com.algorithm.common.GraphList.BFS.name, com.algorithm.common.GraphList.DFS.name).contains(algorithmType)
     }
     Column(modifier = Modifier
         .fillMaxWidth(),

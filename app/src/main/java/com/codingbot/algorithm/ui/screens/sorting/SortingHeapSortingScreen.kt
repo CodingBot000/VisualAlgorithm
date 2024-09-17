@@ -6,16 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
@@ -36,12 +32,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.codingbot.algorithm.R
-import com.codingbot.algorithm.core.common.Logger
+import com.algorithm.utils.Logger
 import com.codingbot.algorithm.ui.component.BottomInfoSection
 import com.codingbot.algorithm.ui.component.LogBottomSheet
 import com.codingbot.algorithm.ui.component.ScreenTitle
 import com.codingbot.algorithm.ui.component.TopIcon
-import com.codingbot.algorithm.ui.component.clickableSingle
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.ui.theme.Dimens
 import com.codingbot.algorithm.viewmodel.HeapSortingUiState
@@ -54,7 +49,13 @@ fun SortingHeapSortingScreen(
     screenWidth: Dp = LocalConfiguration.current.screenWidthDp.dp,
     sortingType: String
 ) {
-    val logger = remember { Logger("SortingHeapSortingScreen", true, "[Screen]") }
+    val logger = remember {
+        com.algorithm.utils.Logger(
+            "SortingHeapSortingScreen",
+            true,
+            "[Screen]"
+        )
+    }
 
     val uiState = sortingViewModel.uiState.collectAsStateWithLifecycle()
     var isLogBottomSheetOpen by remember { mutableStateOf(false) }
@@ -76,7 +77,6 @@ fun SortingHeapSortingScreen(
             },
             trailingIcon = {
                 TopIcon(
-                    imageVector = Icons.Filled.List,
                     onClick = {
                         isLogBottomSheetOpen = !isLogBottomSheetOpen
                     }

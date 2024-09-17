@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -28,9 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.codingbot.algorithm.R
-import com.codingbot.algorithm.core.common.Logger
 import com.codingbot.algorithm.core.common.Screen
-import com.codingbot.algorithm.core.common.SortingList
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.viewmodel.MainViewModel
 
@@ -39,7 +35,7 @@ fun MainScreen(
     navController: NavController,
     mainViewModel: MainViewModel  = hiltViewModel()
 ) {
-    val logger = remember { Logger("MainScreen", true, "[Screen]") }
+    val logger = remember { com.algorithm.utils.Logger("MainScreen", true, "[Screen]") }
 
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -68,7 +64,7 @@ fun MainScreen(
                     SelectionCell(
                         itemName = item.name,
                         onClick = { navigateCellName ->
-                            if ( navigateCellName == SortingList.HEAP_SORT.name) {
+                            if ( navigateCellName == com.algorithm.common.SortingList.HEAP_SORT.name) {
                                 navController.navigate(Screen.SortingHeapSortingScreen.route(navigateCellName))
                             } else {
                                 navController.navigate(Screen.SortingScreen.route(navigateCellName))

@@ -1,15 +1,11 @@
 package com.codingbot.algorithm.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.codingbot.algorithm.core.common.GraphList
-import com.codingbot.algorithm.core.common.InitValue
-import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.domain.model.TrackingData
-import com.codingbot.algorithm.domain.model.TrackingDataResult
-import com.codingbot.algorithm.domain.algorithm.graph.GraphBFSAlgorithm
-import com.codingbot.algorithm.domain.algorithm.graph.GraphDFSAlgorithm
-import com.codingbot.algorithm.domain.algorithm.graph.contract.IDisplayGraphUpdateEvent
-import com.codingbot.algorithm.domain.algorithm.graph.contract.IGraphAlgorithm
+import com.algorithm.domain.corelogic.graph.GraphBFSAlgorithm
+import com.algorithm.domain.corelogic.graph.GraphDFSAlgorithm
+import com.algorithm.domain.graph.IDisplayGraphUpdateEvent
+import com.algorithm.domain.graph.IGraphAlgorithm
+import com.algorithm.utils.Logger
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -20,7 +16,7 @@ data class GraphUiState(
     val forwardButtonEnable: Boolean = false,
     val backwardButtonEnable: Boolean = false,
     val playState: PlayState = PlayState.INIT,
-    val visitedList: List<TrackingData> = emptyList(),
+    val visitedList: List<com.algorithm.model.TrackingData> = emptyList(),
     val moveCount: Int = 0,
     val finish: Boolean = false
 )
@@ -29,7 +25,7 @@ sealed interface GraphIntent {
     data class ButtonEnableForwardAndBackward(val forwardButtonEnable: Boolean, val backwardButtonEnable: Boolean): GraphIntent
     data class StartButtonEnable(val enable: Boolean): GraphIntent
     data class PlayButtonState(val playState: PlayState): GraphIntent
-    data class ElementList(val list: List<TrackingData>): GraphIntent
+    data class ElementList(val list: List<com.algorithm.model.TrackingData>): GraphIntent
     data class MoveCount(val moveCount: Int): GraphIntent
     data class Finish(val finish: Boolean): GraphIntent
 }
@@ -40,15 +36,15 @@ class GraphViewModel
     val logger = Logger("GraphViewModel")
 
     lateinit var originArr: Array<IntArray>
-    private var resultHistoryList: MutableList<TrackingDataResult> = mutableListOf()
+    private var resultHistoryList: MutableList<com.algorithm.model.TrackingDataResult> = mutableListOf()
     private var algorithm: IGraphAlgorithm? = null
 
     var arrColSize = 0
 
     val startIdx: Int
-        get() = getFlatArrayIndex(InitValue.MAZE_START)
+        get() = getFlatArrayIndex(com.algorithm.common.InitValue.MAZE_START)
     val destIdx: Int
-        get() = getFlatArrayIndex(InitValue.MAZE_DEST)
+        get() = getFlatArrayIndex(com.algorithm.common.InitValue.MAZE_DEST)
 
     init {
         initArray()
@@ -64,7 +60,7 @@ class GraphViewModel
         return sb
     }
 
-    private fun makeLogHistory(index: Int, data: TrackingDataResult): String =
+    private fun makeLogHistory(index: Int, data: com.algorithm.model.TrackingDataResult): String =
         "step:$index  [tracking] target order:${data.order}  pos:(x:${data.targetX} y:${data.targetY})"
 
     private fun getFlatArrayIndex(pos: IntArray): Int {
@@ -72,9 +68,11 @@ class GraphViewModel
     }
     private fun getAlgorithm(type: String): IGraphAlgorithm =
         when (type) {
-            GraphList.BFS.name -> GraphBFSAlgorithm()
-            GraphList.DFS.name -> GraphDFSAlgorithm()
-            else -> { GraphBFSAlgorithm() }
+            com.algorithm.common.GraphList.BFS.name -> GraphBFSAlgorithm()
+            com.algorithm.common.GraphList.DFS.name -> GraphDFSAlgorithm()
+            else -> {
+                GraphBFSAlgorithm()
+            }
         }
 
     fun setSpeedValue(speed: Float) {
@@ -86,8 +84,8 @@ class GraphViewModel
     }
 
     override fun initArray() {
-        arrColSize = InitValue.MAZE_INIT.size
-        originArr = InitValue.MAZE_INIT
+        arrColSize = com.algorithm.common.InitValue.MAZE_INIT.size
+        originArr = com.algorithm.common.InitValue.MAZE_INIT
     }
 
     override fun initValue(type: String) {
@@ -95,11 +93,10 @@ class GraphViewModel
 
         algorithm = getAlgorithm(type)
         algorithm?.initValue(
-            viewModelScope = viewModelScope,
             graphListInit = originArr,
             iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
 
-                override fun finish(resultVisitedArray: MutableList<TrackingDataResult>) {
+                override fun finish(resultVisitedArray: MutableList<com.algorithm.model.TrackingDataResult>) {
                     execute(GraphIntent.Finish(true))
 
                     resultHistoryList = resultVisitedArray
@@ -146,7 +143,7 @@ class GraphViewModel
 
     override fun start() {
         viewModelScope.launch {
-            algorithm?.start(InitValue.MAZE_START, InitValue.MAZE_DEST)
+            algorithm?.start(com.algorithm.common.InitValue.MAZE_START, com.algorithm.common.InitValue.MAZE_DEST)
             setPlayButtonState(PlayState.PLAYING)
         }
     }
@@ -156,7 +153,7 @@ class GraphViewModel
         progressIndex = 0
         viewModelScope.launch {
             initArray()
-            algorithm?.restart(InitValue.MAZE_START, InitValue.MAZE_DEST)
+            algorithm?.restart(com.algorithm.common.InitValue.MAZE_START, com.algorithm.common.InitValue.MAZE_DEST)
             setPlayButtonState(PlayState.PLAYING)
         }
     }
@@ -239,7 +236,7 @@ class GraphViewModel
     }
 
     private fun displayBars(
-        trackingList: TrackingDataResult
+        trackingList: com.algorithm.model.TrackingDataResult
     )
     {
         val flatList = trackingList.result.flatMap { it.asList() }

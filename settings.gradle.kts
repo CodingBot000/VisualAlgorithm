@@ -14,5 +14,10 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "VisualAlgorithm"
+
 include(":app")
- 
+
+include(":utils-android")
+include(":common")
+include(":domain")
+include(":data")

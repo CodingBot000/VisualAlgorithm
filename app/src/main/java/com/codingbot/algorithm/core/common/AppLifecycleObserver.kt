@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class AppLifecycleObserver: LifecycleEventObserver {
-    private val logger = Logger("AppLifecycleObserverLogger")
+    private val logger = com.algorithm.utils.Logger("AppLifecycleObserverLogger")
 
     private val _isInBackground: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     val isInBackground = _isInBackground.asStateFlow()

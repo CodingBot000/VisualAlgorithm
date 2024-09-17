@@ -1,14 +1,11 @@
 package com.codingbot.algorithm.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.codingbot.algorithm.core.common.Const
-import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.core.utils.scaledNumber
-import com.codingbot.algorithm.domain.model.SortingData
-import com.codingbot.algorithm.domain.model.SortingHeapDataResult
-import com.codingbot.algorithm.domain.algorithm.sorting.HeapSortAlgorithm
-import com.codingbot.algorithm.domain.algorithm.sorting.contract.IDisplayHeapSortingUpdateEvent
-import com.codingbot.algorithm.domain.algorithm.sorting.contract.ISortingHeapSortingAlgorithm
+import com.algorithm.common.Const
+import com.algorithm.domain.repository.SortingHeapRepository
+import com.algorithm.domain.sorting.IDisplayHeapSortingUpdateEvent
+import com.algorithm.domain.sorting.ISortingHeapSortingAlgorithm
+import com.algorithm.utils.scaledNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,9 +19,9 @@ data class HeapSortingUiState(
     val forwardButtonEnable: Boolean = false,
     val backwardButtonEnable: Boolean = false,
     val playState: PlayState = PlayState.INIT,
-    val elementList: MutableList<SortingData> = mutableListOf<SortingData>(),
-    val heapSortingResultList: MutableList<SortingData> = mutableListOf<SortingData>(),
-    val resultList: MutableList<MutableList<SortingHeapDataResult>> = mutableListOf<MutableList<SortingHeapDataResult>>(),
+    val elementList: MutableList<com.algorithm.model.SortingData> = mutableListOf<com.algorithm.model.SortingData>(),
+    val heapSortingResultList: MutableList<com.algorithm.model.SortingData> = mutableListOf<com.algorithm.model.SortingData>(),
+    val resultList: MutableList<MutableList<com.algorithm.model.SortingHeapDataResult>> = mutableListOf<MutableList<com.algorithm.model.SortingHeapDataResult>>(),
     val finish: Boolean = false,
     val moveCount: Int = 0
 )
@@ -33,21 +30,22 @@ sealed interface HeapSortingIntent {
     data class StartButtonEnable(val enable: Boolean): HeapSortingIntent
     data class ButtonEnableForwardAndBackward(val forwardButtonEnable: Boolean, val backwardButtonEnable: Boolean): HeapSortingIntent
     data class PlayButtonState(val playState: PlayState): HeapSortingIntent
-    data class ElementList(val list: MutableList<SortingData>): HeapSortingIntent
-    data class HeapSortingResultList(val heapSortingResultList: MutableList<SortingData>): HeapSortingIntent
+    data class ElementList(val list: MutableList<com.algorithm.model.SortingData>): HeapSortingIntent
+    data class HeapSortingResultList(val heapSortingResultList: MutableList<com.algorithm.model.SortingData>): HeapSortingIntent
     data class MoveCount(val moveCount: Int): HeapSortingIntent
     data class FinishSorting(val sortingType: String, val enable: Boolean): HeapSortingIntent
 }
 
 @HiltViewModel
-class SortingHeapSortingViewModel @Inject constructor()
+class SortingHeapSortingViewModel @Inject constructor(
+    private val sortingHeapRepository: SortingHeapRepository
+)
     : AlgorithmViewModel<HeapSortingUiState, HeapSortingIntent>(HeapSortingUiState())
 {
-    val logger = Logger("SortingHeapSortingViewModel")
+    val logger = com.algorithm.utils.Logger("SortingHeapSortingViewModel")
 
-    private val originArr = mutableListOf<SortingData>()
-    private var resultHistoryList: MutableList<SortingHeapDataResult> = mutableListOf()
-//    private var algorithm: HeapSortAlgorithm? = null
+    private val originArr = mutableListOf<com.algorithm.model.SortingData>()
+    private var resultHistoryList: MutableList<com.algorithm.model.SortingHeapDataResult> = mutableListOf()
     private var algorithm: ISortingHeapSortingAlgorithm? = null
 
     init {
@@ -64,15 +62,12 @@ class SortingHeapSortingViewModel @Inject constructor()
         return sb
     }
 
-    private fun makeLogHistory(index: Int, data: SortingHeapDataResult): String =
+    private fun makeLogHistory(index: Int, data: com.algorithm.model.SortingHeapDataResult): String =
         if (data.swapTargetIdx1 >= 0 && data.swapTargetIdx2 >= 0) {
             "step:$index  [swaping] target 1:(index:${data.swapTargetIdx1} - element:${data.sortingDataList[data.swapTargetIdx1].element})  <-->  target 2: (index:${data.swapTargetIdx2} - element:${data.sortingDataList[data.swapTargetIdx2].element})"
         } else {
             "\n" + data.resultList.joinToString(separator = " ", prefix = "[result] :") { it.element.toString() } + "\n"
         }
-
-    private fun getAlogrithm() = HeapSortAlgorithm()
-
 
     fun setSpeedValue(speed: Float) {
         this.speed = speed
@@ -83,33 +78,34 @@ class SortingHeapSortingViewModel @Inject constructor()
         progressIndex = 0
         speed = INIT_SPEED
 
-        val randomValues = Array(Const.ARRAYS_SIZE) { Random.nextInt(ELEMENT_RANDOM_FROM, ELEMENT_RANDOM_TO) }
+        val randomValues = Array(com.algorithm.common.Const.ARRAYS_SIZE) { Random.nextInt(ELEMENT_RANDOM_FROM, ELEMENT_RANDOM_TO) }
         val scaledNumberList = scaledNumber(
-            randomValues =randomValues,
+            randomValues = randomValues,
             from = Const.GRAPH_HEIGHT_FROM,
             to = Const.GRAPH_HEIGHT_TO
         )
         randomValues.forEachIndexed { index, randomNum ->
             originArr.add(
-                SortingData(element = randomNum,
-                    scaledNum = scaledNumberList[index])
+                com.algorithm.model.SortingData(
+                    element = randomNum,
+                    scaledNum = scaledNumberList[index]
+                )
             )
         }
 
-        var resultsEmpty = MutableList(originArr.count()) { SortingData() }
+        var resultsEmpty = MutableList(originArr.count()) { com.algorithm.model.SortingData() }
         execute(HeapSortingIntent.HeapSortingResultList(heapSortingResultList = resultsEmpty))
         execute(HeapSortingIntent.ElementList(originArr))
     }
     override fun initValue(type: String) {
         this.type = type
 
-        algorithm = getAlogrithm()
+        algorithm = sortingHeapRepository.getAlgorithm()
         algorithm?.initValue(
-            viewModelScope = viewModelScope,
             sortingListInit = originArr,
             iDisplayHeapSortingUpdateEvent = object: IDisplayHeapSortingUpdateEvent {
 
-                override fun finish(resultList: MutableList<SortingHeapDataResult>) {
+                override fun finish(resultList: MutableList<com.algorithm.model.SortingHeapDataResult>) {
                     execute(HeapSortingIntent.FinishSorting(type, true))
 
                     resultHistoryList = resultList
@@ -246,29 +242,29 @@ class SortingHeapSortingViewModel @Inject constructor()
     }
 
     private fun displayBars(
-        sortingList: MutableList<SortingData>,
-        resultList: MutableList<SortingData>,
+        sortingList: MutableList<com.algorithm.model.SortingData>,
+        resultList: MutableList<com.algorithm.model.SortingData>,
         swapTargetIdx1: Int,
         swapTargetIdx2: Int)
     {
         for (i in sortingList.indices) {
             sortingList[i] =
                 if (i == swapTargetIdx1) {
-                    SortingData(
+                    com.algorithm.model.SortingData(
                         element = sortingList[i].element,
                         scaledNum = sortingList[i].scaledNum,
                         swap1 = true,
                         swap2 = false
                     )
                 } else if (i == swapTargetIdx2) {
-                    SortingData(
+                    com.algorithm.model.SortingData(
                         element = sortingList[i].element,
                         scaledNum = sortingList[i].scaledNum,
                         swap1 = false,
                         swap2 = true
                     )
                 } else {
-                    SortingData(
+                    com.algorithm.model.SortingData(
                         element = sortingList[i].element,
                         scaledNum = sortingList[i].scaledNum,
                         swap1 = false,

@@ -16,8 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.codingbot.algorithm.core.common.Logger
-import com.codingbot.algorithm.domain.model.SortingData
+import com.algorithm.model.SortingData
+import com.algorithm.utils.Logger
 import com.codingbot.algorithm.ui.theme.CustomTheme
 import com.codingbot.algorithm.ui.theme.Dimens
 
@@ -27,10 +27,10 @@ enum class SortingBarCellType {
 @Composable
 fun SortingBarCell(
     sortingBarCellType: SortingBarCellType = SortingBarCellType.SortingArray,
-    item: SortingData,
+    item: com.algorithm.model.SortingData,
     elementWidth: Dp
 ) {
-    val logger = remember { Logger("SortingBarCell", true, "[Screen]") }
+    val logger = remember { com.algorithm.utils.Logger("SortingBarCell", true, "[Screen]") }
     val elementInnerWidth = elementWidth - 2.dp
 
     Column(
