@@ -1,5 +1,7 @@
 package com.algorithm.di
 
+import com.algorithm.domain.repository.GraphRepository
+import com.algorithm.domain.repository.GraphRepositoryImpl
 import com.algorithm.domain.repository.SortingHeapRepository
 import com.algorithm.domain.repository.SortingHeapRepositoryImpl
 import com.algorithm.domain.repository.SortingRepository
@@ -22,4 +24,8 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindSortingHeapRepository(soringHeapRepository: SortingHeapRepositoryImpl): SortingHeapRepository
+
+    @Binds
+    @Singleton
+    fun bindGraphRepository(graphRepository: GraphRepositoryImpl): GraphRepository
 }
