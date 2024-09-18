@@ -49,7 +49,11 @@ fun LogBottomSheet(
                 modifier = Modifier
                     .height(200.dp)
                     .verticalScroll(rememberScrollState()),
-                text = logHistoryString.toString(),
+                text = if (logHistoryString.isEmpty()) {
+                    "Log History is Empty"
+                } else {
+                    logHistoryString
+                },
                 color = CustomTheme.colors.textColorPrimary,
                 style = CustomTheme.typography.bodyRegular
             )
