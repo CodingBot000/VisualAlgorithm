@@ -1,4 +1,4 @@
-package com.algorithm.domain.repository//package com.algorithm.domain.repository
+package com.algorithm.domain.repository.graph//package com.algorithm.domain.repository
 
 import com.algorithm.domain.corelogic.graph.GraphBFSAlgorithm
 import com.algorithm.domain.corelogic.graph.GraphDFSAlgorithm
