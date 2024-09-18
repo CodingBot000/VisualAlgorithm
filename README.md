@@ -29,9 +29,22 @@ Go to the [apk file](https://www.dropbox.com/scl/fi/3oiwv4bqplpshzwnjzr6a/visual
 - Jetpack
 - MVI Architecture
 
+<ul>
+ <li>The core algorithm code is designed to be independent of any UI platform.</li>
+ 
+ <li>Additionally, while we use Flow in the ViewModel to update the View, I do not use Flow for updating the algorithm data. Instead, updates are handled through an interface.</li>
+ 
+ <li>The reason for this is to facilitate future expansion to other platforms.</li>
+ 
+ <li>When developing for a new platform, managing streams can be challenging in terms of resource cleanup, stopping, and restarting. However, implementing it without streams is relatively easier.</li>
+ 
+ <li>One of the goals is to structure the code so that it can be easily adapted to new platforms, as long as the basic structure of the new platform's UI development is understood.</li>
+</ul>
+
 ## Project Structure
 ![Alt text](https://github.com/CodingBot000/VisualAlgorithm/blob/main/VisualAlgorithm.drawio.png)
 
 ## 
 ![Alt text](https://github.com/CodingBot000/VisualAlgorithm/blob/main/VisualAlgorithm_MVI_Preview.drawio.png)
+
 
