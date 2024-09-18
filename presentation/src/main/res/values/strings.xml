@@ -4,4 +4,6 @@
     <string name="graph">Graph</string>
     <string name="result">Result</string>
     <string name="array_temp">Array Temp</string>
+    <string name="log_history">Log History</string>
+    <string name="log_history_empty_msg">Log History is Empty</string>
 </resources>

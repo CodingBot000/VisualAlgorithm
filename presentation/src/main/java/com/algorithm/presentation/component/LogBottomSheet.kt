@@ -16,7 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.algorithm.presentation.R
 import com.algorithm.presentation.ui.theme.CustomTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +42,7 @@ fun LogBottomSheet(
             .navigationBarsPadding()
         ) {
             Text(
-                text = "Log History",
+                text = stringResource(id = R.string.log_history),
                 color = CustomTheme.colors.textColorPrimary,
                 style = CustomTheme.typography.title2Bold
             )
@@ -50,7 +52,7 @@ fun LogBottomSheet(
                     .height(200.dp)
                     .verticalScroll(rememberScrollState()),
                 text = if (logHistoryString.isEmpty()) {
-                    "Log History is Empty"
+                    stringResource(id = R.string.log_history_empty_msg)
                 } else {
                     logHistoryString
                 },

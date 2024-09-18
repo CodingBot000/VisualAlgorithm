@@ -2,6 +2,7 @@ package com.algorithm.presentation.screens.graph
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -38,6 +39,7 @@ import com.algorithm.presentation.ui.component.ScreenTitle
 import com.algorithm.presentation.ui.component.TopIcon
 import com.algorithm.presentation.ui.theme.Color
 import com.algorithm.presentation.ui.theme.CustomTheme
+import com.algorithm.presentation.ui.theme.Dimens
 import com.algorithm.presentation.viewmodel.GraphUiState
 import com.algorithm.presentation.viewmodel.GraphViewModel
 
@@ -62,7 +64,8 @@ fun GraphScreen(
     Column(modifier = Modifier
         .background(color = CustomTheme.colors.bg)
         .fillMaxSize()
-        .padding(horizontal = 10.dp))
+        .padding(bottom = Dimens.BottomPadding),
+        verticalArrangement = Arrangement.Center)
     {
         ScreenTitle(
             title = graphType,

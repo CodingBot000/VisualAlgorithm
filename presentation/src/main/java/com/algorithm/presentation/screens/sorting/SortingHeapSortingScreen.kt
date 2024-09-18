@@ -64,7 +64,7 @@ fun SortingHeapSortingScreen(
 
     Column(modifier = Modifier
         .background(color = CustomTheme.colors.bg)
-        .padding(bottom = 5.dp)
+        .padding(bottom = Dimens.BottomPadding)
         .fillMaxSize(),
         verticalArrangement = Arrangement.Center)
     {
