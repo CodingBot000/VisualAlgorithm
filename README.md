@@ -29,6 +29,8 @@ Go to the [apk file](https://www.dropbox.com/scl/fi/3oiwv4bqplpshzwnjzr6a/visual
 - Jetpack
 - MVI Architecture
 
+
+## Data Flow Description
 <ul>
  <li>The core algorithm code is designed to be independent of any UI platform.</li>
  
