@@ -52,10 +52,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":data"))
-    implementation(project(":domain"))
+    implementation(project(":presentation"))
     implementation(project(":common"))
-    implementation(project(":utils-android"))
+
     // Dagger Hilt
     implementation(libs.google.hilt)
     ksp(libs.google.hilt.compiler)

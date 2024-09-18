@@ -37,4 +37,6 @@ enum class GraphList {
     DFS, BFS
 }
 
-
+enum class PlayState {
+    INIT, RESUME, PLAYING, PAUSE, BACKWARD, FORWARD
+}
