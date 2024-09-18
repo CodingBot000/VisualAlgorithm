@@ -43,6 +43,9 @@ Go to the [apk file](https://www.dropbox.com/scl/fi/3oiwv4bqplpshzwnjzr6a/visual
  <li>One of the goals is to structure the code so that it can be easily adapted to new platforms, as long as the basic structure of the new platform's UI development is understood.</li>
 </ul>
 
+## Multi Module Structure
+![Alt text](https://github.com/CodingBot000/VisualAlgorithm/blob/main/VisualAlgorithm_MultiModule.drawio.png)
+
 ## Project Structure
 ![Alt text](https://github.com/CodingBot000/VisualAlgorithm/blob/main/VisualAlgorithm.drawio.png)
 
