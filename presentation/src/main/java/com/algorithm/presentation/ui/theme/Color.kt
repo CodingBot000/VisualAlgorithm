@@ -2,6 +2,11 @@ package com.algorithm.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val rainbowColors = mutableListOf<androidx.compose.ui.graphics.Color>(
+    com.algorithm.presentation.ui.theme.Color.Red_20, com.algorithm.presentation.ui.theme.Color.Orange_20, com.algorithm.presentation.ui.theme.Color.Yellow_20,
+    com.algorithm.presentation.ui.theme.Color.Green_20, com.algorithm.presentation.ui.theme.Color.Blue_20, com.algorithm.presentation.ui.theme.Color.Indigo_20,
+    com.algorithm.presentation.ui.theme.Color.Purple_20, com.algorithm.presentation.ui.theme.Color.Blue_Gray_20
+)
 
 object Color {
     val Blue = Color(0xFF0062FF)
