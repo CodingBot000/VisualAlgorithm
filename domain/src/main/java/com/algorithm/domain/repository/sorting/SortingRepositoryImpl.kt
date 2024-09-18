@@ -1,4 +1,4 @@
-package com.algorithm.domain.repository//package com.algorithm.domain.repository
+package com.algorithm.domain.repository.sorting//package com.algorithm.domain.repository
 
 import com.algorithm.common.SortingList
 import com.algorithm.domain.corelogic.sorting.BubbleSortAlgorithm

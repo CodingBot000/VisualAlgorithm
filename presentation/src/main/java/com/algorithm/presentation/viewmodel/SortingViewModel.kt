@@ -3,7 +3,7 @@ package com.algorithm.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.algorithm.common.Const
 import com.algorithm.common.PlayState
-import com.algorithm.domain.repository.SortingRepository
+import com.algorithm.domain.repository.sorting.SortingRepository
 import com.algorithm.domain.sorting.IDisplaySortingUpdateEvent
 import com.algorithm.domain.sorting.ISortingAlgorithm
 import com.algorithm.utils.scaledNumber

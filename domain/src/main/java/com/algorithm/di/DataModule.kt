@@ -1,11 +1,11 @@
 package com.algorithm.di
 
-import com.algorithm.domain.repository.GraphRepository
-import com.algorithm.domain.repository.GraphRepositoryImpl
-import com.algorithm.domain.repository.SortingHeapRepository
-import com.algorithm.domain.repository.SortingHeapRepositoryImpl
-import com.algorithm.domain.repository.SortingRepository
-import com.algorithm.domain.repository.SortingRepositoryImpl
+import com.algorithm.domain.repository.graph.GraphRepository
+import com.algorithm.domain.repository.graph.GraphRepositoryImpl
+import com.algorithm.domain.repository.sorting.SortingHeapRepository
+import com.algorithm.domain.repository.sorting.SortingHeapRepositoryImpl
+import com.algorithm.domain.repository.sorting.SortingRepository
+import com.algorithm.domain.repository.sorting.SortingRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
