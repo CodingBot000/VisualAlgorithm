@@ -14,12 +14,12 @@ It visually represents the operation of the algorithm.
 </br>
 
 
-[![Video Label](http://img.youtube.com/vi/ZxufS2Q7xuc/0.jpg)](https://youtu.be/ZxufS2Q7xuc)
+[![Video Label](http://img.youtube.com/vi/9wV2rSu_nkI/0.jpg)](https://youtu.be/9wV2rSu_nkI)
 - Click to view as a 'YouTube' video.  
 
     
 ## Download APK for install
-Go to the [apk file](https://www.dropbox.com/scl/fi/3oiwv4bqplpshzwnjzr6a/visual-algorithm-app-debug.apk?rlkey=4ejuzpj2d2yhgte8oztobf41b&dl=0) to download the latest APK.
+Go to the [apk file](https://www.dropbox.com/scl/fi/svqqde3ipv3v4eyv0e37c/visual-algorithm-app-debug.apk?rlkey=aeo96lqsbbkma0xzscppax1tk&dl=0) to download the latest APK.
 
 
 ## Tech stack
