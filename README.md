@@ -12,7 +12,7 @@ It visually represents the operation of the algorithm.
  <li>Can track the log and view it through the bottom sheet bar.</li>
  </ul>
 </br>
-
+ 
 
 [![Video Label](http://img.youtube.com/vi/9wV2rSu_nkI/0.jpg)](https://youtu.be/9wV2rSu_nkI)
 - Click to view as a 'YouTube' video.  
