@@ -28,7 +28,7 @@ Go to the [apk file](https://www.dropbox.com/scl/fi/svqqde3ipv3v4eyv0e37c/visual
 - [Hilt] for dependency injection.
 - Jetpack
 - MVI Architecture
-
+- Multi Modue
 
 ## Data Flow Description
 <ul>
