@@ -25,7 +25,7 @@ sealed interface MainIntent {
 class MainViewModel @Inject constructor()
     : BaseViewModel<MainUiState, MainIntent>(MainUiState())
 {
-    val logger = com.algorithm.utils.Logger("SortingViewModel")
+    val logger = com.algorithm.utils.Logger("MainViewModel")
 
 //    var curColorIndex = 0
 

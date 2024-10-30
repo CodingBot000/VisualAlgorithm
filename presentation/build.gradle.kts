@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.google.hilt)
     ksp(libs.google.hilt.compiler)
 
+    implementation(libs.lottie.compose)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime)

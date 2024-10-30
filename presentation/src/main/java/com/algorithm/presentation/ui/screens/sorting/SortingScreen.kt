@@ -1,4 +1,4 @@
-package com.algorithm.presentation.screens.sorting
+package com.algorithm.presentation.ui.screens.sorting
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package com.algorithm.presentation.component
+package com.algorithm.presentation.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,7 +40,7 @@ fun RainBowTextColorAnimation(
     }
 
     Text(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
             .padding(5.dp),
         text = buildAnnotatedString {
             text.forEachIndexed { index, char ->

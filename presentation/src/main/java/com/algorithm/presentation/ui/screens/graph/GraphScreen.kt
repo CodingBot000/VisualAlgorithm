@@ -1,4 +1,4 @@
-package com.algorithm.presentation.screens.graph
+package com.algorithm.presentation.ui.screens.graph
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

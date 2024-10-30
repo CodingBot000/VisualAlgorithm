@@ -1,4 +1,4 @@
-package com.algorithm.presentation.component
+package com.algorithm.presentation.ui.component
 
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -47,7 +47,9 @@ fun scaleAndAlpha(
     args: ScaleAndAlphaArgs,
     animation: FiniteAnimationSpec<Float>
 ): Pair<Float, Float> {
-    val transitionState = remember { MutableTransitionState(State.PLACING).apply { targetState = State.PLACED } }
+    val transitionState = remember { MutableTransitionState(State.PLACING).apply { targetState =
+        State.PLACED
+    } }
     val transition = updateTransition(transitionState)
     val alpha by transition.animateFloat(transitionSpec = { animation }) { state ->
         when (state) {

@@ -14,10 +14,10 @@ import androidx.navigation.compose.rememberNavController
 import com.algorithm.common.GraphList
 import com.algorithm.common.SortingList
 import com.algorithm.presentation.core.common.Screen
-import com.algorithm.presentation.screens.MainScreen
-import com.algorithm.presentation.screens.graph.GraphScreen
-import com.algorithm.presentation.screens.sorting.SortingHeapSortingScreen
-import com.algorithm.presentation.screens.sorting.SortingScreen
+import com.algorithm.presentation.ui.screens.MainScreen
+import com.algorithm.presentation.ui.screens.graph.GraphScreen
+import com.algorithm.presentation.ui.screens.sorting.SortingHeapSortingScreen
+import com.algorithm.presentation.ui.screens.sorting.SortingScreen
 import com.algorithm.presentation.ui.theme.VisualAlgorithmTheme
 import dagger.hilt.android.AndroidEntryPoint
 
