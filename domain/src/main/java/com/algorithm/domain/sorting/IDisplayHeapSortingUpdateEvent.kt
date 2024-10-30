@@ -4,5 +4,5 @@ import com.algorithm.model.SortingHeapDataResult
 
 
 interface IDisplayHeapSortingUpdateEvent {
-    fun finish(resultList: MutableList<com.algorithm.model.SortingHeapDataResult>)
+    fun finish(resultList: MutableList<SortingHeapDataResult>)
 }

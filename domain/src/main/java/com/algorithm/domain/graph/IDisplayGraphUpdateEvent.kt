@@ -4,5 +4,5 @@ import com.algorithm.model.TrackingDataResult
 
 
 interface IDisplayGraphUpdateEvent {
-    fun finish(resultVisitedArray: MutableList<com.algorithm.model.TrackingDataResult>)
+    fun finish(resultVisitedArray: MutableList<TrackingDataResult>)
 }

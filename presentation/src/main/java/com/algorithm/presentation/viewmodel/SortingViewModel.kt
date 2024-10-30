@@ -6,6 +6,8 @@ import com.algorithm.common.PlayState
 import com.algorithm.domain.repository.sorting.SortingRepository
 import com.algorithm.domain.sorting.IDisplaySortingUpdateEvent
 import com.algorithm.domain.sorting.ISortingAlgorithm
+import com.algorithm.model.SortingData
+import com.algorithm.model.SortingDataResult
 import com.algorithm.utils.scaledNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -20,8 +22,8 @@ data class SortingUiState(
     val forwardButtonEnable: Boolean = false,
     val backwardButtonEnable: Boolean = false,
     val playState: PlayState = PlayState.INIT,
-    val elementList: MutableList<com.algorithm.model.SortingData> = mutableListOf<com.algorithm.model.SortingData>(),
-    val resultList: MutableList<MutableList<com.algorithm.model.SortingDataResult>> = mutableListOf<MutableList<com.algorithm.model.SortingDataResult>>(),
+    val elementList: MutableList<SortingData> = mutableListOf<SortingData>(),
+    val resultList: MutableList<MutableList<SortingDataResult>> = mutableListOf<MutableList<SortingDataResult>>(),
     val finish: Boolean = false,
     val moveCount: Int = 0
 )
@@ -29,7 +31,7 @@ data class SortingUiState(
 sealed interface SortingIntent {
     data class ButtonEnableForwardAndBackward(val forwardButtonEnable: Boolean, val backwardButtonEnable: Boolean): SortingIntent
     data class PlayButtonState(val playState: PlayState): SortingIntent
-    data class ElementList(val list: MutableList<com.algorithm.model.SortingData>): SortingIntent
+    data class ElementList(val list: MutableList<SortingData>): SortingIntent
     data class MoveCount(val moveCount: Int): SortingIntent
     data class FinishSorting(val sortingType: String, val enable: Boolean): SortingIntent
 }
@@ -43,8 +45,8 @@ class SortingViewModel @Inject constructor(
 {
     val logger = com.algorithm.utils.Logger("SortingViewModel")
 
-    private val originArr = mutableListOf<com.algorithm.model.SortingData>()
-    private var resultHistoryList: MutableList<com.algorithm.model.SortingDataResult> = mutableListOf()
+    private val originArr = mutableListOf<SortingData>()
+    private var resultHistoryList: MutableList<SortingDataResult> = mutableListOf()
     private var algorithm: ISortingAlgorithm? = null
 
     init {
@@ -98,14 +100,14 @@ class SortingViewModel @Inject constructor(
             sortingListInit = originArr,
             iDisplaySortingUpdateEvent = object: IDisplaySortingUpdateEvent {
                 override fun elementList(
-                    list: MutableList<com.algorithm.model.SortingData>,
+                    list: MutableList<SortingData>,
                     swapTargetIdx1: Int,
                     swapTargetIdx2: Int
                 ) {
                     displayBars(list, swapTargetIdx1, swapTargetIdx2)
                 }
 
-                override fun finish(resultList: MutableList<com.algorithm.model.SortingDataResult>) {
+                override fun finish(resultList: MutableList<SortingDataResult>) {
 
                     execute(SortingIntent.FinishSorting(
                         sortingType = type,
@@ -247,7 +249,7 @@ class SortingViewModel @Inject constructor(
     }
 
     private fun displayBars(
-        sortingList: MutableList<com.algorithm.model.SortingData>,
+        sortingList: MutableList<SortingData>,
         swapTargetIdx1: Int,
         swapTargetIdx2: Int)
     {

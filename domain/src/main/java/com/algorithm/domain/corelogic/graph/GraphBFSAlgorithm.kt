@@ -12,9 +12,7 @@ import java.util.Queue
 class GraphBFSAlgorithm: IGraphAlgorithm {
     private lateinit var arrOrigin: Array<IntArray>
     private lateinit var iDisplayGraphUpdateEvent: IDisplayGraphUpdateEvent
-//    private var visitedResultHistory: MutableList<Array<BooleanArray>> = mutableListOf()
     private var visitedResultHistory: MutableList<TrackingDataResult> = mutableListOf()
-//    private lateinit var visualVisited: Array<BooleanArray>
     private lateinit var visualVisited:Array<Array<TrackingData>>
     private var backupArr = emptyArray<IntArray>()
     private var order = 0
@@ -84,7 +82,6 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
         queue.offer(intArrayOf(start[0], start[1]))
         while (!queue.isEmpty()) {
             val p = queue.poll()
-            println("===*** while START queue.poll => p[] {" + p[0] + ", " + p[1] + "}")
             for (dir in dirs) {
                 //1. 먼저 한쪽방향 (dir)을 정해서 해당 방향으로 아래 while문에서 배열밖으로 나가거나 벽을 만날때까지 계속 움직이메 체크한다
                 var x = p[0]
@@ -97,8 +94,7 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                     // 여기서 x, y는 앞으로 이동하게될 미래의 예상 위치이다.
                     // 그러므로 위치는 배열크기 안으로 while조건문이 제한된다. (배열크기 밖으로 이동할수없으므로)
                     // 벽을 만나거나 밖으로 나가면 while문을 나가게 된다
-                    println("")
-                    println("11 x: $x y: $y")
+
                     x += dir[0]
                     y += dir[1]
                     if (x in 0..<col && y in 0..<row && mazeArr[x][y] != 1 && !visualVisited[x][y].isVisited) {
@@ -145,17 +141,11 @@ class GraphBFSAlgorithm: IGraphAlgorithm {
                     )
                 )
                 order++
-
-                println("check visited[$x][$y] true addQueue {$x, $y}")
-                print(visited)
-                println("========")
-
                 // 목적지에 도달하면 true를 리턴
                 if (x == destination[0] && y == destination[1]) return true
                 // 6. 이번에 처음 방문한 곳은 queue에 넣는다.
                 queue.offer(intArrayOf(x, y))
             }
-            println("==== while End")
         }
         return false
     }

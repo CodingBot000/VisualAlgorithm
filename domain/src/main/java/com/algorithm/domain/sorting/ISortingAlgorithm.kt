@@ -5,7 +5,7 @@ import com.algorithm.model.SortingData
 interface ISortingAlgorithm
 {
     fun initValue(
-        sortingListInit: MutableList<com.algorithm.model.SortingData>,
+        sortingListInit: MutableList<SortingData>,
         iDisplaySortingUpdateEvent: IDisplaySortingUpdateEvent
     )
     suspend fun start()

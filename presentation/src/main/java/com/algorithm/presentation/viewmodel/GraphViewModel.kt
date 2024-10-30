@@ -6,6 +6,8 @@ import com.algorithm.domain.corelogic.graph.GraphBFSAlgorithm
 import com.algorithm.domain.corelogic.graph.GraphDFSAlgorithm
 import com.algorithm.domain.graph.IDisplayGraphUpdateEvent
 import com.algorithm.domain.graph.IGraphAlgorithm
+import com.algorithm.model.TrackingData
+import com.algorithm.model.TrackingDataResult
 import com.algorithm.utils.Logger
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,7 +19,7 @@ data class GraphUiState(
     val forwardButtonEnable: Boolean = false,
     val backwardButtonEnable: Boolean = false,
     val playState: PlayState = PlayState.INIT,
-    val visitedList: List<com.algorithm.model.TrackingData> = emptyList(),
+    val visitedList: List<TrackingData> = emptyList(),
     val moveCount: Int = 0,
     val finish: Boolean = false
 )
@@ -26,7 +28,7 @@ sealed interface GraphIntent {
     data class ButtonEnableForwardAndBackward(val forwardButtonEnable: Boolean, val backwardButtonEnable: Boolean): GraphIntent
     data class StartButtonEnable(val enable: Boolean): GraphIntent
     data class PlayButtonState(val playState: PlayState): GraphIntent
-    data class ElementList(val list: List<com.algorithm.model.TrackingData>): GraphIntent
+    data class ElementList(val list: List<TrackingData>): GraphIntent
     data class MoveCount(val moveCount: Int): GraphIntent
     data class Finish(val finish: Boolean): GraphIntent
 }
@@ -37,7 +39,7 @@ class GraphViewModel
     val logger = Logger("GraphViewModel")
 
     lateinit var originArr: Array<IntArray>
-    private var resultHistoryList: MutableList<com.algorithm.model.TrackingDataResult> = mutableListOf()
+    private var resultHistoryList: MutableList<TrackingDataResult> = mutableListOf()
     private var algorithm: IGraphAlgorithm? = null
 
     var arrColSize = 0
@@ -97,7 +99,7 @@ class GraphViewModel
             graphListInit = originArr,
             iDisplayGraphUpdateEvent = object: IDisplayGraphUpdateEvent {
 
-                override fun finish(resultVisitedArray: MutableList<com.algorithm.model.TrackingDataResult>) {
+                override fun finish(resultVisitedArray: MutableList<TrackingDataResult>) {
                     execute(GraphIntent.Finish(true))
 
                     resultHistoryList = resultVisitedArray

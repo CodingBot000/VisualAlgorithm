@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.algorithm.common.InitValue
+import com.algorithm.model.TrackingData
 import com.algorithm.presentation.ui.component.BottomInfoSection
 import com.algorithm.presentation.ui.component.LogBottomSheet
 import com.algorithm.presentation.ui.component.ScreenTitle
@@ -195,7 +196,7 @@ private fun ColumnScope.bottomContent(
 
 @Composable
 private fun overlayGrid(
-    visitedArray: List<com.algorithm.model.TrackingData>,
+    visitedArray: List<TrackingData>,
     columns: Int
 ) {
     val logger = remember { com.algorithm.utils.Logger("GraphScreen", true, "[Screen]") }

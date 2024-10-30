@@ -6,6 +6,8 @@ import com.algorithm.common.PlayState
 import com.algorithm.domain.repository.sorting.SortingHeapRepository
 import com.algorithm.domain.sorting.IDisplayHeapSortingUpdateEvent
 import com.algorithm.domain.sorting.ISortingHeapSortingAlgorithm
+import com.algorithm.model.SortingData
+import com.algorithm.model.SortingHeapDataResult
 import com.algorithm.utils.scaledNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -20,9 +22,9 @@ data class HeapSortingUiState(
     val forwardButtonEnable: Boolean = false,
     val backwardButtonEnable: Boolean = false,
     val playState: PlayState = PlayState.INIT,
-    val elementList: MutableList<com.algorithm.model.SortingData> = mutableListOf<com.algorithm.model.SortingData>(),
-    val heapSortingResultList: MutableList<com.algorithm.model.SortingData> = mutableListOf<com.algorithm.model.SortingData>(),
-    val resultList: MutableList<MutableList<com.algorithm.model.SortingHeapDataResult>> = mutableListOf<MutableList<com.algorithm.model.SortingHeapDataResult>>(),
+    val elementList: MutableList<SortingData> = mutableListOf<SortingData>(),
+    val heapSortingResultList: MutableList<SortingData> = mutableListOf<SortingData>(),
+    val resultList: MutableList<MutableList<SortingHeapDataResult>> = mutableListOf<MutableList<SortingHeapDataResult>>(),
     val finish: Boolean = false,
     val moveCount: Int = 0
 )
@@ -31,8 +33,8 @@ sealed interface HeapSortingIntent {
     data class StartButtonEnable(val enable: Boolean): HeapSortingIntent
     data class ButtonEnableForwardAndBackward(val forwardButtonEnable: Boolean, val backwardButtonEnable: Boolean): HeapSortingIntent
     data class PlayButtonState(val playState: PlayState): HeapSortingIntent
-    data class ElementList(val list: MutableList<com.algorithm.model.SortingData>): HeapSortingIntent
-    data class HeapSortingResultList(val heapSortingResultList: MutableList<com.algorithm.model.SortingData>): HeapSortingIntent
+    data class ElementList(val list: MutableList<SortingData>): HeapSortingIntent
+    data class HeapSortingResultList(val heapSortingResultList: MutableList<SortingData>): HeapSortingIntent
     data class MoveCount(val moveCount: Int): HeapSortingIntent
     data class FinishSorting(val sortingType: String, val enable: Boolean): HeapSortingIntent
 }
@@ -45,8 +47,8 @@ class SortingHeapSortingViewModel @Inject constructor(
 {
     val logger = com.algorithm.utils.Logger("SortingHeapSortingViewModel")
 
-    private val originArr = mutableListOf<com.algorithm.model.SortingData>()
-    private var resultHistoryList: MutableList<com.algorithm.model.SortingHeapDataResult> = mutableListOf()
+    private val originArr = mutableListOf<SortingData>()
+    private var resultHistoryList: MutableList<SortingHeapDataResult> = mutableListOf()
     private var algorithm: ISortingHeapSortingAlgorithm? = null
 
     init {
@@ -106,7 +108,7 @@ class SortingHeapSortingViewModel @Inject constructor(
             sortingListInit = originArr,
             iDisplayHeapSortingUpdateEvent = object: IDisplayHeapSortingUpdateEvent {
 
-                override fun finish(resultList: MutableList<com.algorithm.model.SortingHeapDataResult>) {
+                override fun finish(resultList: MutableList<SortingHeapDataResult>) {
                     execute(HeapSortingIntent.FinishSorting(type, true))
 
                     resultHistoryList = resultList
@@ -243,8 +245,8 @@ class SortingHeapSortingViewModel @Inject constructor(
     }
 
     private fun displayBars(
-        sortingList: MutableList<com.algorithm.model.SortingData>,
-        resultList: MutableList<com.algorithm.model.SortingData>,
+        sortingList: MutableList<SortingData>,
+        resultList: MutableList<SortingData>,
         swapTargetIdx1: Int,
         swapTargetIdx2: Int)
     {
