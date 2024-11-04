@@ -12,12 +12,14 @@ import javax.inject.Inject
 data class MainUiState(
     val selectSortList: MutableList<com.algorithm.common.SortingList> = mutableListOf<com.algorithm.common.SortingList>(),
     val selectGraphList: MutableList<com.algorithm.common.GraphList> = mutableListOf<com.algorithm.common.GraphList>(),
+    val selectRaceConditionList: MutableList<com.algorithm.common.RaceConditionList> = mutableListOf<com.algorithm.common.RaceConditionList>(),
     val rainbowColors: MutableList<androidx.compose.ui.graphics.Color> = mutableListOf<androidx.compose.ui.graphics.Color>()
 )
 
 sealed interface MainIntent {
     data class SelectSortList(val selectList: MutableList<com.algorithm.common.SortingList>): MainIntent
     data class SelectGraphList(val selectList: MutableList<com.algorithm.common.GraphList>): MainIntent
+    data class SelectRaceConditionList(val selectList: MutableList<com.algorithm.common.RaceConditionList>): MainIntent
     data class RainBowColorsList(val rainbowColorList: MutableList<androidx.compose.ui.graphics.Color>): MainIntent
 }
 
@@ -36,6 +38,7 @@ class MainViewModel @Inject constructor()
     private fun initSelect() {
         execute(MainIntent.SelectSortList(enumValues<com.algorithm.common.SortingList>().toMutableList()))
         execute(MainIntent.SelectGraphList(enumValues<com.algorithm.common.GraphList>().toMutableList()))
+        execute(MainIntent.SelectRaceConditionList(enumValues<com.algorithm.common.RaceConditionList>().toMutableList()))
         viewModelScope.launch {
             while (true) {
                 delay(500L) // 0.5초 딜레이
@@ -51,6 +54,7 @@ class MainViewModel @Inject constructor()
         when (intent) {
             is MainIntent.SelectSortList -> copy(selectSortList = intent.selectList)
             is MainIntent.SelectGraphList -> copy(selectGraphList = intent.selectList)
+            is MainIntent.SelectRaceConditionList -> copy(selectRaceConditionList = intent.selectList)
             is MainIntent.RainBowColorsList -> copy(rainbowColors = intent.rainbowColorList.toMutableList())
         }
 

@@ -2,6 +2,8 @@ package com.algorithm.di
 
 import com.algorithm.domain.repository.graph.GraphRepository
 import com.algorithm.domain.repository.graph.GraphRepositoryImpl
+import com.algorithm.domain.repository.racecondition.RaceConditionRepository
+import com.algorithm.domain.repository.racecondition.RaceConditionRepositoryImpl
 import com.algorithm.domain.repository.sorting.SortingHeapRepository
 import com.algorithm.domain.repository.sorting.SortingHeapRepositoryImpl
 import com.algorithm.domain.repository.sorting.SortingRepository
@@ -28,4 +30,8 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindGraphRepository(graphRepository: GraphRepositoryImpl): GraphRepository
+
+    @Binds
+    @Singleton
+    fun bindRaceConditionRepository(raceConditionRepository: RaceConditionRepositoryImpl): RaceConditionRepository
 }

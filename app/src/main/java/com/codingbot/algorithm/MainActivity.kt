@@ -10,11 +10,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.algorithm.common.GraphList
 import com.algorithm.common.SortingList
 import com.algorithm.presentation.core.common.Screen
 import com.algorithm.presentation.ui.screens.MainScreen
+import com.algorithm.presentation.ui.screens.asynchronous.AsynchronousScreen
 import com.algorithm.presentation.ui.screens.graph.GraphScreen
 import com.algorithm.presentation.ui.screens.sorting.SortingHeapSortingScreen
 import com.algorithm.presentation.ui.screens.sorting.SortingScreen
@@ -35,7 +37,14 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = Screen.SelectListScreen.route
+//                        startDestination = Screen.AsynchronousScreen.route
                     ) {
+
+                        composable(
+                            route = Screen.AsynchronousScreen.route)
+                        {
+                            AsynchronousScreen(navController = navController)
+                        }
                         composable(
                             route = Screen.SelectListScreen.route)
                         {
