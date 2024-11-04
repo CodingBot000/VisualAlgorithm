@@ -64,6 +64,23 @@ sealed interface Screen {
         }
     }
 
+    object AsynchronousScreen : Screen {
+        override val route: String = ScreenRoutes.GraphScreen
+
+        const val type = "trackingType"
+
+        val routeWithArgs = "$route/{$type}"
+
+        val arguments = listOf(
+            navArgument(type) { type = NavType.StringType },
+        )
+
+        fun route(
+            trackingType: String = ""
+        ): String {
+            return "$route/$trackingType"
+        }
+    }
 }
 
 
@@ -73,5 +90,6 @@ private object ScreenRoutes {
     const val SortingScreen =  "SortingScreen"
     const val SortingHeapSortingScreen =  "SortingHeapSortingScreen"
     const val GraphScreen =  "GraphScreen"
+    const val AsynchronousScreen = "AsynchronousScreen"
 }
 

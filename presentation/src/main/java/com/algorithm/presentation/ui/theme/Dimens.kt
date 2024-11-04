@@ -5,7 +5,7 @@ import androidx.compose.ui.unit.dp
 
 object Dimens {
     val BottomPadding = 15.dp
-
+    val ScreenTitleHeight = 50.dp
     object Sorting {
         val SortingGraphHeight = Height.H170
         val SortingGraphWidth = Height.H10
@@ -14,6 +14,13 @@ object Dimens {
         val SortingScreenHorizontalPadding = Height.H10
     }
 
+    object RaceCondition {
+        val W_Index = 50.dp
+        val W_RaceCondition = 40.dp
+        val WbetweenSpace = 1.dp
+        val W_SharedCounter = 50.dp
+        val W_RaceConditionCell = 140.dp
+    }
 
     object Height {
         val H170: Dp = 170.dp

@@ -2,6 +2,7 @@
     <string name="app_name">VisualAlgorithm</string>
     <string name="sorting">Sorting</string>
     <string name="graph">Graph</string>
+    <string name="raceCondition">RaceCondition</string>
     <string name="result">Result</string>
     <string name="array_temp">Array Temp</string>
     <string name="log_history">Log History</string>

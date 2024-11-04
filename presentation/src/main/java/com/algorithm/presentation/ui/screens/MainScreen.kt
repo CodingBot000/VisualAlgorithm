@@ -84,6 +84,16 @@ fun MainScreen(
                 navController.navigate(Screen.GraphScreen.route(navigateCellName))
             }
         )
+
+        SelectMenuGridList(
+            subTitle = stringResource(id = R.string.raceCondition),
+            lottieRes = R.raw.lottie_dice,
+            itemsList = uiState.value.selectRaceConditionList,
+            twinkleColorList = uiState.value.rainbowColors,
+            onClick = { navigateCellName ->
+                navController.navigate(Screen.AsynchronousScreen.route)
+            }
+        )
     }
 }
 

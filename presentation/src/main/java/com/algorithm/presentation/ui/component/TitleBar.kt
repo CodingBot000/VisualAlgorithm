@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.algorithm.presentation.R
 import com.algorithm.presentation.ui.theme.CustomTheme
+import com.algorithm.presentation.ui.theme.Dimens
 
 @Composable
 fun ScreenTitle(
@@ -30,6 +32,7 @@ fun ScreenTitle(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .height(Dimens.ScreenTitleHeight)
             .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
