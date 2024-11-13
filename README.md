@@ -5,6 +5,13 @@
 </br>
 </br>
 It visually represents the operation of the algorithm. 
+
+<ul>
+<li>Visual representation of the algorithms: Bubble Sort, Selection Sort, Insertion Sort, Quick Sort, and Heap Sort.</li>
+<li>Visual representation of DFS (Depth-First Search) and BFS (Breadth-First Search) algorithms.</li>
+<li>Visual representation of Race Condition - using two coroutines to demonstrate inconsistent results due to the difference between Cache Memory and Main Memory when accessing shared resources.</li>
+</ul>
+
 <ul>
 <li>Pause and resume are possible during playback.</li>
 <li>While paused, you can track the history of the algorithm's operations using back and forward buttons.</li>
